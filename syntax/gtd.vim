@@ -10,7 +10,11 @@ endif
 syntax sync fromstart
 syntax spell toplevel
 
-syntax region gtdTags start="\%1l" end="^\s*$" contains=@NoSpell,gtdTitle,gtdContext,gtdStatus,gtdHashtag
+if g:gtd#tag_lines_count == 0
+	syntax region gtdTags start='\%1l' end='^\s*$' contains=@NoSpell,gtdTitle,gtdContext,gtdStatus,gtdHashtag
+else
+	execute 'syntax region gtdTags start=/\%1l/ end=/\%(^$\)\|\%'.eval(g:gtd#tag_lines_count+1).'l/ contains=@NoSpell,gtdTitle,gtdContext,gtdStatus,gtdHashtag'
+endif
 syntax match gtdTitle '\%1l^=.*' fold contained contains=@Spell,gtdAttachedFiles
 syntax match gtdContext '^@\S\+$' contained
 syntax match gtdStatus '^!\S\+$' contained
