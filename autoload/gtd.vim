@@ -34,7 +34,10 @@ function! gtd#Init()
 			let g:gtd#folding = 0
 		endif
 
-		let g:gtd#tag_lines_count = 20
+		if !exists('g:gtd#tag_lines_count')
+			\ || type(g:gtd#tag_lines_count) != v:t_number
+			let g:gtd#tag_lines_count = 20
+		endif
 
 		return 1
 

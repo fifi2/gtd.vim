@@ -158,7 +158,7 @@ function! s:GtdSearchAtom(arg, where)
 			call add(l:search_results, l:gtd_file)
 			continue
 		endif
-		if l:arg_type == '/'
+		if l:arg_type == '/' || g:gtd#tag_lines_count == 0
 			let l:file_read = readfile(l:gtd_file)
 		elseif l:arg_type == '=' || l:arg_type == '[*]'
 			let l:file_read = readfile(l:gtd_file, '', 1)
@@ -272,7 +272,12 @@ endfunction
 function! s:GtdSearchTag(pattern, prefix)
 	let l:matches = []
 	for l:f in gtd#AllFiles()
-		for l:l in readfile(l:f, '', g:gtd#tag_lines_count)
+		if g:gtd#tag_lines_count == 0
+			let l:fr = readfile(l:f)
+		else
+			let l:fr = readfile(l:f, '', g:gtd#tag_lines_count)
+		endif
+		for l:l in l:fr
 			if l:l =~ '^$'
 				break
 			elseif l:l =~ a:pattern
