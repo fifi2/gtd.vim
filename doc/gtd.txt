@@ -422,7 +422,11 @@ You can check for updates or browse the plugin here:
 ==============================================================================
 8. Changelog					*gtd-changelog*
 
-    0.0.1		Initial version of the plugin. Enjoy!
+    + Accept 0 for |g:gtd#tag_lines_count| and use in the gtd syntax.
+
+0.0.1~
+
+    + Initial version of the plugin. Enjoy!
 
 
 ==============================================================================
