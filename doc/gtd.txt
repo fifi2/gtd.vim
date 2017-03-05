@@ -173,6 +173,12 @@ Gtd.vim is able to fold your chapters on each title. See |gtd-syntax|. To
 activate this, you have to let this setting. >
     let g:gtd#folding = 1
 <
+						*g:gtd#tag_lines_count*
+You can let this to change the number of lines considered to search tags
+(default is 20). You can let it to 0 if you prefer Gtd.vim loads all the file
+and wait for the first empty line before leaving the search. >
+    let g:gtd#tag_lines_count = 10
+<
 
 ==============================================================================
 3. Usage					*gtd-usage*
