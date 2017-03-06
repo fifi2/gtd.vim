@@ -42,8 +42,9 @@ Notes:
 
 ## Basic configuration
 
-	let g:gtd#dir = '~/notes'
+	:let g:gtd#dir = '~/notes'
 
 ## Read the documentation
 
+	:helptags ALL
 	:h gtd.vim
