@@ -189,6 +189,15 @@ function! gtd#Bench(formula)
 	endif
 endfunction
 
+function! gtd#Context(context)
+	if a:context =~ '@\S\+'
+		let g:gtd#default_context = a:context[1:]
+		echo "Gtd context is now:" a:context
+	else
+		echo "Gtd context doesn't seem legit"
+	endif
+endfunction
+
 function! s:GtdNew(bang, mods, range_start, range_end)
 
 	try
