@@ -1,5 +1,5 @@
 
-function! gtd#search#Start(formula, type)
+function! gtd#search#Start(formula, type, bang)
 
 	if g:gtd#debug
 		echomsg "Gtd" a:formula
@@ -39,7 +39,7 @@ function! gtd#search#Start(formula, type)
 				\ gtd#formula#OperatorPrecedenceHelper(a:formula)
 				\ )
 			\ )
-		if !empty(g:gtd#default_context)
+		if a:bang != '!' && !empty(g:gtd#default_context)
 			let l:search_actions = [
 				\ ' ',
 				\ l:search_actions,

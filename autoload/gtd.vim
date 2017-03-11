@@ -131,7 +131,7 @@ function! gtd#Review(mods)
 			if !l:split
 				call add(open, tabpagenr())
 			endif
-			silent call gtd#search#Start(g, 'new')
+			silent call gtd#search#Start(g, 'new', '!')
 			" Focus is now to the location list
 			setlocal nowinfixheight nowinfixwidth
 			if l:split
@@ -151,7 +151,7 @@ endfunction
 function! gtd#Refresh()
 	let l:current_search_args = gtd#quickfix#ArgsGet()
 	if !empty(l:current_search_args)
-		call gtd#search#Start(l:current_search_args, 'refresh')
+		call gtd#search#Start(l:current_search_args, 'refresh', '!')
 	else
 		echo "No current Gtd search available"
 	endif
@@ -173,7 +173,7 @@ function! gtd#Bench(formula)
 		let l:bench_nb = 100
 		while l:i < l:bench_nb
 			let l:start_time = reltime()
-			silent call gtd#search#Start(a:formula, 'new')
+			silent call gtd#search#Start(a:formula, 'new', '')
 			let l:bench_sum = l:bench_sum
 				\ + reltimefloat(reltime(l:start_time))
 			let l:i = l:i+1
