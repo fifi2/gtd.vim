@@ -39,6 +39,13 @@ function! gtd#search#Start(formula, type)
 				\ gtd#formula#OperatorPrecedenceHelper(a:formula)
 				\ )
 			\ )
+		if !empty(g:gtd#default_context)
+			let l:search_actions = [
+				\ ' ',
+				\ l:search_actions,
+				\ '@'.g:gtd#default_context
+				\ ]
+		endif
 		call gtd#Debug(l:search_actions)
 
 		let l:gtd_results = l:results_to_keep
