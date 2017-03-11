@@ -15,7 +15,6 @@ command! -nargs=1 -complete=customlist,gtd#search#CommandTagComplete Gtd call gt
 command! -nargs=1 -complete=customlist,gtd#search#CommandTagComplete GtdAdd call gtd#search#Start(<q-args>, 'add')
 command! -nargs=1 -complete=customlist,gtd#search#CommandTagComplete GtdFilter call gtd#search#Start(<q-args>, 'filter')
 command! -nargs=0 GtdRefresh call gtd#Refresh()
-command! -nargs=0 GtdCache call gtd#Cache()
 
 if !empty('g:gtd#review')
 	command! -nargs=0 GtdReview call gtd#Review(<q-mods>)
