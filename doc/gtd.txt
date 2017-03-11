@@ -149,7 +149,8 @@ a specific directory in your vimrc file. >
 						*g:gtd#default_context*
 When creating a new Gtd file, the plugin automatically try to insert basic Gtd
 tags in it. If you want, you can define your default context to let the plugin
-insert it as well. >
+insert it as well. This default context will also be added in all your Gtd
+searches as an "AND" argument. >
     let g:gtd#default_context = 'work'
 <
 						*g:gtd#default_action*
@@ -196,7 +197,7 @@ and wait for the first empty line before leaving the search. >
 		    inserted in the new Gtd file.
 
 						*:Gtd*
-:Gtd {formula}	    This command allows you to search for some notes regarding
+:Gtd[!] {formula}   This command allows you to search for some notes regarding
 		    theirs tags or content. Results are loaded to the
 		    |quickfix| list so you can navigate into it with the
 		    |quickfix-window|.
@@ -218,6 +219,9 @@ and wait for the first empty line before leaving the search. >
 		    but previous results (for AND operations) define where to
 		    continue searching next operands.
 		    OR operations allow you to concatenate results.
+
+		    With [!] no default context will be added to the
+		    {formula}. See |g:gtd#default_context|.
 
 						*gtd-atom*
 		    An atom is a part of your formula which can't be reduced.
@@ -319,14 +323,21 @@ and wait for the first empty line before leaving the search. >
 		    You will use: >
 		    :Gtd !archive (#john-doe + /john\sdoe) @work -/foo
 <
+						*:GtdContext*
+:GtdContext {arg}   Change (or set) the current value of
+		    |g:gtd#default_context|.
+
+		    {arg} must be a valid context (Eg. @work).
+
 						*:GtdAdd*
-:GtdAdd {formula}
-		    Same as ":Gtd {formula}" except previous results are kept.
+:GtdAdd[!] {formula}
+		    Same as ":Gtd[!] {formula}" except previous results are
+		    kept.
 
 						*:GtdFilter*
-:GtdFilter {formula}
-		    Same as ":Gtd {formula}" except default working files are
-		    deduced from the current |quickfix| list.
+:GtdFilter[!] {formula}
+		    Same as ":Gtd[!] {formula}" except default working files
+		    are deduced from the current |quickfix| list.
 
 						*:GtdRefresh*
 :GtdRefresh	    Refresh the current Gtd search in your location list.
@@ -422,6 +433,9 @@ You can check for updates or browse the plugin here:
 ==============================================================================
 8. Changelog					*gtd-changelog*
 
+    + New command |:GtdContext|.
+      Gtd.vim now automatically filters searches according to the current
+      context.
     + Accept 0 for |g:gtd#tag_lines_count| and use in the gtd syntax.
 
 0.0.1~
