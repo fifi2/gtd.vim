@@ -102,45 +102,50 @@ endfunction
 
 function! gtd#Review(mods)
 
-	let l:debug_switch = s:GtdDebugSwitch(0)
-	let l:debug_reactivate = 0
+	if empty(g:gtd#review)
+		echo "Gtd review has not been set (g:gtd#review)"
+	else
+		let l:debug_switch = s:GtdDebugSwitch(0)
+		let l:debug_reactivate = 0
 
-	let l:split = 1
+		let l:split = 1
 
-	if a:mods == 'tab' && l:split == 1
-		execute 'tabedit'
-	endif
-
-	let open = []
-	for g in g:gtd#review
-		if l:split
-			if empty(l:open)
-				if a:mods != 'tab'
-					execute 'enew'
-				endif
-			else
-				execute 'belowright new'
-			endif
-		else
+		if a:mods == 'tab' && l:split == 1
 			execute 'tabedit'
 		endif
-		let l:bufnr = bufnr('%')
-		if !l:split
-			call add(open, tabpagenr())
-		endif
-		silent call gtd#search#Start(g, 'new')
-		" Focus is now to the location list
-		setlocal nowinfixheight nowinfixwidth
-		if l:split
-			call add(open, bufnr('%'))
-		endif
-		execute 'silent bw' l:bufnr
-	endfor
-	execute 'normal!' open[0].'gt'
 
-	if l:debug_switch
-		call s:GtdDebugSwitch(1)
+		let open = []
+		for g in g:gtd#review
+			if l:split
+				if empty(l:open)
+					if a:mods != 'tab'
+						execute 'enew'
+					endif
+				else
+					execute 'belowright new'
+				endif
+			else
+				execute 'tabedit'
+			endif
+			let l:bufnr = bufnr('%')
+			if !l:split
+				call add(open, tabpagenr())
+			endif
+			silent call gtd#search#Start(g, 'new')
+			" Focus is now to the location list
+			setlocal nowinfixheight nowinfixwidth
+			if l:split
+				call add(open, bufnr('%'))
+			endif
+			execute 'silent bw' l:bufnr
+		endfor
+		execute 'normal!' open[0].'gt'
+
+		if l:debug_switch
+			call s:GtdDebugSwitch(1)
+		endif
 	endif
+
 endfunction
 
 function! gtd#Refresh()
