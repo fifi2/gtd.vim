@@ -43,6 +43,19 @@ Right after you set the directory in which to save the Gtd files (see
 accordingly to the current date and time to save time.
     Eg. 20170212_210000.gtd.
 
+						*gtd-sample-file*
+Here is a sample of what a Gtd file may look like:
+
+    =Title of the Gtd file
+    @work
+    !inbox
+    #project-name
+    #involded-person
+
+    Content of the Gtd file, right after the first blank line.
+
+    Etc.
+
 						*gtd-title*
 To accelerate the creation of a task file, we create it with a filename
 composed by the current date and time. To title it, you can use this syntax
@@ -116,19 +129,6 @@ choosed. Here is just an example of what you can do with this plugin.
 
     3. When you decide, you will be able to search for some notes and work on
        them, change the action tag, whatever.
-
-						*gtd-sample-file*
-Here is a sample of what a Gtd file may look like:
-
-    =Title of the Gtd file
-    @work
-    !inbox
-    #project-name
-    #involded-person
-
-    Content of the Gtd file, right after the first blank line.
-
-    Etc.
 
 
 ==============================================================================
