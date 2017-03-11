@@ -5,8 +5,11 @@ function! gtd#Init()
 	try
 		if !exists('g:gtd#dir')
 			let g:gtd#dir = '.'
-		elseif !isdirectory(expand(g:gtd#dir))
-			throw "Gtd directory has not been set properly (g:gtd#dir)"
+		else
+			let g:gtd#dir = expand(g:gtd#dir)
+			if !isdirectory(g:gtd#dir)
+				throw "Gtd directory has not been set properly (g:gtd#dir)"
+			endif
 		endif
 		let g:gtd#dir = fnamemodify(g:gtd#dir, ':p')
 
