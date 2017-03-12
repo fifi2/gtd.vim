@@ -152,15 +152,6 @@ function! gtd#Review(mods)
 
 endfunction
 
-function! gtd#Refresh()
-	let l:current_search_args = gtd#quickfix#ArgsGet()
-	if !empty(l:current_search_args)
-		call gtd#search#Start(l:current_search_args, 'refresh', '!')
-	else
-		echo "No current Gtd search available"
-	endif
-endfunction
-
 function! gtd#New(bang, mods)
 	call s:GtdNew(a:bang, a:mods, 0, 0)
 endfunction

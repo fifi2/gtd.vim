@@ -14,7 +14,7 @@ command! -bang -range -nargs=0 GtdNewFromSelection <line1>,<line2>call gtd#NewFr
 command! -bang -nargs=1 -complete=customlist,gtd#search#CommandTagComplete Gtd call gtd#search#Start(<q-args>, 'new', <q-bang>)
 command! -bang -nargs=1 -complete=customlist,gtd#search#CommandTagComplete GtdAdd call gtd#search#Start(<q-args>, 'add', <q-bang>)
 command! -bang -nargs=1 -complete=customlist,gtd#search#CommandTagComplete GtdFilter call gtd#search#Start(<q-args>, 'filter', <q-bang>)
-command! -nargs=0 GtdRefresh call gtd#Refresh()
+command! -nargs=0 GtdRefresh call gtd#search#Start(gtd#quickfix#ArgsGet(), 'refresh', '!')
 command! -nargs=1 -complete=customlist,gtd#search#CommandTagComplete GtdContext call gtd#Context(<f-args>)
 
 if !empty('g:gtd#review')

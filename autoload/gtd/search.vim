@@ -9,6 +9,12 @@ function! gtd#search#Start(formula, type, bang)
 	try
 		let l:formula = a:formula
 
+		" If we are dealing with a refresh, we might want to check if we
+		" succeed to get the previous request.
+		if a:type == 'refresh' && empty(l:formula)
+			throw "Gtd refresh is not possible."
+		endif
+
 		" Do we need previous results?
 		if a:type == 'add' || a:type == 'filter'
 			let l:previous_results = gtd#quickfix#ResultsGet()
