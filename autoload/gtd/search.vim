@@ -36,19 +36,14 @@ function! gtd#search#Start(formula, type, bang)
 
 		let s:gtd_highlighted = []
 
+		if a:bang != '!' && !empty(g:gtd#default_context)
+			let l:formula = '('.l:formula.') @'.g:gtd#default_context
+		endif
 		let l:search_actions = gtd#formula#Parser(
 			\ gtd#formula#ListConvert(
 				\ gtd#formula#OperatorPrecedenceHelper(l:formula)
 				\ )
 			\ )
-		if a:bang != '!' && !empty(g:gtd#default_context)
-			let l:search_actions = [
-				\ ' ',
-				\ l:search_actions,
-				\ '@'.g:gtd#default_context
-				\ ]
-			let l:formula = '('.l:formula.') @'.g:gtd#default_context
-		endif
 		call gtd#Debug(l:search_actions)
 
 		let l:gtd_results = l:results_to_keep
