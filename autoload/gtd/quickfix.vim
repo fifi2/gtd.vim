@@ -48,9 +48,10 @@ function! s:GtdQfTitleSet(formula, previous_args, type)
 endfunction
 
 function! s:GtdQfCreateResult(filename)
-	let l:title = gtd#search#TitleGet(a:filename)
+	let l:filename_path = g:gtd#dir.a:filename.'.gtd'
+	let l:title = gtd#search#TitleGet(l:filename_path)
 	return {
-		\ 'filename': fnamemodify(a:filename, ':.'),
+		\ 'filename': fnamemodify(l:filename_path, ':.'),
 		\ 'text': l:title[0],
 		\ 'type': l:title[1],
 		\ 'lnum': 1

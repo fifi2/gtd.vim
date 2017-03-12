@@ -28,7 +28,7 @@ function! gtd#search#Start(formula, type, bang)
 
 		" Where are we looking for results?
 		if a:type == 'new' || a:type == 'add' || a:type == 'refresh'
-			let l:where = gtd#AllFiles()
+			let l:where = gtd#AllFiles('short')
 		elseif a:type == 'filter'
 			let l:where = l:previous_results
 		endif
@@ -54,6 +54,7 @@ function! gtd#search#Start(formula, type, bang)
 
 		let l:gtd_results = l:results_to_keep
 			\ + s:GtdSearchHandler(l:search_actions, l:where)
+
 
 		" Highlighting
 		if !empty(s:gtd_highlighted) && !empty(l:gtd_results)
@@ -163,12 +164,13 @@ function! s:GtdSearchAtom(arg, where)
 
 	" Search
 	let l:search_results = []
-	for l:gtd_file in l:where
+	for l:gtd_name in l:where
 		if index([ 'Y', 'M', 'D' ], l:arg_type) >= 0
-			\ && fnamemodify(l:gtd_file, ':t:r') =~ l:arg_reg
-			call add(l:search_results, l:gtd_file)
+			\ && l:gtd_name =~ l:arg_reg
+			call add(l:search_results, l:gtd_name)
 			continue
 		endif
+		let l:gtd_file = g:gtd#dir.l:gtd_name.'.gtd'
 		if l:arg_type == '/' || g:gtd#tag_lines_count == 0
 			let l:file_read = readfile(l:gtd_file)
 		elseif l:arg_type == '=' || l:arg_type == '[*]'
@@ -178,7 +180,7 @@ function! s:GtdSearchAtom(arg, where)
 		endif
 		for l:l in l:file_read
 			if l:l =~? l:arg_reg
-				call add(l:search_results, l:gtd_file)
+				call add(l:search_results, l:gtd_name)
 				break
 			elseif l:arg_type != '/' && l:l !~ '^[@!#=]'
 				break
@@ -188,8 +190,8 @@ function! s:GtdSearchAtom(arg, where)
 
 	if l:arg_neg
 		" Remove the files from the ones we had at the begining
-		for l:gtd_file in l:search_results
-			let l:idx = index(l:where, l:gtd_file)
+		for l:gtd_res in l:search_results
+			let l:idx = index(l:where, l:gtd_res)
 			if l:idx >= 0
 				call remove(l:where, l:idx)
 			endif
@@ -282,7 +284,7 @@ endfunction
 
 function! s:GtdSearchTag(pattern, prefix)
 	let l:matches = []
-	for l:f in gtd#AllFiles()
+	for l:f in gtd#AllFiles('full')
 		if g:gtd#tag_lines_count == 0
 			let l:fr = readfile(l:f)
 		else

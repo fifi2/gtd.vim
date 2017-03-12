@@ -261,7 +261,19 @@ function! s:GtdDebugSwitch(target)
 	return l:switch_done
 endfunction
 
-function! gtd#AllFiles()
-	return glob(g:gtd#dir.'*.gtd', 0, 1)
+function! s:GtdFilenameShort(key, value)
+	return fnamemodify(a:value, ':t:r')
+endfunction
+
+function! gtd#AllFiles(mode)
+	let l:all_files = glob(g:gtd#dir.'*.gtd', 0, 1)
+	if a:mode == 'full'
+		return l:all_files
+	elseif a:mode == 'short'
+		return map(
+			\ l:all_files,
+			\ function('s:GtdFilenameShort')
+			\ )
+	endif
 endfunction
 
