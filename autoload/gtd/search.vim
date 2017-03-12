@@ -7,6 +7,8 @@ function! gtd#search#Start(formula, type, bang)
 	endif
 
 	try
+		let l:formula = a:formula
+
 		" Do we need previous results?
 		if a:type == 'add' || a:type == 'filter'
 			let l:previous_results = gtd#quickfix#ResultsGet()
@@ -36,7 +38,7 @@ function! gtd#search#Start(formula, type, bang)
 
 		let l:search_actions = gtd#formula#Parser(
 			\ gtd#formula#ListConvert(
-				\ gtd#formula#OperatorPrecedenceHelper(a:formula)
+				\ gtd#formula#OperatorPrecedenceHelper(l:formula)
 				\ )
 			\ )
 		if a:bang != '!' && !empty(g:gtd#default_context)
@@ -45,6 +47,7 @@ function! gtd#search#Start(formula, type, bang)
 				\ l:search_actions,
 				\ '@'.g:gtd#default_context
 				\ ]
+			let l:formula = '('.l:formula.') @'.g:gtd#default_context
 		endif
 		call gtd#Debug(l:search_actions)
 
@@ -58,7 +61,7 @@ function! gtd#search#Start(formula, type, bang)
 
 		" Quickfix loading
 		call gtd#quickfix#ListSet(
-			\ a:formula,
+			\ l:formula,
 			\ l:gtd_results,
 			\ l:previous_args,
 			\ a:type
@@ -67,7 +70,7 @@ function! gtd#search#Start(formula, type, bang)
 		if !empty(l:gtd_results)
 			execute 'lwindow'
 		else
-			redraw | echomsg 'No results for' a:formula
+			redraw | echomsg 'No results for' l:formula
 		endif
 
 	catch /.*/
