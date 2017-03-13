@@ -22,7 +22,7 @@ if !empty('g:gtd#review')
 endif
 
 if exists('g:gtd#debug') && g:gtd#debug
-	command! -nargs=1 -complete=customlist,gtd#search#CommandTagComplete GtdBench call gtd#Bench(<f-args>)
+	command! -bang -nargs=1 -complete=customlist,gtd#search#CommandTagComplete GtdBench call gtd#Bench(<q-args>, <q-bang>)
 endif
 
 nnoremap <silent> <Plug>GtdNew :GtdNew<CR>

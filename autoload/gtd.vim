@@ -160,7 +160,7 @@ function! gtd#NewFromSelection(bang, mods) range
 	call s:GtdNew(a:bang, a:mods, a:firstline, a:lastline)
 endfunction
 
-function! gtd#Bench(formula)
+function! gtd#Bench(formula, bang)
 	let l:debug_switch = s:GtdDebugSwitch(0)
 	try
 		let l:i = 0
@@ -168,7 +168,7 @@ function! gtd#Bench(formula)
 		let l:bench_nb = 100
 		while l:i < l:bench_nb
 			let l:start_time = reltime()
-			silent call gtd#search#Start(a:formula, 'new', '')
+			silent call gtd#search#Start(a:formula, 'new', a:bang)
 			let l:bench_sum = l:bench_sum
 				\ + reltimefloat(reltime(l:start_time))
 			let l:i = l:i+1
