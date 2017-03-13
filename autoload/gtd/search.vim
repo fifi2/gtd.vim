@@ -1,5 +1,5 @@
 
-function! gtd#search#Start(formula, type, bang)
+function! gtd#search#Start(bang, formula, type)
 
 	if g:gtd#debug
 		echomsg "Gtd" a:formula

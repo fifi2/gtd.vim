@@ -135,7 +135,7 @@ function! gtd#Review(mods)
 			if !l:split
 				call add(open, tabpagenr())
 			endif
-			silent call gtd#search#Start(g, 'new', '!')
+			silent call gtd#search#Start('!', g, 'new')
 			" Focus is now to the location list
 			setlocal nowinfixheight nowinfixwidth
 			if l:split
@@ -152,15 +152,15 @@ function! gtd#Review(mods)
 
 endfunction
 
-function! gtd#New(bang, mods)
+function! gtd#New(mods, bang)
 	call s:GtdNew(a:bang, a:mods, 0, 0)
 endfunction
 
-function! gtd#NewFromSelection(bang, mods) range
+function! gtd#NewFromSelection(mods, bang) range
 	call s:GtdNew(a:bang, a:mods, a:firstline, a:lastline)
 endfunction
 
-function! gtd#Bench(formula, bang)
+function! gtd#Bench(bang, formula)
 	let l:debug_switch = s:GtdDebugSwitch(0)
 	try
 		let l:i = 0
@@ -168,7 +168,7 @@ function! gtd#Bench(formula, bang)
 		let l:bench_nb = 100
 		while l:i < l:bench_nb
 			let l:start_time = reltime()
-			silent call gtd#search#Start(a:formula, 'new', a:bang)
+			silent call gtd#search#Start(a:bang, a:formula, 'new')
 			let l:bench_sum = l:bench_sum
 				\ + reltimefloat(reltime(l:start_time))
 			let l:i = l:i+1
