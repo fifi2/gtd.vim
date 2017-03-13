@@ -197,7 +197,7 @@ function! s:GtdNew(bang, mods, range_start, range_end)
 
 	try
 		let l:gtd_date = strftime("%Y%m%d_%H%M%S")
-		let l:gtd_note = g:gtd#dir.l:gtd_date.'.gtd'
+		let l:gtd_note = fnamemodify(g:gtd#dir.l:gtd_date.'.gtd', ':.')
 		let l:template = s:Template(a:range_start, a:range_end)
 		if empty(a:mods)
 			let l:action = 'edit'.a:bang
