@@ -433,6 +433,8 @@ You can check for updates or browse the plugin here:
 ==============================================================================
 8. Changelog					*gtd-changelog*
 
+    + Manage vim markers as a folding method (in addition to the Markdown
+      titles).
     + New command |:GtdContext|.
       Gtd.vim now automatically filters searches according to the current
       context.

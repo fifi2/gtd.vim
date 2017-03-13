@@ -21,9 +21,14 @@ setlocal completefunc=gtd#search#InsertTagComplete
 let b:undo_ftplugin .= ' | setlocal completefunc<'
 
 function! GtdMarkdowFold()
-	let l:fold_level = match(getline(v:lnum), '^#\{1,6}\zs .*$')
+	let l:line = getline(v:lnum)
+	let l:fold_level = match(l:line, '^#\{1,6}\zs .*$')
 	if l:fold_level > 0
 		return '>'.l:fold_level
+	elseif  l:line =~ '{\{3}'
+		return 'a1'
+	elseif  l:line =~ '}\{3}'
+		return 's1'
 	else
 		return '='
 	endif
