@@ -240,12 +240,10 @@ endfunction
 
 function! gtd#search#CommandTagComplete(arg_lead, cmd_line, cursor_pos)
 
-	let l:complete_list = []
-	let l:arg_neg = 0
 	let l:arg_lead = a:arg_lead
-	let l:parenthesis = 0
 
 	" Is there some parenthesis in front of arg_lead?
+	let l:parenthesis = 0
 	while !empty(l:arg_lead) && l:arg_lead[0] == '('
 		let l:parenthesis += 1
 		let l:arg_lead = strpart(l:arg_lead, 1)
@@ -253,8 +251,10 @@ function! gtd#search#CommandTagComplete(arg_lead, cmd_line, cursor_pos)
 
 	" Is it a negative atom?
 	if !empty(l:arg_lead) && l:arg_lead[0] == '-'
-		let l:arg_neg = 1
-		let l:arg_lead = strpart(l:arg_lead, 1)
+		let l:arg_neg = '-'
+		let l:arg_lead = l:arg_lead[1:]
+	else
+		let l:arg_neg = ''
 	endif
 
 	" Is there something remaining?
@@ -262,23 +262,16 @@ function! gtd#search#CommandTagComplete(arg_lead, cmd_line, cursor_pos)
 		let l:complete_regex = '^[@!#]'
 	elseif index(['@', '!', '#'], l:arg_lead[0]) != -1
 		let l:complete_regex = '^'.l:arg_lead
+	endif
+
+	if exists('l:complete_regex')
+		return s:GtdSearchTag(
+			\ l:complete_regex,
+			\ repeat('(', l:parenthesis).l:arg_neg
+			\ )
 	else
-		" This arg lead can't be completed
-		let l:complete_regex = ''
+		return []
 	endif
-
-	if !empty(l:complete_regex)
-		let l:prefix = ''
-		if l:arg_neg
-			let l:prefix = '-'.l:prefix
-		endif
-		if l:parenthesis > 0
-			let l:prefix = repeat('(', l:parenthesis).l:prefix
-		endif
-		let l:complete_list = s:GtdSearchTag(l:complete_regex, l:prefix)
-	endif
-
-	return l:complete_list
 
 endfunction
 
