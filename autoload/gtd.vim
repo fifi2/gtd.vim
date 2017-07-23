@@ -73,7 +73,6 @@ function! gtd#Files()
 		if has('win32')
 			execute 'silent !explorer.exe' l:gtd_note_dir
 		else
-			" TODO Test it
 			execute 'silent !xdg-open' l:gtd_note_dir
 		endif
 
