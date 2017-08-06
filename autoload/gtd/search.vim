@@ -115,8 +115,7 @@ function! s:GtdSearchAtom(arg, where)
 	endif
 
 	" Search params
-	let l:where = a:where
-	let l:arg = a:arg
+	let [ l:where, l:arg ] = [ a:where, a:arg ]
 
 	" What is the type of the argument?
 	" arg can be an attached files tag [*]
@@ -205,7 +204,7 @@ function! s:GtdSearchAtom(arg, where)
 endfunction
 
 function! s:GtdSearchHighlightedAtomsCollect(atom)
-	let s:gtd_highlighted = add(s:gtd_highlighted, a:atom)
+	let s:gtd_highlighted += [ a:atom ]
 endfunction
 
 function! gtd#search#TitleGet(filename)
@@ -243,9 +242,9 @@ function! gtd#search#CommandTagComplete(arg_lead, cmd_line, cursor_pos)
 	let l:arg_lead = a:arg_lead
 
 	if a:cmd_line =~ '^GtdContext'
-		let l:prefix_types_to_complete = ['@']
+		let l:prefix_types_to_complete = [ '@' ]
 	else
-		let l:prefix_types_to_complete = ['@', '!', '#']
+		let l:prefix_types_to_complete = [ '@', '!', '#' ]
 	endif
 
 	" Is there some parenthesis in front of arg_lead?

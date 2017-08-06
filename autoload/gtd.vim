@@ -162,9 +162,7 @@ endfunction
 function! gtd#Bench(bang, formula)
 	let l:debug_switch = s:GtdDebugSwitch(0)
 	try
-		let l:i = 0
-		let l:bench_sum = 0.0
-		let l:bench_nb = 100
+		let [ l:i, l:bench_sum, l:bench_nb ] = [ 0, 0.0, 100 ]
 		while l:i < l:bench_nb
 			let l:start_time = reltime()
 			silent call gtd#search#Start(a:bang, a:formula, 'new')

@@ -13,9 +13,7 @@ endfunction
 
 function! gtd#formula#Parser(formula)
 
-	let l:c_idx = 0
-	let l:br_match = 0
-	let l:brackets = 0
+	let [ l:c_idx, l:br_match, l:brackets ] = [ 0, 0, 0 ]
 	let l:formula_len = len(a:formula)
 	while l:c_idx < l:formula_len
 		if a:formula[l:c_idx] == '('
@@ -75,9 +73,7 @@ function! gtd#formula#Simplify(formula)
 endfunction
 
 function! gtd#formula#ListConvert(formula)
-	let l:formula_list = []
-	let l:c_idx = 0
-	let l:atom_pending = ''
+	let [ l:formula_list, l:c_idx, l:atom_pending ] = [ [], 0, '' ]
 	let l:formula_len = strlen(a:formula)
 
 	while l:c_idx < l:formula_len
@@ -153,11 +149,11 @@ function! s:GtdFormulaEltSimplify(formula_list)
 		if l:br_match == 0 && l:br_start != -1 && l:br_end != -1
 			if s:GtdFormulaKeepBrackets(l:op_in, l:op_out)
 				return l:formula_clean
-					\ + ['(']
+					\ + [ '(' ]
 					\ + s:GtdFormulaEltSimplify(
 						\ a:formula_list[l:br_start+1:l:br_end-1]
 						\ )
-					\ + [')']
+					\ + [ ')' ]
 					\ + s:GtdFormulaEltSimplify(
 						\ a:formula_list[l:br_end+1:]
 						\ )
