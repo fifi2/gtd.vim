@@ -74,9 +74,8 @@ endfunction
 
 function! gtd#formula#ListConvert(formula)
 	let [ l:formula_list, l:c_idx, l:atom_pending ] = [ [], 0, '' ]
-	let l:formula_len = strlen(a:formula)
 
-	while l:c_idx < l:formula_len
+	while l:c_idx < strlen(a:formula)
 		if index([ '(', ')', '+', ' ' ], a:formula[l:c_idx]) >= 0
 			if !empty(l:atom_pending)
 				call add(l:formula_list, l:atom_pending)
@@ -91,7 +90,6 @@ function! gtd#formula#ListConvert(formula)
 
 	if !empty(l:atom_pending)
 		call add(l:formula_list, l:atom_pending)
-		let l:atom_pending = ''
 	endif
 
 	return l:formula_list

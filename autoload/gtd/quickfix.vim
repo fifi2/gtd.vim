@@ -60,8 +60,7 @@ endfunction
 
 function! s:GtdQfListCreate(results)
 	let l:qf = []
-	let l:gtd_results = uniq(sort(a:results))
-	for l:gtd_result in l:gtd_results
+	for l:gtd_result in uniq(sort(a:results))
 		call add(l:qf, s:GtdQfCreateResult(l:gtd_result))
 	endfor
 	return l:qf
