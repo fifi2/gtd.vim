@@ -20,21 +20,24 @@ let b:undo_ftplugin .= ' | execute "nunmap <buffer> <Plug>GtdExplore"'
 setlocal completefunc=gtd#search#InsertTagComplete
 let b:undo_ftplugin .= ' | setlocal completefunc<'
 
-function! GtdMarkdowFold()
-	let l:line = getline(v:lnum)
-	let l:fold_level = match(l:line, '^#\{1,6}\zs .*$')
-	if l:fold_level > 0
-		return '>'.l:fold_level
-	elseif  l:line =~ '{\{3}'
-		return 'a1'
-	elseif  l:line =~ '}\{3}'
-		return 's1'
-	else
-		return '='
-	endif
-endfunction
-
+" Define Gtd folding for markdown chapters
 if has('folding') && g:gtd#folding == 1
+
+	" Folding function
+	function! GtdMarkdowFold()
+		let l:line = getline(v:lnum)
+		let l:fold_level = match(l:line, '^#\{1,6}\zs .*$')
+		if l:fold_level > 0
+			return '>'.l:fold_level
+		elseif  l:line =~ '{\{3}'
+			return 'a1'
+		elseif  l:line =~ '}\{3}'
+			return 's1'
+		else
+			return '='
+		endif
+	endfunction
+
 	setlocal foldexpr=GtdMarkdowFold()
 	setlocal foldmethod=expr
 	let b:undo_ftplugin .= ' | setlocal foldexpr< foldmethod<'
