@@ -57,19 +57,19 @@ function! gtd#formula#Parser(formula)
 endfunction
 
 function! gtd#formula#Simplify(formula)
-	let l:formula = substitute(a:formula, '\s*+\s*', '+', 'g')
-	let l:formula = gtd#formula#ListConvert(l:formula)
-	let l:formula = s:GtdFormulaEltSimplify(l:formula)
-	let l:formula_clean = []
-	for l:elt in l:formula
-		if l:elt == '+'
-			call add(l:formula_clean, ' + ')
-		else
-			call add(l:formula_clean, l:elt)
+	let l:formula = s:GtdFormulaEltSimplify(
+		\ gtd#formula#ListConvert(
+			\ substitute(a:formula, '\s*+\s*', '+', 'g')
+			\ )
+		\ )
+	let l:elt_idx = 0
+	while l:elt_idx < len(l:formula)
+		if l:formula[l:elt_idx] == '+'
+			let l:formula[l:elt_idx] = ' + '
 		endif
-	endfor
-	let l:formula = join(l:formula_clean, '')
-	return l:formula
+		let l:elt_idx += 1
+	endwhile
+	return join(l:formula, '')
 endfunction
 
 function! gtd#formula#ListConvert(formula)
