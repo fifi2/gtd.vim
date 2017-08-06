@@ -100,7 +100,13 @@ function! gtd#Files()
 endfunction
 
 function! gtd#Explore()
-	execute "Vexplore" expand('%:r')
+	let l:gtd_note_dir = expand('%:p:r')
+
+	if !isdirectory(l:gtd_note_dir)
+		echomsg "Gtd note directory ".l:gtd_note_dir." doesn't exist"
+	else
+		execute "Vexplore" l:gtd_note_dir
+	endif
 endfunction
 
 function! gtd#Review(mods)

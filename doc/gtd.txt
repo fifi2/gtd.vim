@@ -433,6 +433,7 @@ You can check for updates or browse the plugin here:
 ==============================================================================
 8. Changelog					*gtd-changelog*
 
+	+ |:GtdExplore| is possible if the directory really exists.
 	+ GtdMarkdowFold() is now only defined if needed.
 	+ Only complete |:GtdContext| with relevant context tags.
     + Manage vim markers as a folding method (in addition to the Markdown
