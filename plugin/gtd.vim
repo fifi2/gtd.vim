@@ -4,10 +4,13 @@ if &cp || (exists('g:loaded_gtd') && g:loaded_gtd)
 	finish
 endif
 
+" Init Gtd.vim configuration
 if !gtd#Init()
 	let g:loaded_gtd = 1
 	finish
 endif
+
+" Define Gtd.vim commands
 
 command! -bang -nargs=0 GtdNew call gtd#New(<q-mods>, <q-bang>)
 command! -bang -range -nargs=0 GtdNewFromSelection <line1>,<line2>call gtd#NewFromSelection(<q-mods>, <q-bang>)
