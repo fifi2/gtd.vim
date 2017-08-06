@@ -242,6 +242,12 @@ function! gtd#search#CommandTagComplete(arg_lead, cmd_line, cursor_pos)
 
 	let l:arg_lead = a:arg_lead
 
+	if a:cmd_line =~ '^GtdContext'
+		let l:prefix_types_to_complete = ['@']
+	else
+		let l:prefix_types_to_complete = ['@', '!', '#']
+	endif
+
 	" Is there some parenthesis in front of arg_lead?
 	let l:parenthesis = 0
 	while !empty(l:arg_lead) && l:arg_lead[0] == '('
@@ -259,8 +265,8 @@ function! gtd#search#CommandTagComplete(arg_lead, cmd_line, cursor_pos)
 
 	" Is there something remaining?
 	if empty(l:arg_lead)
-		let l:complete_regex = '^[@!#]'
-	elseif index(['@', '!', '#'], l:arg_lead[0]) != -1
+		let l:complete_regex = '^['.join(l:prefix_types_to_complete).']'
+	elseif index(l:prefix_types_to_complete, l:arg_lead[0]) != -1
 		let l:complete_regex = '^'.l:arg_lead
 	endif
 
