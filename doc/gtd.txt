@@ -46,15 +46,15 @@ accordingly to the current date and time to save time.
 						*gtd-sample-file*
 Here is a sample of what a Gtd file may look like:
 
-    =Title of the Gtd file
-    @work
-    !inbox
-    #project-name
-    #involded-person
+	=Title of the Gtd file
+	@work
+	!inbox
+	#project-name
+	#involded-person
 
-    Content of the Gtd file, right after the first blank line.
+	Content of the Gtd file, right after the first blank line.
 
-    Etc.
+	Etc.
 
 						*gtd-title*
 To accelerate the creation of a task file, we create it with a filename
@@ -66,24 +66,24 @@ keyword in this title.
 The @ character precedes the context of the Gtd file. You can use one or more
 context per file. It is dedicated to mark the files you want to retrieve in a
 particular context.
-    Eg. @home
-	@work
+	Eg. @home
+	    @work
 
 						*gtd-action*
 Gtd actions are some usefull tags to mark files in a distinctive state. It can
 be used to create logical baskets for your tasks. Use what you prefer.
-    Eg. !inbox
-	!todo
-	!waiting
-	!someday
-	!scheduled-20170629
+	Eg. !inbox
+	    !todo
+	    !waiting
+	    !someday
+	    !scheduled-20170629
 
 						*gtd-hashtag*
 You can add a bunch of hashtags to your Gtd files to mark they are related to
 some peculiar concepts or people.
-    Eg.	#john-doe
-	#project-name
-	#company-name
+	Eg.	#john-doe
+		#project-name
+		#company-name
 
 						*gtd-date*
 The creation date of your notes will be known thanks to the automatic filename
@@ -109,26 +109,27 @@ decide to do. Gtd.vim is designed to let you use any kind of action tags,
 hashtags or contexts. It will just help you to search notes with the tags you
 choosed. Here is just an example of what you can do with this plugin.
 
-    1. New notes are tagged !inbox. It may be the main action tag. At this
-       point, you need a title, a context, an action tag !inbox and the task
-       detail right after in the file (if the title is not enough).
+	1. New notes are tagged !inbox. It may be the main action tag. At this
+	   point, you need a title, a context, an action tag !inbox and the
+	   task detail right after in the file (if the title is not enough).
 
-    2. You will regularly ask Gtd.vim to display !inbox files. While editing
-       one of them, you can decide to change the action tag to something else:
-	- !todo if you can deal with it now
-	- !waiting if you can't do it right now
-	- !someday if you don't want to do it now
-	- !scheduled-YYYYMMDD if you would like to forget it until a
-	  particular date.
+	2. You will regularly ask Gtd.vim to display !inbox files. While
+	   editing one of them, you can decide to change the action tag to
+	   something else:
+	   - !todo if you can deal with it now
+	   - !waiting if you can't do it right now
+	   - !someday if you don't want to do it now
+	   - !scheduled-YYYYMMDD if you would like to forget it until a
+	     particular date.
 
-       It is the right moment to add some hashtags, you may want to tag people
-       involved, project name, technical concept or organizations related to
-       the task.
-        - #firstname-lastname
-	- #project-name
+	   It is the right moment to add some hashtags, you may want to tag
+	   people involved, project name, technical concept or organizations
+	   related to the task.
+	   - #firstname-lastname
+	   - #project-name
 
-    3. When you decide, you will be able to search for some notes and work on
-       them, change the action tag, whatever.
+	3. When you decide, you will be able to search for some notes and work
+	   on them, change the action tag, whatever.
 
 
 ==============================================================================
@@ -144,41 +145,41 @@ When creating a new Gtd file, the plugin automatically try to insert basic Gtd
 tags in it. If you want, you can define your default context to let the plugin
 insert it as well. This default context will also be added in all your Gtd
 searches as an "AND" argument. >
-    let g:gtd#default_context = 'work'
+	let g:gtd#default_context = 'work'
 <
 						*g:gtd#dir*
 Directory where to save notes or to do the search. Default is the current
 directory. If you want to save all your notes in the same directory (which is
 important to perform relevant search), you may decide to set this variable to
 a specific directory in your vimrc file. >
-    let g:gtd#dir = '~/notes'
+	let g:gtd#dir = '~/notes'
 <
 						*g:gtd#default_action*
 When creating a new Gtd file, the plugin automatically try to insert basic Gtd
 tags in it. If you want, you can define your default action tag to let the
 plugin insert it as well. >
-    let g:gtd#default_action = 'inbox'
+	let g:gtd#default_action = 'inbox'
 <
 						*g:gtd#folding*
 Gtd.vim is able to fold your chapters on each title. See |gtd-syntax|. To
 activate this, you have to let this setting. >
-    let g:gtd#folding = 1
+	let g:gtd#folding = 1
 <
 						*g:gtd#review*
 You might want to have a quick review on your most frequent Gtd search. To do
 so, you can populate the review list in your configuration. The review is done
 when you execute |:GtdReview| command. >
-    let g:gtd#review = [
-	\ '(!inbox + !scheduled-'.strftime("%Y%m%d").') @work',
-	\ '!todo @work',
-	\ '!waiting @work',
-	\ ]
+	let g:gtd#review = [
+		\ '(!inbox + !scheduled-'.strftime("%Y%m%d").') @work',
+		\ '!todo @work',
+		\ '!waiting @work',
+		\ ]
 <
 						*g:gtd#tag_lines_count*
 You can let this to change the number of lines considered to search tags
 (default is 20). You can let it to 0 if you prefer Gtd.vim loads all the file
 and wait for the first empty line before leaving the search. >
-    let g:gtd#tag_lines_count = 10
+	let g:gtd#tag_lines_count = 10
 <
 
 ==============================================================================
@@ -374,16 +375,16 @@ You might want to have a map to access your attached files in a quicker way
 than executing |:GtdFiles|. To do so, simply associate the key combinaison of
 your choice to <Plug>GtdAttachedFiles. This map is only available when the
 current buffer has gtd filetype. >
-    nmap <Leader>tf <Plug>GtdAttachedFiles
+	nmap <Leader>tf <Plug>GtdAttachedFiles
 <
 You can set a map to create a new Gtd file in a quicker way than using
 |:GtdNew| or |:GtdNewFromSelection|. Key combinaisons can be equal. >
-    nmap <Leader>tn <Plug>GtdNew
-    vmap <Leader>tn <Plug>GtdNew
+	nmap <Leader>tn <Plug>GtdNew
+	vmap <Leader>tn <Plug>GtdNew
 <
 Other optional mapping have to be written manually in your vimrc file.
 Eg. To quickly search for pending tasks or scheduled today: >
-    nnoremap <Leader>tw :Gtd @work (!inbox + !scheduled-<C-R>=strftime("%Y%m%d")<CR>)<CR>
+	nnoremap <Leader>tw :Gtd @work (!inbox + !scheduled-<C-R>=strftime("%Y%m%d")<CR>)<CR>
 <
 
 ==============================================================================
@@ -409,7 +410,7 @@ You can read it here: http://www.gnu.org/licenses/gpl-3.0.en.html
 						*g:gtd#debug*
 If you want, you can get the debug messages of the plugin by setting the
 g:gtd#debug variable. Default is 0. >
-    let g:gtd#debug = 1
+	let g:gtd#debug = 1
 <
 						*:GtdBench*
 :GtdBench {formula}	Same as |:Gtd| except that the search is performed
@@ -423,11 +424,11 @@ g:gtd#debug variable. Default is 0. >
 
 						*gtd-bugs*
 Thank you to track any issue you may encounter here:
-    https://github.com/phb1/gtd.vim/issues
+	https://github.com/phb1/gtd.vim/issues
 
 						*gtd-repository*
 You can check for updates or browse the plugin here:
-    https://github.com/phb1/gtd.vim
+	https://github.com/phb1/gtd.vim
 
 
 ==============================================================================
@@ -436,23 +437,23 @@ You can check for updates or browse the plugin here:
 	+ |:GtdExplore| is possible if the directory really exists.
 	+ GtdMarkdowFold() is now only defined if needed.
 	+ Only complete |:GtdContext| with relevant context tags.
-    + Manage vim markers as a folding method (in addition to the Markdown
-      titles).
-    + New command |:GtdContext|.
-      Gtd.vim now automatically filters searches according to the current
-      context.
-    + Accept 0 for |g:gtd#tag_lines_count| and use in the gtd syntax.
+	+ Manage vim markers as a folding method (in addition to the Markdown
+	  titles).
+	+ New command |:GtdContext|.
+	  Gtd.vim now automatically filters searches according to the current
+	  context.
+	+ Accept 0 for |g:gtd#tag_lines_count| and use in the gtd syntax.
 
 0.0.1~
 
-    + Initial version of the plugin. Enjoy!
+	+ Initial version of the plugin. Enjoy!
 
 
 ==============================================================================
 9. Credits					*gtd-credits*
 
-    Vim			Thank you Bram Moolenaar!
-    Vimscript help	Thank you to the community #vim on freenode.net
-    GTD methodology	Thank you to David Allen!
+	Vim		Thank you Bram Moolenaar!
+	Vimscript help	Thank you to the community #vim on freenode.net
+	GTD methodology	Thank you to David Allen!
 
  vim:tw=78:ts=8:ft=help:norl:
