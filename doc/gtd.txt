@@ -41,7 +41,7 @@ present what this plugin can do.
 Right after you set the directory in which to save the Gtd files (see
 |g:gtd#dir|), you will create new notes in it with |:Gtd| command, named
 accordingly to the current date and time to save time.
-    Eg. 20170212_210000.gtd.
+	Eg. 20170629_021800.gtd.
 
 						*gtd-sample-file*
 Here is a sample of what a Gtd file may look like:
@@ -76,7 +76,7 @@ be used to create logical baskets for your tasks. Use what you prefer.
 	!todo
 	!waiting
 	!someday
-	!scheduled-20120712
+	!scheduled-20170629
 
 						*gtd-hashtag*
 You can add a bunch of hashtags to your Gtd files to mark they are related to
@@ -233,7 +233,7 @@ and wait for the first empty line before leaving the search. >
 		    - |gtd-context|. Eg: @work
 		    - |gtd-action|. Eg: !inbox or !waiting
 		    - |gtd-attached| [*]
-		    - |gtd-date|. Eg: Y2017, M02 or D12, respectively for
+		    - |gtd-date|. Eg: Y2017, M06 or D29, respectively for
 		      year, month and day.
 		    - |gtd-content| to look for a |pattern| into your notes.
 		      Eg: /bar
@@ -251,7 +251,7 @@ and wait for the first empty line before leaving the search. >
 			    #hashtag	    -#hashtag
 			    =title_search   -=title_search
 			    /search	    -/search
-			    Y2017	    -M12
+			    Y2017	    -M06
 			    [*]		    -[*]
 
 						*gtd-completion*
@@ -279,11 +279,11 @@ and wait for the first empty line before leaving the search. >
 		    tagged !inbox and related to @work context.
 
 >
-		    :Gtd (!inbox + !scheduled-20170212) @home
+		    :Gtd (!inbox + !scheduled-20170629) @home
 <
 		    Operators precedence is respected so you can look for both
 		    !inbox notes and notes you wanted to get notice on
-		    02/12/2017, all related to @home context.
+		    06/29/2017, all related to @home context.
 
 >
 		    :Gtd !todo #project
@@ -296,11 +296,11 @@ and wait for the first empty line before leaving the search. >
 		    Looks for notes with "foo" somewhere in the title line.
 
 >
-		    :Gtd Y2017 M02 D1[12]
-		    :Gtd Y2017 M02 (D11 + D12)
+		    :Gtd Y2017 M06 D2[89]
+		    :Gtd Y2017 M06 (D28 + D29)
 <
-		    Looks for notes created either the 11th or the 12th
-		    February 2017.
+		    Looks for notes created either the 28th or the 29th of
+		    June 2017.
 
 >
 		    :Gtd [*]
