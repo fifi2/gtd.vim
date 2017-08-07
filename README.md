@@ -42,6 +42,7 @@ Notes:
 
 ## Basic configuration
 
+	:filetype plugin on
 	:let g:gtd#dir = '~/notes'
 
 ## Read the documentation

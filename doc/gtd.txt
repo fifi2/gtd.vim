@@ -25,8 +25,8 @@ Summary:
 1. Introduction					*gtd-introduction*
 
 Gtd.vim is a plugin to manage notes and keep them as reference files for a
-future use. It comes with a major command |:Gtd| you would use to create new
-notes or to retrieve already existing ones.
+future use. It comes with a major command |:Gtd| you would use to retrieve
+already existing ones.
 
 The goal is to save all your notes into a single directory and to rely on the
 tags you used to retrieve next actions or former notes you may need again.
@@ -39,7 +39,7 @@ give here examples of what you can do, not what you should. The objetive is to
 present what this plugin can do.
 
 Right after you set the directory in which to save the Gtd files (see
-|g:gtd#dir|), you will create new notes in it with |:Gtd| command, named
+|g:gtd#dir|), you will create new notes in it with |:GtdNew| command, named
 accordingly to the current date and time to save time.
 	Eg. 20170629_021800.gtd.
 
@@ -200,13 +200,13 @@ and wait for the first empty line before leaving the search. >
 						*:Gtd*
 :Gtd[!] {formula}   This command allows you to search for some notes regarding
 		    theirs tags or content. Results are loaded to the
-		    |quickfix| list so you can navigate into it with the
-		    |quickfix-window|.
+		    |location-list| list so you can navigate into it with the
+		    |location-list-window|.
 
 		    {formula} is a string you can consider as a mathematic
 		    expression.
 
-		    - {formula} is either an |gtd-atom|
+		    - {formula} is either a |gtd-atom|
 		    - And/or a group of atoms
 		      Eg.   atom1 atom2	-> This is a AND operation
 			    atom1 + atom2	-> This is a OR operation
@@ -258,8 +258,8 @@ and wait for the first empty line before leaving the search. >
 						*gtd-completion*
 		    Pressing <Tab> while you're editing your formula will
 		    search for similar atoms in your existing notes and give
-		    you back proposals. Date atoms are not supported in
-		    completion system.
+		    you back proposals. Title, content or date atoms are not
+		    supported in completion system.
 
 						*gtd-formula-examples*
 >
@@ -341,7 +341,9 @@ and wait for the first empty line before leaving the search. >
 		    are deduced from the current |quickfix| list.
 
 						*:GtdRefresh*
-:GtdRefresh	    Refresh the current Gtd search in your location list.
+:GtdRefresh	    Refresh the current Gtd search in your location list,
+		    assuming you've done some changes in the tags of the
+		    previous results.
 
 						*:GtdReview*
 :GtdReview	    If you are used to repeat a few |:Gtd| search, you might
@@ -390,7 +392,7 @@ Eg. To quickly search for pending tasks or scheduled today: >
 ==============================================================================
 5. Syntax					*gtd-syntax*
 
-Title have to be the first line of the file
+Title has to be the first line of the file
 
 Highlighting of the tags
 
