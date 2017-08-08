@@ -61,10 +61,10 @@ endfunction
 function! gtd#Files()
 
 	try
-		let l:gtd_note_dir = expand('%:r')
+		let l:gtd_note_dir = s:GtdAttachedFilesDirGet()
 
 		" Creation of the directory if needed
-		if !isdirectory(l:gtd_note_dir)
+		if !s:GtdAttachedFilesDirTest(l:gtd_note_dir)
 			\ && (!exists('*mkdir') || !mkdir(l:gtd_note_dir))
 			throw "Gtd note directory ".l:gtd_note_dir." can't be created"
 		endif
@@ -79,10 +79,9 @@ function! gtd#Files()
 		" We wait the user to continue...
 		call input("Hit enter to continue")
 
-		if isdirectory(l:gtd_note_dir)
+		if s:GtdAttachedFilesDirTest(l:gtd_note_dir)
 			if empty(glob(l:gtd_note_dir.'/**'))
-				let delete_test = delete(l:gtd_note_dir, 'd')
-				if delete_test == 0
+				if delete(l:gtd_note_dir, 'd') == 0
 					call s:AttachedFilesTagRemove()
 				else
 					throw "Gtd note directory couldn't be deleted"
@@ -100,9 +99,9 @@ function! gtd#Files()
 endfunction
 
 function! gtd#Explore()
-	let l:gtd_note_dir = expand('%:p:r')
+	let l:gtd_note_dir = s:GtdAttachedFilesDirGet()
 
-	if !isdirectory(l:gtd_note_dir)
+	if !s:GtdAttachedFilesDirTest(l:gtd_note_dir)
 		echomsg "Gtd note directory ".l:gtd_note_dir." doesn't exist"
 	else
 		execute "Vexplore" l:gtd_note_dir
@@ -239,6 +238,14 @@ endfunction
 
 function! s:AttachedFilesTagTest()
 	return getline(1) =~ '^=.* \[\*\]$'
+endfunction
+
+function! s:GtdAttachedFilesDirGet()
+	return expand('%:p:r')
+endfunction
+
+function! s:GtdAttachedFilesDirTest(dir)
+	return isdirectory(a:dir)
 endfunction
 
 function! s:AttachedFilesTagAdd()
