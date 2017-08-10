@@ -2,9 +2,12 @@
 function! gtd#quickfix#ResultsGet()
 	let l:previous_results = []
 	for l:qf_item in getloclist(0)
-		call add(l:previous_results, buffer_name(l:qf_item['bufnr']))
+		call add(l:previous_results, bufname(l:qf_item['bufnr']))
 	endfor
-	return l:previous_results
+	return map(
+		\ l:previous_results,
+		\ function('gtd#FilenameShort')
+		\ )
 endfunction
 
 function! gtd#quickfix#ArgsGet()

@@ -443,6 +443,8 @@ You can check for updates or browse the plugin here:
 ==============================================================================
 8. Changelog					*gtd-changelog*
 
+	+ Fix issue with |:GtdAdd| and |:GtdFilter| which didn't use short
+	  names of the former results.
 	+ New command |:GtdDelete| to delete the GTD file and its attached
 	  files.
 	+ |:GtdExplore| is possible if the directory really exists.

@@ -305,7 +305,7 @@ function! s:GtdDebugSwitch(target)
 	return l:switch_done
 endfunction
 
-function! s:GtdFilenameShort(key, value)
+function! gtd#FilenameShort(key, value)
 	return fnamemodify(a:value, ':t:r')
 endfunction
 
@@ -316,7 +316,7 @@ function! gtd#AllFiles(mode)
 	elseif a:mode == 'short'
 		return map(
 			\ l:all_files,
-			\ function('s:GtdFilenameShort')
+			\ function('gtd#FilenameShort')
 			\ )
 	endif
 endfunction
