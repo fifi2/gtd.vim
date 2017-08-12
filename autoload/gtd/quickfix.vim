@@ -2,7 +2,7 @@
 function! gtd#quickfix#ResultsGet()
 	let l:previous_results = []
 	for l:qf_item in getloclist(0)
-		call add(l:previous_results, bufname(l:qf_item['bufnr']))
+		let l:previous_results += [ bufname(l:qf_item['bufnr']) ]
 	endfor
 	return map(
 		\ l:previous_results,
@@ -64,7 +64,7 @@ endfunction
 function! s:GtdQfListCreate(results)
 	let l:qf = []
 	for l:gtd_result in uniq(sort(a:results))
-		call add(l:qf, s:GtdQfCreateResult(l:gtd_result))
+		let l:qf += [ s:GtdQfCreateResult(l:gtd_result) ]
 	endfor
 	return l:qf
 endfunction

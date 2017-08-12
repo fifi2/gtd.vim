@@ -78,10 +78,10 @@ function! gtd#formula#ListConvert(formula)
 	while l:c_idx < strlen(a:formula)
 		if index([ '(', ')', '+', ' ' ], a:formula[l:c_idx]) >= 0
 			if !empty(l:atom_pending)
-				call add(l:formula_list, l:atom_pending)
+				let l:formula_list += [ l:atom_pending ]
 				let l:atom_pending = ''
 			endif
-			call add(l:formula_list, a:formula[l:c_idx])
+			let l:formula_list += [ a:formula[l:c_idx] ]
 		else
 			let l:atom_pending .= a:formula[l:c_idx]
 		endif
@@ -89,7 +89,7 @@ function! gtd#formula#ListConvert(formula)
 	endwhile
 
 	if !empty(l:atom_pending)
-		call add(l:formula_list, l:atom_pending)
+		let l:formula_list += [ l:atom_pending ]
 	endif
 
 	return l:formula_list
@@ -117,7 +117,7 @@ function! s:GtdFormulaEltSimplify(formula_list)
 			endif
 			let l:br_match += 1
 			if empty(l:op_out)
-				call add(l:op_out, l:op_last)
+				let l:op_out += [ l:op_last ]
 			endif
 		elseif l:c_elt == ')'
 			let l:br_match -= 1
@@ -131,7 +131,7 @@ function! s:GtdFormulaEltSimplify(formula_list)
 		elseif l:c_elt == '+' || l:c_elt == ' '
 			if l:br_start != -1 && l:br_end == -1
 				" Inside some brackets
-				call add(l:op_in, l:c_elt)
+				let l:op_in += [ l:c_elt ]
 			else
 				" Outside of any brackets
 				if l:br_start == -1
@@ -139,7 +139,7 @@ function! s:GtdFormulaEltSimplify(formula_list)
 					let l:op_last = l:c_elt
 				else
 					" After closing bracket
-					call add(l:op_out, l:c_elt)
+					let l:op_out += [ l:c_elt ]
 				endif
 			endif
 		endif
@@ -164,7 +164,7 @@ function! s:GtdFormulaEltSimplify(formula_list)
 			endif
 		else
 			if l:br_match == 0 && l:br_start == -1
-				call add(l:formula_clean, l:c_elt)
+				let l:formula_clean += [ l:c_elt ]
 			endif
 			let l:c_idx += 1
 		endif

@@ -171,13 +171,13 @@ function! gtd#Review(mods)
 			endif
 			let l:bufnr = bufnr('%')
 			if !l:split
-				call add(open, tabpagenr())
+				let open += [ tabpagenr() ]
 			endif
 			silent call gtd#search#Start('!', g, 'new')
 			" Focus is now to the location list
 			setlocal nowinfixheight nowinfixwidth
 			if l:split
-				call add(open, bufnr('%'))
+				let open += [ bufnr('%') ]
 			endif
 			execute 'silent bw' l:bufnr
 		endfor
@@ -255,15 +255,15 @@ endfunction
 
 function! s:Template(range_start, range_end)
 	let l:template = []
-	call add(l:template, '=')
+	let l:template += [ '=' ]
 	if !empty(g:gtd#default_context)
-		call add(l:template, '@'.g:gtd#default_context)
+		let l:template += [ '@'.g:gtd#default_context ]
 	endif
 	if !empty(g:gtd#default_action)
-		call add(l:template, '!'.g:gtd#default_action)
+		let l:template += [ '!'.g:gtd#default_action ]
 	endif
 	if a:range_start != 0 && a:range_end != 0
-		call add(l:template, '')
+		let l:template += [ '' ]
 		let l:selection = getline(a:range_start, a:range_end)
 		let l:template = l:template + l:selection
 	endif

@@ -166,7 +166,7 @@ function! s:GtdSearchAtom(arg, where)
 	for l:gtd_name in l:where
 		if index([ 'Y', 'M', 'D' ], l:arg_type) >= 0
 			\ && l:gtd_name =~ l:arg_reg
-			call add(l:search_results, l:gtd_name)
+			let l:search_results += [ l:gtd_name ]
 			continue
 		endif
 		let l:gtd_file = g:gtd#dir.l:gtd_name.'.gtd'
@@ -179,7 +179,7 @@ function! s:GtdSearchAtom(arg, where)
 		endif
 		for l:l in l:file_read
 			if l:l =~? l:arg_reg
-				call add(l:search_results, l:gtd_name)
+				let l:search_results += [ l:gtd_name ]
 				break
 			elseif l:arg_type != '/' && l:l !~ '^[@!#=]'
 				break
@@ -292,7 +292,7 @@ function! s:GtdSearchTag(pattern, prefix)
 			if l:l =~ '^$'
 				break
 			elseif l:l =~ a:pattern
-				call add(l:matches, a:prefix.l:l)
+				let l:matches += [ a:prefix.l:l ]
 			endif
 		endfor
 	endfor
