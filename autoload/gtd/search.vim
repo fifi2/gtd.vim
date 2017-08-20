@@ -58,7 +58,7 @@ function! gtd#search#Start(bang, formula, type)
 
 		" Highlighting
 		if !empty(s:gtd_highlighted) && !empty(l:gtd_results)
-			let @/ = '\('.join(s:gtd_highlighted, '\)\|\(').'\)'
+			let @/ = '\('.join(uniq(sort(s:gtd_highlighted)), '\)\|\(').'\)'
 		endif
 
 		" Quickfix loading
@@ -145,7 +145,6 @@ function! s:GtdSearchAtom(arg, where)
 		let l:arg_reg = '^=.*'.strpart(l:arg, 1)
 	elseif l:arg_type == '/'
 		let l:arg_reg = strpart(l:arg, 1)
-		call s:GtdSearchHighlightedAtomsCollect(l:arg_reg)
 	elseif l:arg_type == '[*]'
 		let l:arg_reg = '^=.* \[\*\]$'
 	elseif index([ 'Y', 'M', 'D' ], l:arg_type) >= 0
@@ -180,6 +179,9 @@ function! s:GtdSearchAtom(arg, where)
 		for l:l in l:file_read
 			if l:l =~? l:arg_reg
 				let l:search_results += [ l:gtd_name ]
+				if l:arg_type == '/'
+					call s:GtdSearchHighlightedAtomsCollect(l:arg_reg)
+				endif
 				break
 			elseif l:arg_type != '/' && l:l !~ '^[@!#=]'
 				break
