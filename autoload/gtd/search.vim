@@ -45,6 +45,7 @@ function! gtd#search#Start(bang, formula, type)
 		if a:bang != '!' && !empty(g:gtd#default_context)
 			let l:formula = '('.l:formula.') @'.g:gtd#default_context
 		endif
+
 		let l:search_actions = gtd#formula#Parser(
 			\ gtd#formula#ListConvert(
 				\ gtd#formula#OperatorPrecedenceHelper(l:formula)
@@ -52,9 +53,12 @@ function! gtd#search#Start(bang, formula, type)
 			\ )
 		call gtd#Debug(l:search_actions)
 
+		if g:gtd#cache
+			call gtd#cache#Load(1)
+		endif
+
 		let l:gtd_results = l:results_to_keep
 			\ + s:GtdSearchHandler(l:search_actions, l:where)
-
 
 		" Highlighting
 		if !empty(s:gtd_highlighted) && !empty(l:gtd_results)
@@ -138,55 +142,75 @@ function! s:GtdSearchAtom(arg, where)
 		let l:arg_type = strpart(l:arg, 0, 1)
 	endif
 
-	" Preparing search...
-	if index([ '@', '!', '#' ], l:arg_type) >= 0
-		let l:arg_reg = '^'.l:arg.'$'
-	elseif l:arg_type == '='
-		let l:arg_reg = '^=.*'.strpart(l:arg, 1)
-	elseif l:arg_type == '/'
-		let l:arg_reg = strpart(l:arg, 1)
-	elseif l:arg_type == '[*]'
-		let l:arg_reg = '^=.* \[\*\]$'
-	elseif index([ 'Y', 'M', 'D' ], l:arg_type) >= 0
-		let l:arg_val = strpart(l:arg, 1)
-		if l:arg_type == 'Y'
-			let l:arg_reg = '^'.l:arg_val.'\d\{4}_\d\{6}$'
-		elseif l:arg_type == 'M'
-			let l:arg_reg = '^'.'\d\{4}'.l:arg_val.'\d\{2}_\d\{6}$'
-		elseif l:arg_type == 'D'
-			let l:arg_reg = '^'.'\d\{6}'.l:arg_val.'_\d\{6}$'
-		endif
-	else
-		throw "Gtd arg type not possible ".l:arg
-	endif
+	" Can we use cache file?
+	let l:cache_decision = g:gtd#cache && gtd#cache#IsPossible(l:arg_type)
 
 	" Search
 	let l:search_results = []
 	for l:gtd_name in l:where
-		if index([ 'Y', 'M', 'D' ], l:arg_type) >= 0
-			\ && l:gtd_name =~ l:arg_reg
-			let l:search_results += [ l:gtd_name ]
-			continue
-		endif
 		let l:gtd_file = g:gtd#dir.l:gtd_name.'.gtd'
-		if l:arg_type == '/' || g:gtd#tag_lines_count == 0
-			let l:file_read = readfile(l:gtd_file)
-		elseif l:arg_type == '=' || l:arg_type == '[*]'
-			let l:file_read = readfile(l:gtd_file, '', 1)
-		else
-			let l:file_read = readfile(l:gtd_file, '', g:gtd#tag_lines_count)
-		endif
-		for l:l in l:file_read
-			if l:l =~? l:arg_reg
+
+		if l:cache_decision
+			if gtd#cache#Query(
+				\ l:gtd_file,
+				\ l:gtd_name, l:arg,
+				\ getftime(l:gtd_file)
+				\ )
 				let l:search_results += [ l:gtd_name ]
-				if l:arg_type == '/'
-					call s:GtdSearchHighlightedAtomsCollect(l:arg_reg)
-				endif
-				break
-			elseif l:arg_type != '/' && l:l !~ '^[@!#=]'
-				break
 			endif
-		endfor
+		else
+
+			" Preparing search...
+			if index([ '@', '!', '#' ], l:arg_type) >= 0
+				let l:arg_reg = '^'.l:arg.'$'
+			elseif l:arg_type == '='
+				let l:arg_reg = '^=.*'.strpart(l:arg, 1)
+			elseif l:arg_type == '/'
+				let l:arg_reg = strpart(l:arg, 1)
+			elseif l:arg_type == '[*]'
+				let l:arg_reg = '^=.* \[\*\]$'
+			elseif index([ 'Y', 'M', 'D' ], l:arg_type) >= 0
+				let l:arg_val = strpart(l:arg, 1)
+				if l:arg_type == 'Y'
+					let l:arg_reg = '^'.l:arg_val.'\d\{4}_\d\{6}$'
+				elseif l:arg_type == 'M'
+					let l:arg_reg = '^'.'\d\{4}'.l:arg_val.'\d\{2}_\d\{6}$'
+				elseif l:arg_type == 'D'
+					let l:arg_reg = '^'.'\d\{6}'.l:arg_val.'_\d\{6}$'
+				endif
+			else
+				throw "Gtd arg type not possible ".l:arg
+			endif
+
+			if index([ 'Y', 'M', 'D' ], l:arg_type) >= 0
+				\ && l:gtd_name =~ l:arg_reg
+				let l:search_results += [ l:gtd_name ]
+				continue
+			endif
+
+			if l:arg_type == '/' || g:gtd#tag_lines_count == 0
+				let l:file_read = readfile(l:gtd_file)
+			elseif l:arg_type == '=' || l:arg_type == '[*]'
+				let l:file_read = readfile(l:gtd_file, '', 1)
+			else
+				let l:file_read = readfile(
+					\ l:gtd_file,
+					\ '',
+					\ g:gtd#tag_lines_count)
+			endif
+
+			for l:l in l:file_read
+				if l:l =~? l:arg_reg
+					let l:search_results += [ l:gtd_name ]
+					if l:arg_type == '/'
+						call s:GtdSearchHighlightedAtomsCollect(l:arg_reg)
+					endif
+					break
+				elseif l:arg_type != '/' && l:l !~ '^[@!#=]'
+					break
+				endif
+			endfor
+		endif
 	endfor
 
 	if l:arg_neg
@@ -284,20 +308,31 @@ endfunction
 
 function! s:GtdSearchTag(pattern, prefix)
 	let l:matches = []
-	for l:f in gtd#AllFiles('full')
-		if g:gtd#tag_lines_count == 0
-			let l:fr = readfile(l:f)
-		else
-			let l:fr = readfile(l:f, '', g:gtd#tag_lines_count)
-		endif
-		for l:l in l:fr
-			if l:l =~ '^$'
-				break
-			elseif l:l =~ a:pattern
-				let l:matches += [ a:prefix.l:l ]
-			endif
+	if g:gtd#cache
+		call gtd#cache#Load(1)
+		for l:f in gtd#AllFiles('short')
+			for l:t in gtd#cache#TagsGet(l:f)
+				if l:t =~ a:pattern
+					let l:matches += [ a:prefix.l:t ]
+				endif
+			endfor
 		endfor
-	endfor
+	else
+		for l:f in gtd#AllFiles('full')
+			if g:gtd#tag_lines_count == 0
+				let l:fr = readfile(l:f)
+			else
+				let l:fr = readfile(l:f, '', g:gtd#tag_lines_count)
+			endif
+			for l:l in l:fr
+				if l:l =~ '^$'
+					break
+				elseif l:l =~ a:pattern
+					let l:matches += [ a:prefix.l:l ]
+				endif
+			endfor
+		endfor
+	endif
 	return uniq(sort(l:matches))
 endfunction
 

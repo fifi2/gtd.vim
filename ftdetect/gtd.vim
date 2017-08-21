@@ -1,2 +1,5 @@
 " Map .gtd extension with gtd filetype
-autocmd BufReadPost,BufNewFile *.gtd set filetype=gtd
+augroup gtd
+	autocmd!
+	autocmd BufReadPost,BufNewFile *.gtd set filetype=gtd
+augroup END

@@ -20,6 +20,12 @@ function! gtd#Init()
 
 		if !exists('g:gtd#cache') || g:gtd#cache != 1
 			let g:gtd#cache = 0
+		else
+			if !exists('g:gtd#cache_file')
+				let g:gtd#cache_file = g:gtd#dir.'cache'
+			else
+				let g:gtd#cache_file = expand(g:gtd#cache_file)
+			endif
 		endif
 
 		if !exists('g:gtd#default_action') || empty(g:gtd#default_action)
@@ -133,6 +139,12 @@ function! gtd#Delete()
 				execute 'bwipeout!'
 			else
 				redraw | echomsg "GTD file couldn't be deleted"
+			endif
+
+			if g:gtd#cache
+				call gtd#cache#Delete(
+					\ gtd#FilenameShort('N/A', l:gtd_note_file)
+					\ )
 			endif
 		else
 			execute 'bwipeout!'
