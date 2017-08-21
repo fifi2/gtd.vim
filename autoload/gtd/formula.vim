@@ -105,6 +105,7 @@ function! s:GtdFormulaEltSimplify(formula_list)
 	let l:br_match = 0			" Marker to know if we have a bracket match
 	let l:op_out = []			" Operators immediately outside the brackets
 	let l:op_in = []			" Operators inside the current brackets
+	let l:wait_for_eob = 0		" Wait for end of current bracket block
 
 	while l:c_idx < len(a:formula_list)
 
@@ -114,6 +115,8 @@ function! s:GtdFormulaEltSimplify(formula_list)
 			if l:br_start == -1
 				let l:br_start = l:c_idx
 				let l:op_in = []
+			else
+				let l:wait_for_eob = 1
 			endif
 			let l:br_match += 1
 			if empty(l:op_out)
@@ -127,8 +130,10 @@ function! s:GtdFormulaEltSimplify(formula_list)
 					let l:c_idx += 1
 					continue
 				endif
+			elseif l:br_match == 1
+				let l:wait_for_eob = 0
 			endif
-		elseif l:c_elt == '+' || l:c_elt == ' '
+		elseif l:wait_for_eob == 0 && (l:c_elt == '+' || l:c_elt == ' ')
 			if l:br_start != -1 && l:br_end == -1
 				" Inside some brackets
 				let l:op_in += [ l:c_elt ]

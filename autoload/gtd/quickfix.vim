@@ -46,8 +46,11 @@ function! s:GtdQfTitleSet(formula, previous_args, type)
 	else
 		let l:qf_title = a:formula
 	endif
-	let l:qf_title = gtd#formula#Simplify(l:qf_title)
-	call setloclist(0, [], 'a', {'title': ':Gtd '.l:qf_title})
+
+	call setloclist(
+		\ 0, [], 'a',
+		\ {'title': ':Gtd '.gtd#formula#Simplify(l:qf_title)}
+		\ )
 endfunction
 
 function! s:GtdQfCreateResult(filename)

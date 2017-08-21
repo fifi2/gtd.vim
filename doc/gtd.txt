@@ -443,6 +443,8 @@ You can check for updates or browse the plugin here:
 ==============================================================================
 8. Changelog					*gtd-changelog*
 
+	+ Fix bug with internal parenthesized blocks during formula
+	  simplification.
 	+ Fix bug with the highlighting of results, for atom |gtd-content|.
 	+ Optimization of results collection (assignation seems slightly
 	  faster than the add() function).
