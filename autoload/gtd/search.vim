@@ -188,15 +188,12 @@ function! s:GtdSearchAtom(arg, where)
 				continue
 			endif
 
-			if l:arg_type == '/' || g:gtd#tag_lines_count == 0
-				let l:file_read = readfile(l:gtd_file)
+			if l:arg_type == '/'
+				let l:file_read = gtd#note#Read(l:gtd_file, 0)
 			elseif l:arg_type == '=' || l:arg_type == '[*]'
-				let l:file_read = readfile(l:gtd_file, '', 1)
+				let l:file_read = gtd#note#Read(l:gtd_file, 1)
 			else
-				let l:file_read = readfile(
-					\ l:gtd_file,
-					\ '',
-					\ g:gtd#tag_lines_count)
+				let l:file_read = gtd#note#Read(l:gtd_file, g:gtd#tag_lines_count)
 			endif
 
 			for l:l in l:file_read
@@ -319,12 +316,7 @@ function! s:GtdSearchTag(pattern, prefix)
 		endfor
 	else
 		for l:f in gtd#AllFiles('full')
-			if g:gtd#tag_lines_count == 0
-				let l:fr = readfile(l:f)
-			else
-				let l:fr = readfile(l:f, '', g:gtd#tag_lines_count)
-			endif
-			for l:l in l:fr
+			for l:l in gtd#note#Read(l:f, g:gtd#tag_lines_count)
 				if l:l =~ '^$'
 					break
 				elseif l:l =~ a:pattern

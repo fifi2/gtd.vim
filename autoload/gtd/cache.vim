@@ -82,12 +82,7 @@ endfunction
 
 function! s:GtdCacheFileCreate(file)
 	let l:file_tags = []
-	if g:gtd#tag_lines_count == 0
-		let l:file = readfile(a:file)
-	else
-		let l:file = readfile(a:file, '', g:gtd#tag_lines_count)
-	endif
-	for l:l in l:file
+	for l:l in gtd#note#Read(a:file, g:gtd#tag_lines_count)
 		if l:l =~ '^$'
 			break
 		endif
