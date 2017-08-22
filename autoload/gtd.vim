@@ -203,11 +203,11 @@ function! gtd#Review(mods)
 endfunction
 
 function! gtd#New(mods, bang)
-	call s:GtdNew(a:bang, a:mods, 0, 0)
+	call gtd#note#Create(a:bang, a:mods, 0, 0)
 endfunction
 
 function! gtd#NewFromSelection(mods, bang) range
-	call s:GtdNew(a:bang, a:mods, a:firstline, a:lastline)
+	call gtd#note#Create(a:bang, a:mods, a:firstline, a:lastline)
 endfunction
 
 function! gtd#Bench(bang, formula)
@@ -239,47 +239,6 @@ function! gtd#Context(context)
 	else
 		echo "Gtd context doesn't seem legit"
 	endif
-endfunction
-
-function! s:GtdNew(bang, mods, range_start, range_end)
-
-	try
-		let l:gtd_date = strftime("%Y%m%d_%H%M%S")
-		let l:gtd_note = fnamemodify(g:gtd#dir.l:gtd_date.'.gtd', ':.')
-		let l:template = s:Template(a:range_start, a:range_end)
-		if empty(a:mods)
-			let l:action = 'edit'.a:bang
-		else
-			let l:action = a:mods.' split'
-		endif
-		execute l:action.' '.l:gtd_note
-		if append(0, l:template)
-			throw "Gtd template couldn't be inserted"
-		else
-			execute 'normal! gg'
-			execute 'startinsert!'
-		endif
-	catch /.*/
-		echomsg v:exception
-	endtry
-
-endfunction
-
-function! s:Template(range_start, range_end)
-	let l:template = []
-	let l:template += [ '=' ]
-	if !empty(g:gtd#default_context)
-		let l:template += [ '@'.g:gtd#default_context ]
-	endif
-	if !empty(g:gtd#default_action)
-		let l:template += [ '!'.g:gtd#default_action ]
-	endif
-	if a:range_start != 0 && a:range_end != 0
-		let l:template += [ '' ]
-		let l:selection = getline(a:range_start, a:range_end)
-		let l:template = l:template + l:selection
-	endif
-	return l:template
 endfunction
 
 function! s:AttachedFilesTagTest()
