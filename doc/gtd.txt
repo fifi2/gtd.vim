@@ -457,6 +457,8 @@ You can check for updates or browse the plugin here:
 ==============================================================================
 8. Changelog					*gtd-changelog*
 
+	+ Fix: it is now possible to look for tags in the cache using regular
+	  expressions.
 	+ Cache system.
 	+ Fix bug with internal parenthesized blocks during formula
 	  simplification.

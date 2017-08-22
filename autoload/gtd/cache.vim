@@ -54,7 +54,7 @@ function! gtd#cache#Query(file, key, tag, time)
 	endif
 
 	" Then, the cache query is possible.
-	return index(
+	return match(
 		\ get(get(s:cache, a:key, {}), 'tags', []),
 		\ a:tag
 		\ ) >= 0
