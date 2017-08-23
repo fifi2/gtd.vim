@@ -12,8 +12,7 @@ endif
 
 " Define Gtd.vim commands
 
-command! -bang -nargs=0 GtdNew call gtd#New(<q-mods>, <q-bang>)
-command! -bang -range -nargs=0 GtdNewFromSelection <line1>,<line2>call gtd#NewFromSelection(<q-mods>, <q-bang>)
+command! -bang -range -nargs=0 GtdNew <line1>,<line2>call gtd#note#Create(<q-mods>, <q-bang>, <count>)
 command! -bang -nargs=1 -complete=customlist,gtd#search#CommandTagComplete Gtd call gtd#search#Start(<q-bang>, <q-args>, 'new')
 command! -bang -nargs=1 -complete=customlist,gtd#search#CommandTagComplete GtdAdd call gtd#search#Start(<q-bang>, <q-args>, 'add')
 command! -bang -nargs=1 -complete=customlist,gtd#search#CommandTagComplete GtdFilter call gtd#search#Start(<q-bang>, <q-args>, 'filter')
@@ -33,7 +32,7 @@ if exists('g:gtd#debug') && g:gtd#debug
 endif
 
 nnoremap <silent> <Plug>GtdNew :GtdNew<CR>
-vnoremap <silent> <Plug>GtdNew :GtdNewFromSelection<CR>
+vnoremap <silent> <Plug>GtdNew :GtdNew<CR>
 
 let g:loaded_gtd = 1
 

@@ -1,25 +1,9 @@
 
-function! gtd#note#Create(bang, mods, range_start, range_end)
-
-	try
-		if empty(a:mods)
-			let l:action = 'edit'.a:bang
-		else
-			let l:action = a:mods.' split'
-		endif
-		let l:template = s:GtdNoteTemplate(a:range_start, a:range_end)
-		execute l:action fnamemodify(g:gtd#dir.strftime("%Y%m%d_%H%M%S").'.gtd', ':.')
-		if append(0, l:template)
-			throw "Gtd template couldn't be inserted"
-		else
-			execute 'normal! gg'
-			execute 'startinsert!'
-		endif
-	catch /.*/
-		echomsg v:exception
-	endtry
-
-endfunction
+let s:note_template = [
+	\ '=',
+	\ '@'.g:gtd#default_context,
+	\ '!'.g:gtd#default_action
+	\ ]
 
 function! gtd#note#Read(note, count)
 	if a:count == 0
@@ -29,18 +13,47 @@ function! gtd#note#Read(note, count)
 	endif
 endfunction
 
-function! s:GtdNoteTemplate(range_start, range_end)
-	let l:template = []
-	let l:template += [ '=' ]
-	if !empty(g:gtd#default_context)
-		let l:template += [ '@'.g:gtd#default_context ]
-	endif
-	if !empty(g:gtd#default_action)
-		let l:template += [ '!'.g:gtd#default_action ]
-	endif
-	if a:range_start != 0 && a:range_end != 0
-		let l:template += [ '' ] + getline(a:range_start, a:range_end)
-	endif
-	return l:template
+function! gtd#note#Create(bang, mods, isrange) range
+
+	" a:isrange is deduced from <count>
+	" Ugly workaround :
+	" - to avoid having one line insertion when no range is really given
+	" - and having a lonely command to do both note creation from scratch and
+	"   from selection.
+
+	try
+		if empty(a:mods)
+			let l:action = 'edit'.a:bang
+		else
+			let l:action = a:mods.' split'
+		endif
+
+		let l:content = copy(s:note_template)
+		if a:isrange != -1
+			if a:firstline == a:lastline
+				let l:line = getline(a:firstline)
+				if !empty(l:line)
+					let l:content += [ '', l:line ]
+				endif
+			else
+				let l:content += [ '' ] + getline(a:firstline, a:lastline)
+			endif
+		endif
+
+		execute l:action fnamemodify(
+			\ g:gtd#dir.strftime("%Y%m%d_%H%M%S").'.gtd',
+			\ ':.'
+			\ )
+
+		if append(0, l:content)
+			throw "Gtd default content couldn't be inserted"
+		else
+			execute 'normal! gg'
+			execute 'startinsert!'
+		endif
+	catch /.*/
+		echomsg v:exception
+	endtry
+
 endfunction
 

@@ -202,14 +202,6 @@ function! gtd#Review(mods)
 
 endfunction
 
-function! gtd#New(mods, bang)
-	call gtd#note#Create(a:bang, a:mods, 0, 0)
-endfunction
-
-function! gtd#NewFromSelection(mods, bang) range
-	call gtd#note#Create(a:bang, a:mods, a:firstline, a:lastline)
-endfunction
-
 function! gtd#Bench(bang, formula)
 	let l:debug_switch = s:GtdDebugSwitch(0)
 	try

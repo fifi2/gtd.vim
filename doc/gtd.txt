@@ -43,7 +43,7 @@ Right after you set the directory in which to save the Gtd files (see
 accordingly to the current date and time to save time.
 	Eg. 20170629_021800.gtd.
 
-						*gtd-sample-file*
+						*gtd-note* *gtd-sample-file*
 Here is a sample of what a Gtd file may look like:
 
 	=Title of the Gtd file
@@ -196,16 +196,14 @@ and wait for the first empty line before leaving the search. >
 3. Usage					*gtd-usage*
 
 						*:GtdNew*
-:GtdNew[!]	    Create a new task file.
+:[range]GtdNew[!]    Create a new task file.
 
 		    Modifiers are allowed (see |<mods>|). Without modifier and
 		    with the [!] any changes in the current buffer are
 		    abandoned.
 
-						*:GtdNewFromSelection*
-:[range]GtdNewFromSelection[!]
-		    Same as ":Gtd" except the selected range of text is
-		    inserted in the new Gtd file.
+		    With a [range] (optional), seletected text is inserted in
+		    the new |gtd-note|.
 
 						*:Gtd*
 :Gtd[!] {formula}   This command allows you to search for some notes regarding
@@ -401,7 +399,7 @@ current buffer has gtd filetype. >
 	nmap <Leader>tf <Plug>GtdAttachedFiles
 <
 You can set a map to create a new Gtd file in a quicker way than using
-|:GtdNew| or |:GtdNewFromSelection|. Key combinaisons can be equal. >
+|:GtdNew|. Key combinaisons can be equal for normal and visual modes. >
 	nmap <Leader>tn <Plug>GtdNew
 	vmap <Leader>tn <Plug>GtdNew
 <
@@ -457,6 +455,8 @@ You can check for updates or browse the plugin here:
 ==============================================================================
 8. Changelog					*gtd-changelog*
 
+	+ |:GtdNew| is now capable to use a range as initial content of the
+	  notes. Removal of the dedicated command.
 	+ Fix: it is now possible to look for tags in the cache using regular
 	  expressions.
 	+ Cache system.
