@@ -342,13 +342,13 @@ and wait for the first empty line before leaving the search. >
 
 						*:GtdAdd*
 :GtdAdd[!] {formula}
-		    Same as ":Gtd[!] {formula}" except previous results are
-		    kept.
+		    Same as |:Gtd| except previous results are kept.
 
 						*:GtdFilter*
 :GtdFilter[!] {formula}
-		    Same as ":Gtd[!] {formula}" except default working files
-		    are deduced from the current |quickfix| list.
+		    Same as |:Gtd| except default working files are deduced
+		    from the current list of results (from the
+		    |location-list|).
 
 						*:GtdRefresh*
 :GtdRefresh	    Refresh the current Gtd search in your location list,
