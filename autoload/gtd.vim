@@ -67,10 +67,10 @@ endfunction
 function! gtd#Files()
 
 	try
-		let l:gtd_note_dir = s:GtdAttachedFilesDirGet()
+		let l:gtd_note_dir = gtd#AttachedFilesDirGet()
 
 		" Creation of the directory if needed
-		if !s:GtdAttachedFilesDirTest(l:gtd_note_dir)
+		if !gtd#AttachedFilesDirTest(l:gtd_note_dir)
 			\ && (!exists('*mkdir') || !mkdir(l:gtd_note_dir))
 			throw "Gtd note directory ".l:gtd_note_dir." can't be created"
 		endif
@@ -85,7 +85,7 @@ function! gtd#Files()
 		" We wait the user to continue...
 		call input("Hit enter to continue")
 
-		if s:GtdAttachedFilesDirTest(l:gtd_note_dir)
+		if gtd#AttachedFilesDirTest(l:gtd_note_dir)
 			if empty(glob(l:gtd_note_dir.'/**'))
 				if delete(l:gtd_note_dir, 'd') == 0
 					call s:AttachedFilesTagRemove()
@@ -105,52 +105,12 @@ function! gtd#Files()
 endfunction
 
 function! gtd#Explore()
-	let l:gtd_note_dir = s:GtdAttachedFilesDirGet()
+	let l:gtd_note_dir = gtd#AttachedFilesDirGet()
 
-	if !s:GtdAttachedFilesDirTest(l:gtd_note_dir)
+	if !gtd#AttachedFilesDirTest(l:gtd_note_dir)
 		echomsg "Gtd note directory ".l:gtd_note_dir." doesn't exist"
 	else
 		execute "Vexplore" l:gtd_note_dir
-	endif
-endfunction
-
-function! gtd#Delete()
-	let l:gtd_note_dir = s:GtdAttachedFilesDirGet()
-	let [ l:confirm, l:gtd_note_dir_test ] = [
-		\ 1,
-		\ s:GtdAttachedFilesDirTest(l:gtd_note_dir)
-		\ ]
-
-	if l:gtd_note_dir_test
-		\ && input("Attached files found. Do you confirm? (Y/N) ") != 'Y'
-		let l:confirm = 0
-	endif
-
-	if l:confirm
-		if l:gtd_note_dir_test
-			if delete(l:gtd_note_dir, 'rf') != 0
-				redraw | echomsg "Attached files couldn't be deleted"
-			endif
-		endif
-
-		let l:gtd_note_file = expand('%:p')
-		if !empty(glob(l:gtd_note_file))
-			if delete(l:gtd_note_file) == 0
-				execute 'bwipeout!'
-			else
-				redraw | echomsg "GTD file couldn't be deleted"
-			endif
-
-			if g:gtd#cache
-				call gtd#cache#Delete(
-					\ gtd#note#Key('N/A', l:gtd_note_file)
-					\ )
-			endif
-		else
-			execute 'bwipeout!'
-		endif
-	else
-		redraw | echomsg "Deletion cancelled"
 	endif
 endfunction
 
@@ -237,11 +197,11 @@ function! s:AttachedFilesTagTest()
 	return getline(1) =~ '^=.* \[\*\]$'
 endfunction
 
-function! s:GtdAttachedFilesDirGet()
+function! gtd#AttachedFilesDirGet()
 	return expand('%:p:r')
 endfunction
 
-function! s:GtdAttachedFilesDirTest(dir)
+function! gtd#AttachedFilesDirTest(dir)
 	return isdirectory(a:dir)
 endfunction
 

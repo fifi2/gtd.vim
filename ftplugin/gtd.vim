@@ -14,7 +14,7 @@ let b:undo_ftplugin .= ' | execute "nunmap <buffer> <Plug>GtdAttachedFiles"'
 command! -buffer -nargs=0 GtdExplore call gtd#Explore()
 let b:undo_ftplugin .= ' | execute "delcommand GtdExplore"'
 
-command! -buffer -nargs=0 GtdDelete call gtd#Delete()
+command! -buffer -nargs=0 GtdDelete call gtd#note#Delete()
 let b:undo_ftplugin .= ' | execute "delcommand GtdDelete"'
 
 execute "nnoremap <buffer> <silent> <Plug>GtdExplore :GtdExplore<CR>"

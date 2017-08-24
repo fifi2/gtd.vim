@@ -73,7 +73,9 @@ function! gtd#cache#IsPossible(atom_type)
 endfunction
 
 function! gtd#cache#Delete(key)
-	unlet! s:cache[a:key]
+	if exists('s:cache')
+		unlet! s:cache[a:key]
+	endif
 endfunction
 
 function! gtd#cache#TagsGet(key)
