@@ -28,7 +28,7 @@ if g:gtd#cache == 1
 endif
 
 if exists('g:gtd#debug') && g:gtd#debug
-	command! -bang -nargs=1 -complete=customlist,gtd#search#CommandTagComplete GtdBench call gtd#Bench(<q-bang>, <q-args>)
+	command! -bang -nargs=1 -complete=customlist,gtd#search#CommandTagComplete GtdBench call gtd#debug#Bench(<q-bang>, <q-args>)
 endif
 
 nnoremap <silent> <Plug>GtdNew :GtdNew<CR>

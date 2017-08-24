@@ -51,7 +51,7 @@ function! gtd#search#Start(bang, formula, type)
 				\ gtd#formula#OperatorPrecedenceHelper(l:formula)
 				\ )
 			\ )
-		call gtd#Debug(l:search_actions)
+		call gtd#debug#Message(l:search_actions)
 
 		if g:gtd#cache
 			call gtd#cache#Load(1)
@@ -94,7 +94,7 @@ function! gtd#search#Review(mods)
 	if empty(g:gtd#review)
 		echo "Gtd review has not been set (g:gtd#review)"
 	else
-		let l:debug_switch = gtd#DebugSwitch(0)
+		let l:debug_switch = gtd#debug#Switch(0)
 		let l:debug_reactivate = 0
 
 		let l:split = 1
@@ -131,7 +131,7 @@ function! gtd#search#Review(mods)
 		execute 'normal!' open[0].'gt'
 
 		if l:debug_switch
-			call gtd#DebugSwitch(1)
+			call gtd#debug#Switch(1)
 		endif
 	endif
 
