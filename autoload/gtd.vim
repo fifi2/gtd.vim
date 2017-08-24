@@ -64,56 +64,6 @@ function! gtd#Debug(message)
 	endif
 endfunction
 
-function! gtd#Files()
-
-	try
-		let l:gtd_note_dir = gtd#AttachedFilesDirGet()
-
-		" Creation of the directory if needed
-		if !gtd#AttachedFilesDirTest(l:gtd_note_dir)
-			\ && (!exists('*mkdir') || !mkdir(l:gtd_note_dir))
-			throw "Gtd note directory ".l:gtd_note_dir." can't be created"
-		endif
-
-		" Browsing directory
-		if has('win32')
-			execute 'silent !explorer.exe' l:gtd_note_dir
-		else
-			execute 'silent !xdg-open' l:gtd_note_dir
-		endif
-
-		" We wait the user to continue...
-		call input("Hit enter to continue")
-
-		if gtd#AttachedFilesDirTest(l:gtd_note_dir)
-			if empty(glob(l:gtd_note_dir.'/**'))
-				if delete(l:gtd_note_dir, 'd') == 0
-					call s:AttachedFilesTagRemove()
-				else
-					throw "Gtd note directory couldn't be deleted"
-				endif
-			else
-				call s:AttachedFilesTagAdd()
-			endif
-		else
-			throw "Gtd note directory couldn't be found"
-		endif
-	catch /.*/
-		echomsg v:exception
-	endtry
-
-endfunction
-
-function! gtd#Explore()
-	let l:gtd_note_dir = gtd#AttachedFilesDirGet()
-
-	if !gtd#AttachedFilesDirTest(l:gtd_note_dir)
-		echomsg "Gtd note directory ".l:gtd_note_dir." doesn't exist"
-	else
-		execute "Vexplore" l:gtd_note_dir
-	endif
-endfunction
-
 function! gtd#Bench(bang, formula)
 	let l:debug_switch = gtd#DebugSwitch(0)
 	try
@@ -142,32 +92,6 @@ function! gtd#Context(context)
 		echo "Gtd context is now:" a:context
 	else
 		echo "Gtd context doesn't seem legit"
-	endif
-endfunction
-
-function! s:AttachedFilesTagTest()
-	return getline(1) =~ '^=.* \[\*\]$'
-endfunction
-
-function! gtd#AttachedFilesDirGet()
-	return expand('%:p:r')
-endfunction
-
-function! gtd#AttachedFilesDirTest(dir)
-	return isdirectory(a:dir)
-endfunction
-
-function! s:AttachedFilesTagAdd()
-	let l:title = getline(1)
-	if l:title =~ '^=' && !s:AttachedFilesTagTest()
-		call setline(1, substitute(l:title, '\s*$', ' \[\*\]', ''))
-	endif
-endfunction
-
-function! s:AttachedFilesTagRemove()
-	let l:title = getline(1)
-	if l:title =~ '^=' && s:AttachedFilesTagTest()
-		call setline(1, substitute(l:title, ' \[\*\]$', '', ''))
 	endif
 endfunction
 

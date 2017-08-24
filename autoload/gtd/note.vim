@@ -74,10 +74,10 @@ function! gtd#note#Create(bang, mods, isrange) range
 endfunction
 
 function! gtd#note#Delete()
-	let l:gtd_note_dir = gtd#AttachedFilesDirGet()
+	let l:gtd_note_dir = gtd#files#DirGet()
 	let [ l:confirm, l:gtd_note_dir_test ] = [
 		\ 1,
-		\ gtd#AttachedFilesDirTest(l:gtd_note_dir)
+		\ gtd#files#DirTest(l:gtd_note_dir)
 		\ ]
 
 	if l:gtd_note_dir_test

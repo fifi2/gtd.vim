@@ -5,20 +5,20 @@ if exists("b:did_ftplugin")
 	finish
 endif
 
-command! -buffer -nargs=0 GtdFiles call gtd#Files()
+command! -buffer -nargs=0 GtdFiles call gtd#files#Open()
 let b:undo_ftplugin = 'execute "delcommand GtdFiles"'
 
 execute "nnoremap <buffer> <silent> <Plug>GtdAttachedFiles :GtdFiles<CR>"
 let b:undo_ftplugin .= ' | execute "nunmap <buffer> <Plug>GtdAttachedFiles"'
 
-command! -buffer -nargs=0 GtdExplore call gtd#Explore()
+command! -buffer -nargs=0 GtdExplore call gtd#files#Explore()
 let b:undo_ftplugin .= ' | execute "delcommand GtdExplore"'
-
-command! -buffer -nargs=0 GtdDelete call gtd#note#Delete()
-let b:undo_ftplugin .= ' | execute "delcommand GtdDelete"'
 
 execute "nnoremap <buffer> <silent> <Plug>GtdExplore :GtdExplore<CR>"
 let b:undo_ftplugin .= ' | execute "nunmap <buffer> <Plug>GtdExplore"'
+
+command! -buffer -nargs=0 GtdDelete call gtd#note#Delete()
+let b:undo_ftplugin .= ' | execute "delcommand GtdDelete"'
 
 setlocal completefunc=gtd#search#InsertTagComplete
 let b:undo_ftplugin .= ' | setlocal completefunc<'
