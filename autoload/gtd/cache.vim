@@ -15,7 +15,7 @@ function! gtd#cache#Load(silent)
 		else
 			let [ s:cache, l:curr, l:ratio ] = [ {}, 1, 0.0 ]
 			let l:time = localtime()
-			let l:all_files = gtd#AllFiles('full')
+			let l:all_files = gtd#note#GetAll('full')
 			let l:nb_files = len(l:all_files)
 			for l:f in l:all_files
 				if !a:silent
@@ -29,7 +29,7 @@ function! gtd#cache#Load(silent)
 					let l:curr += 1
 				endif
 				let l:l_tags = s:GtdCacheFileCreate(l:f)
-				let s:cache[gtd#FilenameShort('N/A', l:f)] = {
+				let s:cache[gtd#note#Key('N/A', l:f)] = {
 					\ 'time': l:time,
 					\ 'tags': l:l_tags
 					\ }

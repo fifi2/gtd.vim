@@ -28,7 +28,7 @@ function! gtd#search#Start(bang, formula, type)
 
 		" Where are we looking for results?
 		if a:type == 'new' || a:type == 'add' || a:type == 'refresh'
-			let l:where = gtd#AllFiles('short')
+			let l:where = gtd#note#GetAll('short')
 		elseif a:type == 'filter'
 			let l:where = l:previous_results
 		endif
@@ -307,7 +307,7 @@ function! s:GtdSearchTag(pattern, prefix)
 	let l:matches = []
 	if g:gtd#cache
 		call gtd#cache#Load(1)
-		for l:f in gtd#AllFiles('short')
+		for l:f in gtd#note#GetAll('short')
 			for l:t in gtd#cache#TagsGet(l:f)
 				if l:t =~ a:pattern
 					let l:matches += [ a:prefix.l:t ]
@@ -315,7 +315,7 @@ function! s:GtdSearchTag(pattern, prefix)
 			endfor
 		endfor
 	else
-		for l:f in gtd#AllFiles('full')
+		for l:f in gtd#note#GetAll('full')
 			for l:l in gtd#note#Read(l:f, g:gtd#tag_lines_count)
 				if l:l =~ '^$'
 					break

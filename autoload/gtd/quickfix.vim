@@ -6,7 +6,7 @@ function! gtd#quickfix#ResultsGet()
 	endfor
 	return map(
 		\ l:previous_results,
-		\ function('gtd#FilenameShort')
+		\ function('gtd#note#Key')
 		\ )
 endfunction
 

@@ -143,7 +143,7 @@ function! gtd#Delete()
 
 			if g:gtd#cache
 				call gtd#cache#Delete(
-					\ gtd#FilenameShort('N/A', l:gtd_note_file)
+					\ gtd#note#Key('N/A', l:gtd_note_file)
 					\ )
 			endif
 		else
@@ -266,21 +266,5 @@ function! s:GtdDebugSwitch(target)
 		let l:switch_done = 1
 	endif
 	return l:switch_done
-endfunction
-
-function! gtd#FilenameShort(key, value)
-	return fnamemodify(a:value, ':t:r')
-endfunction
-
-function! gtd#AllFiles(mode)
-	let l:all_files = glob(g:gtd#dir.'*.gtd', 0, 1)
-	if a:mode == 'full'
-		return l:all_files
-	elseif a:mode == 'short'
-		return map(
-			\ l:all_files,
-			\ function('gtd#FilenameShort')
-			\ )
-	endif
 endfunction
 

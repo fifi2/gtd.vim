@@ -5,6 +5,22 @@ let s:note_template = [
 	\ '!'.g:gtd#default_action
 	\ ]
 
+function! gtd#note#Key(key, value)
+	return fnamemodify(a:value, ':t:r')
+endfunction
+
+function! gtd#note#GetAll(mode)
+	let l:all_files = glob(g:gtd#dir.'*.gtd', 0, 1)
+	if a:mode == 'full'
+		return l:all_files
+	elseif a:mode == 'short'
+		return map(
+			\ l:all_files,
+			\ function('gtd#note#Key')
+			\ )
+	endif
+endfunction
+
 function! gtd#note#Read(note, count)
 	if a:count == 0
 		return readfile(a:note)
