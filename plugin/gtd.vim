@@ -20,7 +20,7 @@ command! -nargs=0 GtdRefresh call gtd#search#Start('!', gtd#quickfix#ArgsGet(), 
 command! -nargs=1 -complete=customlist,gtd#search#CommandTagComplete GtdContext call gtd#Context(<f-args>)
 
 if !empty('g:gtd#review')
-	command! -nargs=0 GtdReview call gtd#Review(<q-mods>)
+	command! -nargs=0 GtdReview call gtd#search#Review(<q-mods>)
 endif
 
 if g:gtd#cache == 1

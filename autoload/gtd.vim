@@ -114,56 +114,8 @@ function! gtd#Explore()
 	endif
 endfunction
 
-function! gtd#Review(mods)
-
-	if empty(g:gtd#review)
-		echo "Gtd review has not been set (g:gtd#review)"
-	else
-		let l:debug_switch = s:GtdDebugSwitch(0)
-		let l:debug_reactivate = 0
-
-		let l:split = 1
-
-		if a:mods == 'tab' && l:split == 1
-			execute 'tabedit'
-		endif
-
-		let open = []
-		for g in g:gtd#review
-			if l:split
-				if empty(l:open)
-					if a:mods != 'tab'
-						execute 'enew'
-					endif
-				else
-					execute 'belowright new'
-				endif
-			else
-				execute 'tabedit'
-			endif
-			let l:bufnr = bufnr('%')
-			if !l:split
-				let open += [ tabpagenr() ]
-			endif
-			silent call gtd#search#Start('!', g, 'new')
-			" Focus is now to the location list
-			setlocal nowinfixheight nowinfixwidth
-			if l:split
-				let open += [ bufnr('%') ]
-			endif
-			execute 'silent bw' l:bufnr
-		endfor
-		execute 'normal!' open[0].'gt'
-
-		if l:debug_switch
-			call s:GtdDebugSwitch(1)
-		endif
-	endif
-
-endfunction
-
 function! gtd#Bench(bang, formula)
-	let l:debug_switch = s:GtdDebugSwitch(0)
+	let l:debug_switch = gtd#DebugSwitch(0)
 	try
 		let [ l:i, l:bench_sum, l:bench_nb ] = [ 0, 0.0, 100 ]
 		while l:i < l:bench_nb
@@ -180,7 +132,7 @@ function! gtd#Bench(bang, formula)
 	let l:bench_avg = l:bench_sum / l:bench_nb
 	echo "Gtd benchmark:" l:bench_avg
 	if l:debug_switch
-		call s:GtdDebugSwitch(1)
+		call gtd#DebugSwitch(1)
 	endif
 endfunction
 
@@ -219,7 +171,7 @@ function! s:AttachedFilesTagRemove()
 	endif
 endfunction
 
-function! s:GtdDebugSwitch(target)
+function! gtd#DebugSwitch(target)
 	let l:switch_done = 0
 	if g:gtd#debug != a:target
 		let g:gtd#debug = a:target

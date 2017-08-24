@@ -89,6 +89,54 @@ function! gtd#search#Start(bang, formula, type)
 
 endfunction
 
+function! gtd#search#Review(mods)
+
+	if empty(g:gtd#review)
+		echo "Gtd review has not been set (g:gtd#review)"
+	else
+		let l:debug_switch = gtd#DebugSwitch(0)
+		let l:debug_reactivate = 0
+
+		let l:split = 1
+
+		if a:mods == 'tab' && l:split == 1
+			execute 'tabedit'
+		endif
+
+		let open = []
+		for g in g:gtd#review
+			if l:split
+				if empty(l:open)
+					if a:mods != 'tab'
+						execute 'enew'
+					endif
+				else
+					execute 'belowright new'
+				endif
+			else
+				execute 'tabedit'
+			endif
+			let l:bufnr = bufnr('%')
+			if !l:split
+				let open += [ tabpagenr() ]
+			endif
+			silent call gtd#search#Start('!', g, 'new')
+			" Focus is now to the location list
+			setlocal nowinfixheight nowinfixwidth
+			if l:split
+				let open += [ bufnr('%') ]
+			endif
+			execute 'silent bw' l:bufnr
+		endfor
+		execute 'normal!' open[0].'gt'
+
+		if l:debug_switch
+			call gtd#DebugSwitch(1)
+		endif
+	endif
+
+endfunction
+
 function! s:GtdSearchHandler(actions, where)
 
 	if type(a:actions) == v:t_string
