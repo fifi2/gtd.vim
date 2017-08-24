@@ -86,15 +86,6 @@ function! gtd#Bench(bang, formula)
 	endif
 endfunction
 
-function! gtd#Context(context)
-	if a:context =~ '@\S\+'
-		let g:gtd#default_context = a:context[1:]
-		echo "Gtd context is now:" a:context
-	else
-		echo "Gtd context doesn't seem legit"
-	endif
-endfunction
-
 function! gtd#DebugSwitch(target)
 	let l:switch_done = 0
 	if g:gtd#debug != a:target

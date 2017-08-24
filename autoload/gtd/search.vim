@@ -137,6 +137,15 @@ function! gtd#search#Review(mods)
 
 endfunction
 
+function! gtd#search#Context(context)
+	if a:context =~ '@\S\+'
+		let g:gtd#default_context = a:context[1:]
+		echo "Gtd context is now:" a:context
+	else
+		echo "Gtd context doesn't seem legit"
+	endif
+endfunction
+
 function! s:GtdSearchHandler(actions, where)
 
 	if type(a:actions) == v:t_string

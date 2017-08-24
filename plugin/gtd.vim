@@ -17,7 +17,7 @@ command! -bang -nargs=1 -complete=customlist,gtd#search#CommandTagComplete Gtd c
 command! -bang -nargs=1 -complete=customlist,gtd#search#CommandTagComplete GtdAdd call gtd#search#Start(<q-bang>, <q-args>, 'add')
 command! -bang -nargs=1 -complete=customlist,gtd#search#CommandTagComplete GtdFilter call gtd#search#Start(<q-bang>, <q-args>, 'filter')
 command! -nargs=0 GtdRefresh call gtd#search#Start('!', gtd#quickfix#ArgsGet(), 'refresh')
-command! -nargs=1 -complete=customlist,gtd#search#CommandTagComplete GtdContext call gtd#Context(<f-args>)
+command! -nargs=1 -complete=customlist,gtd#search#CommandTagComplete GtdContext call gtd#search#Context(<f-args>)
 
 if !empty('g:gtd#review')
 	command! -nargs=0 GtdReview call gtd#search#Review(<q-mods>)
