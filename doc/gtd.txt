@@ -455,6 +455,8 @@ You can check for updates or browse the plugin here:
 ==============================================================================
 8. Changelog					*gtd-changelog*
 
+	+ Fix: trailing spaces in the Gtd request weren't removed as expected
+	  due to the adding of default context.
 	+ |:GtdNew| is now capable to use a range as initial content of the
 	  notes. Removal of the dedicated command.
 	+ Fix: it is now possible to look for tags in the cache using regular

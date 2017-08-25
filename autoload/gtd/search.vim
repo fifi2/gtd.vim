@@ -42,14 +42,14 @@ function! gtd#search#Start(bang, formula, type)
 
 		let s:gtd_highlighted = []
 
+		let l:formula = gtd#formula#OperatorPrecedenceHelper(l:formula)
+
 		if a:bang != '!' && !empty(g:gtd#default_context)
 			let l:formula = '('.l:formula.') @'.g:gtd#default_context
 		endif
 
 		let l:search_actions = gtd#formula#Parser(
-			\ gtd#formula#ListConvert(
-				\ gtd#formula#OperatorPrecedenceHelper(l:formula)
-				\ )
+			\ gtd#formula#ListConvert(l:formula)
 			\ )
 		call gtd#debug#Message(l:search_actions)
 
