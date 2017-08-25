@@ -17,8 +17,8 @@ function! gtd#search#Start(bang, formula, type)
 
 		" Do we need previous results?
 		if a:type == 'add' || a:type == 'filter'
-			let l:previous_results = gtd#quickfix#ResultsGet()
-			let l:previous_args = gtd#quickfix#ArgsGet()
+			let l:previous_results = gtd#results#Get()
+			let l:previous_args = gtd#results#Args()
 		elseif a:type == 'new' || a:type == 'refresh'
 			let l:previous_results = []
 			let l:previous_args = ''
@@ -65,8 +65,8 @@ function! gtd#search#Start(bang, formula, type)
 			let @/ = '\('.join(uniq(sort(s:gtd_highlighted)), '\)\|\(').'\)'
 		endif
 
-		" Quickfix loading
-		call gtd#quickfix#ListSet(
+		" Results loading
+		call gtd#results#Set(
 			\ l:formula,
 			\ l:gtd_results,
 			\ l:previous_args,

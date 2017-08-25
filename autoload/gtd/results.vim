@@ -1,5 +1,5 @@
 
-function! gtd#quickfix#ResultsGet()
+function! gtd#results#Get()
 	let l:previous_results = []
 	for l:qf_item in getloclist(0)
 		let l:previous_results += [ bufname(l:qf_item['bufnr']) ]
@@ -10,35 +10,34 @@ function! gtd#quickfix#ResultsGet()
 		\ )
 endfunction
 
-function! gtd#quickfix#ArgsGet()
+function! gtd#results#Args()
 	let l:args = ''
-	let l:qf_title = s:GtdQfTitleGet()
-	if s:GtdQfTest(l:qf_title)
+	let l:qf_title = s:GtdResultsTitleGet()
+	if s:GtdResultsTest(l:qf_title)
 		let l:args = substitute(l:qf_title, '^:Gtd ', '', '')
 	endif
 	return l:args
 endfunction
 
-function! gtd#quickfix#ListSet(formula, results, previous_args, type)
-	let l:qf_list = s:GtdQfListCreate(a:results)
+function! gtd#results#Set(formula, results, previous_args, type)
 	if a:type == 'refresh'
 		let l:qf_action = 'r'
 	else
 		let l:qf_action = ' '
 	endif
-	call setloclist(0, l:qf_list, l:qf_action)
-	call s:GtdQfTitleSet(a:formula, a:previous_args, a:type)
+	call setloclist(0, s:GtdResultsListCreate(a:results), l:qf_action)
+	call s:GtdResultsTitleSet(a:formula, a:previous_args, a:type)
 endfunction
 
-function! s:GtdQfTest(qf_title)
+function! s:GtdResultsTest(qf_title)
 	return a:qf_title =~ '^:Gtd '
 endfunction
 
-function! s:GtdQfTitleGet()
+function! s:GtdResultsTitleGet()
 	return get(getloclist(0, {'title': 1}), 'title', '')
 endfunction
 
-function! s:GtdQfTitleSet(formula, previous_args, type)
+function! s:GtdResultsTitleSet(formula, previous_args, type)
 	if a:type == 'add'
 		let l:qf_title = '('.a:previous_args.') + ('.a:formula.')'
 	elseif a:type == 'filter'
@@ -53,7 +52,7 @@ function! s:GtdQfTitleSet(formula, previous_args, type)
 		\ )
 endfunction
 
-function! s:GtdQfCreateResult(filename)
+function! s:GtdResultsCreateResult(filename)
 	let l:filename_path = g:gtd#dir.a:filename.'.gtd'
 	let l:title = gtd#search#TitleGet(l:filename_path)
 	return {
@@ -64,10 +63,10 @@ function! s:GtdQfCreateResult(filename)
 		\ }
 endfunction
 
-function! s:GtdQfListCreate(results)
+function! s:GtdResultsListCreate(results)
 	let l:qf = []
 	for l:gtd_result in uniq(sort(a:results))
-		let l:qf += [ s:GtdQfCreateResult(l:gtd_result) ]
+		let l:qf += [ s:GtdResultsCreateResult(l:gtd_result) ]
 	endfor
 	return l:qf
 endfunction
