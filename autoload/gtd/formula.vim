@@ -1,14 +1,10 @@
 
 function! gtd#formula#OperatorPrecedenceHelper(formula)
-	let l:formula = a:formula
-	let l:formula = substitute(l:formula, '^\s\+', '\1', '')
-	let l:formula = substitute(l:formula, '\s\+$', '\1', '')
+	let l:formula = substitute(a:formula, '^\s*\(.\{-}\)\s*$', '\1', '')
 	let l:formula = substitute(l:formula, '\([()]\)', '\1\1\1', 'g')
 	let l:formula = substitute(l:formula, '\s*+\s*', '))+((', 'g')
 	let l:formula = substitute(l:formula, '\s\+', ') (', 'g')
-	let l:formula = substitute(l:formula, '^', '((', '')
-	let l:formula = substitute(l:formula, '$', '))', '')
-	return l:formula
+	return '(('.l:formula.'))'
 endfunction
 
 function! gtd#formula#Parser(formula)
