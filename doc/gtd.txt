@@ -196,7 +196,7 @@ and wait for the first empty line before leaving the search. >
 3. Usage					*gtd-usage*
 
 						*:GtdNew*
-:[range]GtdNew[!]    Create a new task file.
+:[range]GtdNew[!]   Create a new task file.
 
 		    Modifiers are allowed (see |<mods>|). Without modifier and
 		    with the [!] any changes in the current buffer are
@@ -208,8 +208,7 @@ and wait for the first empty line before leaving the search. >
 						*:Gtd*
 :Gtd[!] {formula}   This command allows you to search for some notes regarding
 		    theirs tags or content. Results are loaded to the
-		    |location-list| list so you can navigate into it with the
-		    |location-list-window|.
+		    |gtd-results| buffer so you can navigate into it.
 
 		    {formula} is a string you can consider as a mathematic
 		    expression.
@@ -268,6 +267,11 @@ and wait for the first empty line before leaving the search. >
 		    search for similar atoms in your existing notes and give
 		    you back proposals. Title, content or date atoms are not
 		    supported in completion system.
+
+						*gtd-results*
+		    The searches you do are loaded into a special temporary
+		    gtd-results buffer which is automatically displayed in a
+		    window. You can use it to access the GTD notes.
 
 						*gtd-formula-examples*
 >
@@ -340,18 +344,18 @@ and wait for the first empty line before leaving the search. >
 
 						*:GtdAdd*
 :GtdAdd[!] {formula}
-		    Same as |:Gtd| except previous results are kept.
+		    Same as |:Gtd| except previous results are kept if a
+		    search has already been performed.
 
 						*:GtdFilter*
 :GtdFilter[!] {formula}
 		    Same as |:Gtd| except default working files are deduced
-		    from the current list of results (from the
-		    |location-list|).
+		    from the current list of results if a former search has
+		    been performed.
 
 						*:GtdRefresh*
-:GtdRefresh	    Refresh the current Gtd search in your location list,
-		    assuming you've done some changes in the tags of the
-		    previous results.
+:GtdRefresh	    Refresh the current Gtd search, assuming you've done some
+		    changes in the tags of the previous results.
 
 						*:GtdReview*
 :GtdReview[!]	    If you are used to repeat a few |:Gtd| search, you might
@@ -458,6 +462,9 @@ You can check for updates or browse the plugin here:
 ==============================================================================
 8. Changelog					*gtd-changelog*
 
+	+ Results are now loaded into the new |gtd-results| buffer instead of
+	  the location list. This buffer is able to load the results of
+	  multiple searches (as |GtdReview| can produce).
 	+ Fix: trailing spaces in the Gtd request weren't removed as expected
 	  due to the adding of default context.
 	+ |:GtdNew| is now capable to use a range as initial content of the
