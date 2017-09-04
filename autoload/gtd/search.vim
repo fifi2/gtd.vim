@@ -12,10 +12,14 @@ function! gtd#search#Start(bang, formula, type)
 		let l:highlight = 0
 
 		if a:type == 'new'
+			let l:what = s:GtdSearchContextAdd(
+				\ a:bang,
+				\ gtd#formula#OperatorPrecedenceHelper(a:formula)
+				\ )
 			let l:searches += [ {
-				\ 'before': '',
+				\ 'display': gtd#formula#Simplify(l:what),
 				\ 'keep': [],
-				\ 'what': a:formula,
+				\ 'what': l:what,
 				\ 'where': gtd#note#GetAll('short')
 				\ } ]
 		elseif a:type == 'review'
@@ -23,10 +27,14 @@ function! gtd#search#Start(bang, formula, type)
 				throw "Gtd review has not been set (g:gtd#review)"
 			else
 				for l:r in g:gtd#review
+					let l:what = s:GtdSearchContextAdd(
+						\ a:bang,
+						\ gtd#formula#OperatorPrecedenceHelper(l:r)
+						\ )
 					let l:searches += [ {
-						\ 'before': '',
+						\ 'display': gtd#formula#Simplify(l:what),
 						\ 'keep': [],
-						\ 'what': l:r,
+						\ 'what': l:what,
 						\ 'where': gtd#note#GetAll('short')
 						\ } ]
 				endfor
@@ -37,10 +45,14 @@ function! gtd#search#Start(bang, formula, type)
 				throw 'No previous result'
 			else
 				for l:p in l:previous['gtd']
+					let l:what = s:GtdSearchContextAdd(
+						\ a:bang,
+						\ gtd#formula#OperatorPrecedenceHelper(l:p['formula'])
+						\ )
 					let l:searches += [ {
-						\ 'before': '',
+						\ 'display': gtd#formula#Simplify(l:what),
 						\ 'keep': [],
-						\ 'what': l:p['formula'],
+						\ 'what': l:what,
 						\ 'where': gtd#note#GetAll('short')
 						\ } ]
 				endfor
@@ -50,11 +62,17 @@ function! gtd#search#Start(bang, formula, type)
 			if l:previous['id'] == -1
 				throw 'No previous result'
 			else
+				let l:what = s:GtdSearchContextAdd(
+					\ a:bang,
+					\ gtd#formula#OperatorPrecedenceHelper(a:formula)
+					\ )
 				for l:p in l:previous['gtd']
 					let l:searches += [ {
-						\ 'before': l:p['formula'],
+						\ 'display': gtd#formula#Simplify(
+							\ l:p['formula'].' + '.l:what
+							\ ),
 						\ 'keep': l:p['results'],
-						\ 'what': a:formula,
+						\ 'what': l:what,
 						\ 'where': gtd#note#GetAll('short')
 						\ } ]
 				endfor
@@ -64,11 +82,17 @@ function! gtd#search#Start(bang, formula, type)
 			if l:previous['id'] == -1
 				throw 'No previous result'
 			else
+				let l:what = s:GtdSearchContextAdd(
+					\ a:bang,
+					\ gtd#formula#OperatorPrecedenceHelper(a:formula)
+					\ )
 				for l:p in l:previous['gtd']
 					let l:searches += [ {
-						\ 'before': l:p['formula'],
+						\ 'display': gtd#formula#Simplify(
+							\ '('.l:p['formula'].') ('.l:what.')'
+							\ ),
 						\ 'keep': [],
-						\ 'what': a:formula,
+						\ 'what': l:what,
 						\ 'where': l:p['results']
 						\ } ]
 				endfor
@@ -81,24 +105,16 @@ function! gtd#search#Start(bang, formula, type)
 			let l:result_id = gtd#results#Create(l:previous['id'])
 		endif
 
+		if g:gtd#cache
+			call gtd#cache#Load(1)
+		endif
+
 		for l:s in l:searches
-
-			let l:s['what'] = gtd#formula#OperatorPrecedenceHelper(
-				\ l:s['what']
-				\ )
-
-			if a:bang != '!' && !empty(g:gtd#default_context)
-				let l:s['what'] = '('.l:s['what'].') @'.g:gtd#default_context
-			endif
 
 			let l:search_actions = gtd#formula#Parser(
 				\ gtd#formula#ListConvert(l:s['what'])
 				\ )
 			call gtd#debug#Message(l:search_actions)
-
-			if g:gtd#cache
-				call gtd#cache#Load(1)
-			endif
 
 			" No need to do each search if type is 'add' there will be no
 			" change...
@@ -111,24 +127,12 @@ function! gtd#search#Start(bang, formula, type)
 			let l:gtd_results += l:s['keep']
 			let l:gtd_results = uniq(sort(l:gtd_results))
 
-			if a:type == 'new' || a:type == 'review' || a:type == 'refresh'
-				let l:formula_disp = l:s['what']
-			elseif a:type == 'add'
-				let l:formula_disp = l:s['before'].' + '.l:s['what']
-			elseif a:type == 'filter'
-				let l:formula_disp = '('.l:s['before'].') ('.l:s['what'].')'
-			endif
-
 			if l:highlight == 0 && !empty(l:gtd_results)
 				let l:highlight = 1
 			endif
 
 			" Results loading
-			call gtd#results#Set(
-				\ l:result_id,
-				\ gtd#formula#Simplify(l:formula_disp),
-				\ l:gtd_results
-				\ )
+			call gtd#results#Set(l:result_id, l:s['display'], l:gtd_results)
 		endfor
 
 		" Highlighting
@@ -154,6 +158,14 @@ function! gtd#search#Context(context)
 		echo "Gtd context is now:" a:context
 	else
 		echo "Gtd context doesn't seem legit"
+	endif
+endfunction
+
+function! s:GtdSearchContextAdd(bang, formula)
+	if a:bang != '!' && !empty(g:gtd#default_context)
+		return '('.a:formula.') @'.g:gtd#default_context
+	else
+		return a:formula
 	endif
 endfunction
 
