@@ -2,138 +2,149 @@
 function! gtd#search#Start(bang, formula, type)
 
 	if g:gtd#debug
-		echomsg "Gtd" a:formula
 		let l:start_time = reltime()
 	endif
 
 	try
-		let l:formula = a:formula
 
-		" If we are dealing with a refresh, we might want to check if we
-		" succeed to get the previous request.
-		if a:type == 'refresh' && empty(l:formula)
-			throw "Gtd refresh is not possible."
-		endif
-
-		" Do we need previous results?
-		if a:type == 'add' || a:type == 'filter'
-			let l:previous_results = gtd#results#Get()
-			let l:previous_args = gtd#results#Args()
-		elseif a:type == 'new' || a:type == 'refresh'
-			let l:previous_results = []
-			let l:previous_args = ''
-		else
-			throw "Gtd type forbidden ".a:type
-		endif
-
-		" Where are we looking for results?
-		if a:type == 'new' || a:type == 'add' || a:type == 'refresh'
-			let l:where = gtd#note#GetAll('short')
-		elseif a:type == 'filter'
-			let l:where = l:previous_results
-		endif
-
-		" Are we going to keep some previous results?
-		if a:type == 'new' || a:type == 'filter' || a:type == 'refresh'
-			let l:results_to_keep = []
-		elseif a:type == 'add'
-			let l:results_to_keep = l:previous_results
-		endif
-
+		let l:searches = []
 		let s:gtd_highlighted = []
+		let l:highlight = 0
 
-		let l:formula = gtd#formula#OperatorPrecedenceHelper(l:formula)
-
-		if a:bang != '!' && !empty(g:gtd#default_context)
-			let l:formula = '('.l:formula.') @'.g:gtd#default_context
+		if a:type == 'new'
+			let l:searches += [ {
+				\ 'before': '',
+				\ 'keep': [],
+				\ 'what': a:formula,
+				\ 'where': gtd#note#GetAll('short')
+				\ } ]
+		elseif a:type == 'review'
+			if empty(g:gtd#review)
+				throw "Gtd review has not been set (g:gtd#review)"
+			else
+				for l:r in g:gtd#review
+					let l:searches += [ {
+						\ 'before': '',
+						\ 'keep': [],
+						\ 'what': l:r,
+						\ 'where': gtd#note#GetAll('short')
+						\ } ]
+				endfor
+			endif
+		elseif a:type == 'refresh'
+			let l:previous = gtd#results#Get()
+			if l:previous['id'] == -1
+				throw 'No previous result'
+			else
+				for l:p in l:previous['gtd']
+					let l:searches += [ {
+						\ 'before': '',
+						\ 'keep': [],
+						\ 'what': l:p['formula'],
+						\ 'where': gtd#note#GetAll('short')
+						\ } ]
+				endfor
+			endif
+		elseif a:type == 'add'
+			let l:previous = gtd#results#Get()
+			if l:previous['id'] == -1
+				throw 'No previous result'
+			else
+				for l:p in l:previous['gtd']
+					let l:searches += [ {
+						\ 'before': l:p['formula'],
+						\ 'keep': l:p['results'],
+						\ 'what': a:formula,
+						\ 'where': gtd#note#GetAll('short')
+						\ } ]
+				endfor
+			endif
+		elseif a:type == 'filter'
+			let l:previous = gtd#results#Get()
+			if l:previous['id'] == -1
+				throw 'No previous result'
+			else
+				for l:p in l:previous['gtd']
+					let l:searches += [ {
+						\ 'before': l:p['formula'],
+						\ 'keep': [],
+						\ 'what': a:formula,
+						\ 'where': l:p['results']
+						\ } ]
+				endfor
+			endif
 		endif
 
-		let l:search_actions = gtd#formula#Parser(
-			\ gtd#formula#ListConvert(l:formula)
-			\ )
-		call gtd#debug#Message(l:search_actions)
-
-		if g:gtd#cache
-			call gtd#cache#Load(1)
+		if a:type != 'refresh'
+			let l:result_id = gtd#results#Create(-1)
+		else
+			let l:result_id = gtd#results#Create(l:previous['id'])
 		endif
 
-		let l:gtd_results = l:results_to_keep
-			\ + s:GtdSearchHandler(l:search_actions, l:where)
+		for l:s in l:searches
+
+			let l:s['what'] = gtd#formula#OperatorPrecedenceHelper(
+				\ l:s['what']
+				\ )
+
+			if a:bang != '!' && !empty(g:gtd#default_context)
+				let l:s['what'] = '('.l:s['what'].') @'.g:gtd#default_context
+			endif
+
+			let l:search_actions = gtd#formula#Parser(
+				\ gtd#formula#ListConvert(l:s['what'])
+				\ )
+			call gtd#debug#Message(l:search_actions)
+
+			if g:gtd#cache
+				call gtd#cache#Load(1)
+			endif
+
+			" No need to do each search if type is 'add' there will be no
+			" change...
+			if a:type != 'add' || !exists('l:gtd_results')
+				let l:gtd_results = s:GtdSearchHandler(
+					\ l:search_actions,
+					\ l:s['where']
+					\ )
+			endif
+			let l:gtd_results += l:s['keep']
+			let l:gtd_results = uniq(sort(l:gtd_results))
+
+			if a:type == 'new' || a:type == 'review' || a:type == 'refresh'
+				let l:formula_disp = l:s['what']
+			elseif a:type == 'add'
+				let l:formula_disp = l:s['before'].' + '.l:s['what']
+			elseif a:type == 'filter'
+				let l:formula_disp = '('.l:s['before'].') ('.l:s['what'].')'
+			endif
+
+			if l:highlight == 0 && !empty(l:gtd_results)
+				let l:highlight = 1
+			endif
+
+			" Results loading
+			call gtd#results#Set(
+				\ l:result_id,
+				\ gtd#formula#Simplify(l:formula_disp),
+				\ l:gtd_results
+				\ )
+		endfor
 
 		" Highlighting
-		if !empty(s:gtd_highlighted) && !empty(l:gtd_results)
+		if l:highlight && !empty(s:gtd_highlighted)
 			let @/ = '\('.join(uniq(sort(s:gtd_highlighted)), '\)\|\(').'\)'
 		endif
 
-		" Results loading
-		call gtd#results#Set(
-			\ l:formula,
-			\ l:gtd_results,
-			\ l:previous_args,
-			\ a:type
-			\ )
+		call gtd#results#Display(l:result_id)
 
-		if !empty(l:gtd_results)
-			execute 'lwindow'
-		else
-			redraw | echomsg 'No results for' l:formula
+		if g:gtd#debug
+			echomsg "Gtd elapsed time:" reltimestr(reltime(l:start_time))
 		endif
 
 	catch /.*/
 		echomsg v:exception
 	endtry
-
-	if g:gtd#debug
-		echomsg "Gtd elapsed time:" reltimestr(reltime(l:start_time))
-	endif
-
-endfunction
-
-function! gtd#search#Review(mods)
-
-	if empty(g:gtd#review)
-		echo "Gtd review has not been set (g:gtd#review)"
-	else
-		let l:debug_switch = gtd#debug#Switch(0)
-		let l:debug_reactivate = 0
-
-		let l:split = 1
-
-		if a:mods == 'tab' && l:split == 1
-			execute 'tabedit'
-		endif
-
-		let open = []
-		for g in g:gtd#review
-			if l:split
-				if empty(l:open)
-					if a:mods != 'tab'
-						execute 'enew'
-					endif
-				else
-					execute 'belowright new'
-				endif
-			else
-				execute 'tabedit'
-			endif
-			let l:bufnr = bufnr('%')
-			if !l:split
-				let open += [ tabpagenr() ]
-			endif
-			silent call gtd#search#Start('!', g, 'new')
-			" Focus is now to the location list
-			setlocal nowinfixheight nowinfixwidth
-			if l:split
-				let open += [ bufnr('%') ]
-			endif
-			execute 'silent bw' l:bufnr
-		endfor
-		execute 'normal!' open[0].'gt'
-
-		if l:debug_switch
-			call gtd#debug#Switch(1)
-		endif
-	endif
 
 endfunction
 
@@ -250,7 +261,10 @@ function! s:GtdSearchAtom(arg, where)
 			elseif l:arg_type == '=' || l:arg_type == '[*]'
 				let l:file_read = gtd#note#Read(l:gtd_file, 1)
 			else
-				let l:file_read = gtd#note#Read(l:gtd_file, g:gtd#tag_lines_count)
+				let l:file_read = gtd#note#Read(
+					\ l:gtd_file,
+					\ g:gtd#tag_lines_count
+					\ )
 			endif
 
 			for l:l in l:file_read
@@ -285,19 +299,6 @@ endfunction
 
 function! s:GtdSearchHighlightedAtomsCollect(atom)
 	let s:gtd_highlighted += [ a:atom ]
-endfunction
-
-function! gtd#search#TitleGet(filename)
-	let l:title_line = '=NO TITLE'
-	let l:title_type = 'E'
-	let l:title_line = readfile(a:filename, '', 1)[0]
-	if l:title_line =~ '^='
-		let l:title_type = ''
-		if l:title_line =~ ' \[\*\]$'
-			let l:title_type = 'I'
-		endif
-	endif
-	return [ l:title_line, l:title_type ]
 endfunction
 
 function! gtd#search#InsertTagComplete(findstart, base)

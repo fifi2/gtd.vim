@@ -354,9 +354,12 @@ and wait for the first empty line before leaving the search. >
 		    previous results.
 
 						*:GtdReview*
-:GtdReview	    If you are used to repeat a few |:Gtd| search, you might
+:GtdReview[!]	    If you are used to repeat a few |:Gtd| search, you might
 		    like to use this command to execute them all in one
 		    action.
+
+		    With [!] no default context will be added to any of your
+		    searches. See |g:gtd#default_context|.
 
 		    See |g:gtd#review|.
 

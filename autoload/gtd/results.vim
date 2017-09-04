@@ -1,73 +1,205 @@
 
-function! gtd#results#Get()
-	let l:previous_results = []
-	for l:qf_item in getloclist(0)
-		let l:previous_results += [ bufname(l:qf_item['bufnr']) ]
+let s:results_buffer = 0
+let s:results_history = []
+let s:results_current = -1
+
+" s:results_history looks like this:
+" [
+" 	[
+" 		{
+" 			'formula': '#hastag',
+" 			'results': [
+" 				{
+"					'key': '20170414_104443',
+"					'attached': 0,
+"					'title': 'Example 1'
+"				},
+" 				{
+"					'attached': 1,
+"					'key': '20170818_100024',
+"					'title': 'Example 2'
+"				},
+" 			]
+" 		}
+" 	],
+" 	[
+" 		{
+" 			'formula': '!inbox @work',
+" 			'results': [
+" 				{
+"					'key': '20161205_153911',
+"					'attached': 0,
+"					'title': 'Example 3'
+"				},
+" 			]
+" 		},
+" 		{
+" 			'formula': '!waiting @work',
+" 			'results': [
+" 				{
+"					'key': '20161115_150000',
+"					'attached': 0,
+"					'title': 'Example 4'
+"				},
+" 			]
+" 		},
+" 		{
+" 			'formula': '!someday @work',
+" 			'results': [
+" 				{
+"					'key': '20161207_112100',
+"					'attached': 0,
+"					'title': 'Example 5'
+"				},
+" 				{
+"					'key': '20161216_162500',
+"					'attached': 0,
+"					'title': 'Example 6'
+"				},
+" 			]
+" 		}
+" 	]
+" ]
+
+function! gtd#results#Create(recycling)
+	if a:recycling < 0
+		call add(s:results_history, [])
+		return len(s:results_history)-1
+	else
+		let s:results_history[a:recycling] = []
+		return a:recycling
+	endif
+endfunction
+
+function! gtd#results#Set(history_id, formula, results)
+	let l:results = []
+	for l:r in a:results
+		let l:r_data = gtd#note#Read(g:gtd#dir.l:r.'.gtd', 1)[0]
+		let l:results += [
+				\ {
+				\ 'key': l:r,
+				\ 'attached': match(l:r_data, ' \[\*\]$') == -1 ? 0 : 1,
+				\ 'title': substitute(
+					\ l:r_data,
+					\ '^=\(.\{-}\)\( \[\*\]\)\?$',
+					\ '\1',
+					\ ''
+					\ )
+				\ }
+			\ ]
 	endfor
-	return map(
-		\ l:previous_results,
-		\ function('gtd#note#Key')
-		\ )
+
+	let l:result_history = {
+		\ 'formula': a:formula,
+		\ 'results': l:results
+		\ }
+
+	let s:results_history[a:history_id] += [ l:result_history ]
 endfunction
 
-function! gtd#results#Args()
-	let l:args = ''
-	let l:qf_title = s:GtdResultsTitleGet()
-	if s:GtdResultsTest(l:qf_title)
-		let l:args = substitute(l:qf_title, '^:Gtd ', '', '')
+function! gtd#results#Get()
+	let l:requests = []
+	if s:results_current != -1
+		for l:q in get(s:results_history, s:results_current, [])
+			let l:results = []
+			for l:r in l:q['results']
+				let l:results += [ l:r['key'] ]
+			endfor
+			let l:requests += [
+				\ { 'formula': l:q['formula'], 'results': l:results }
+				\ ]
+		endfor
 	endif
-	return l:args
-endfunction
-
-function! gtd#results#Set(formula, results, previous_args, type)
-	if a:type == 'refresh'
-		let l:qf_action = 'r'
-	else
-		let l:qf_action = ' '
-	endif
-	call setloclist(0, s:GtdResultsListCreate(a:results), l:qf_action)
-	call s:GtdResultsTitleSet(a:formula, a:previous_args, a:type)
-endfunction
-
-function! s:GtdResultsTest(qf_title)
-	return a:qf_title =~ '^:Gtd '
-endfunction
-
-function! s:GtdResultsTitleGet()
-	return get(getloclist(0, {'title': 1}), 'title', '')
-endfunction
-
-function! s:GtdResultsTitleSet(formula, previous_args, type)
-	if a:type == 'add'
-		let l:qf_title = '('.a:previous_args.') + ('.a:formula.')'
-	elseif a:type == 'filter'
-		let l:qf_title = '('.a:previous_args.') ('.a:formula.')'
-	else
-		let l:qf_title = a:formula
-	endif
-
-	call setloclist(
-		\ 0, [], 'a',
-		\ {'title': ':Gtd '.gtd#formula#Simplify(l:qf_title)}
-		\ )
-endfunction
-
-function! s:GtdResultsCreateResult(filename)
-	let l:filename_path = g:gtd#dir.a:filename.'.gtd'
-	let l:title = gtd#search#TitleGet(l:filename_path)
 	return {
-		\ 'filename': fnamemodify(l:filename_path, ':.'),
-		\ 'text': l:title[0],
-		\ 'type': l:title[1],
-		\ 'lnum': 1
+		\ 'id': s:results_current,
+		\ 'gtd': l:requests
 		\ }
 endfunction
 
-function! s:GtdResultsListCreate(results)
-	let l:qf = []
-	for l:gtd_result in uniq(sort(a:results))
-		let l:qf += [ s:GtdResultsCreateResult(l:gtd_result) ]
-	endfor
-	return l:qf
+function! gtd#results#Browse(move)
+	if type(a:move) == v:t_number && s:results_current != -1
+		let l:len = len(s:results_history)
+		let l:idx = eval('(s:results_current+'.a:move.'+l:len)%l:len')
+
+		" We do not autorize looping on the history
+		if l:idx >= 0 && l:idx-s:results_current == a:move
+			call gtd#results#Display(l:idx)
+		endif
+	endif
+endfunction
+
+function! s:GtdResultsHistoryId(gtd_id)
+	" a:gtd_id may be -1 to deal with last display but I'd prefer to save the
+	" real key.
+	let l:len = len(s:results_history)
+	return (a:gtd_id+l:len)%l:len
+endfunction
+
+function! gtd#results#Display(gtd_id)
+	try
+		let l:content = []
+		let l:gtd_id = s:GtdResultsHistoryId(a:gtd_id)
+		let l:gtd_data = get(s:results_history, l:gtd_id, [])
+
+		for l:gtd in l:gtd_data
+			let l:content += [ l:gtd['formula'] ]
+			if empty(l:gtd['results'])
+				let l:content += [ ' No result' ]
+			else
+				for l:r in l:gtd['results']
+					let l:attached = l:r['attached'] ? '[*]' : '[ ]'
+					let l:content += [
+						\ ' '.l:r['key'].' '.l:attached.' '.l:r['title']
+						\ ]
+				endfor
+			endif
+			let l:content += [ '' ]
+		endfor
+
+		let s:results_buffer = s:GtdResultsOpen()
+		let s:results_current = l:gtd_id
+		call append(0, l:content)
+		call s:GtdResultsFreeze()
+	catch /.*/
+		echomsg v:exception
+	endtry
+endfunction
+
+function! gtd#results#Edit(line)
+	let l:key = matchstr(getline(a:line), '^ \zs\d\{8}_\d\{6}')
+	if !empty(l:key)
+		execute "silent split" g:gtd#dir.l:key.'.gtd'
+	else
+		call gtd#search#Start('!', '', 'refresh')
+	endif
+endfunction
+
+function! s:GtdResultsOpen()
+	if s:results_buffer != 0 && bufloaded(s:results_buffer)
+		let l:w = bufwinnr(s:results_buffer)
+		if l:w != -1
+			execute l:w 'wincmd w'
+			call s:GtdResultsFree()
+			return s:results_buffer
+		else
+			execute 'silent! bwipeout' s:results_buffer
+		endif
+	endif
+	execute 'keepalt botright 15new | set ft=gtd-results'
+	call s:GtdResultsFree()
+	return bufnr('%')
+endfunction
+
+function! gtd#results#Close()
+	let s:results_buffer = 0
+endfunction
+
+function! s:GtdResultsFree()
+	execute "setlocal modifiable | silent! 1,$d"
+endfunction
+
+function! s:GtdResultsFreeze()
+	execute "silent! keeppatterns $-1,$g/^$/d | 1"
+	execute "setlocal nomodifiable"
 endfunction
 

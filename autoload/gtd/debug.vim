@@ -11,7 +11,7 @@ function! gtd#debug#Bench(bang, formula)
 		let [ l:i, l:bench_sum, l:bench_nb ] = [ 0, 0.0, 100 ]
 		while l:i < l:bench_nb
 			let l:start_time = reltime()
-			silent call gtd#search#Start(a:bang, a:formula, 'new')
+			silent call gtd#search#Gtd(a:bang, a:formula)
 			let l:bench_sum = l:bench_sum
 				\ + reltimefloat(reltime(l:start_time))
 			let l:i = l:i+1
