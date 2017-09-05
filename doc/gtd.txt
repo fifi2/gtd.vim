@@ -187,6 +187,11 @@ From the |gtd-results| buffer, you can edit one |gtd-note| file with <Enter>
 (default value). You can chance this map : >
 	let g:gtd#map_edit = 'o'
 <
+						*g:gtd#results_history*
+Define how many searches are saved into the history. You can disable this
+limitation by setting this parameter to 0. Default: 10. >
+	let g:gtd#results_history = 0
+<
 						*g:gtd#review*
 You might want to have a quick review on your most frequent Gtd search. To do
 so, you can populate the review list in your configuration. The review is done
@@ -498,6 +503,8 @@ You can check for updates or browse the plugin here:
 ==============================================================================
 8. Changelog					*gtd-changelog*
 
+	+ New |g:gtd#results_history| to define how many searches are saved
+	  into the history.
 	+ Mappings of |gtd-results| buffer can now be overrided with personnal
 	  combinaisons.
 	+ Results are now loaded into the new |gtd-results| buffer instead of

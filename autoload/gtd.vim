@@ -49,6 +49,11 @@ function! gtd#Init()
 			let g:gtd#tag_lines_count = 20
 		endif
 
+		if !exists('g:gtd#results_history')
+			\ || type(g:gtd#results_history) != v:t_number
+			let g:gtd#results_history = 10
+		endif
+
 		if !exists('g:gtd#map_edit') || empty(g:gtd#map_edit)
 			let g:gtd#map_edit = '<Enter>'
 		endif
