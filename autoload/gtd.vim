@@ -49,6 +49,18 @@ function! gtd#Init()
 			let g:gtd#tag_lines_count = 20
 		endif
 
+		if !exists('g:gtd#map_edit') || empty(g:gtd#map_edit)
+			let g:gtd#map_edit = '<Enter>'
+		endif
+
+		if !exists('g:gtd#map_browse_older') || empty(g:gtd#map_browse_older)
+			let g:gtd#map_browse_older = '<C-Left>'
+		endif
+
+		if !exists('g:gtd#map_browse_newer') || empty(g:gtd#map_browse_newer)
+			let g:gtd#map_browse_newer = '<C-Right>'
+		endif
+
 		return 1
 
 	catch /.*/

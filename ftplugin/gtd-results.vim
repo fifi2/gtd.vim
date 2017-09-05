@@ -24,14 +24,23 @@ execute 'setlocal cursorline'
 
 execute 'silent! file! Gtd results'
 
-execute "nnoremap <buffer> <silent> <Enter> :call gtd#results#Edit(line('.'))<CR>"
-let b:undo_ftplugin = 'execute "nunmap <buffer> <Enter>"'
+if !hasmapto('<Plug>GtdEdit')
+	execute 'nmap' g:gtd#map_edit '<Plug>GtdEdit'
+endif
+execute "nnoremap <buffer> <silent> <Plug>GtdEdit :call gtd#results#Edit(line('.'))<CR>"
+let b:undo_ftplugin = 'execute "nunmap <buffer> <Plug>GtdEdit"'
 
-execute "nnoremap <buffer> <silent> <C-Left> :call gtd#results#Browse(-1)<CR>"
-let b:undo_ftplugin = ' | execute "nunmap <buffer> <C-Left>"'
+if !hasmapto('<Plug>GtdBrowseOlder')
+	execute 'nmap' g:gtd#map_browse_older '<Plug>GtdBrowseOlder'
+endif
+execute "nnoremap <buffer> <silent> <Plug>GtdBrowseOlder :call gtd#results#Browse(-1)<CR>"
+let b:undo_ftplugin = ' | execute "nunmap <buffer> <Plug>GtdBrowseOlder"'
 
-execute "nnoremap <buffer> <silent> <C-Right> :call gtd#results#Browse(1)<CR>"
-let b:undo_ftplugin = ' | execute "nunmap <buffer> <C-Right>"'
+if !hasmapto('<Plug>GtdBrowseNewer')
+	execute 'nmap' g:gtd#map_browse_newer '<Plug>GtdBrowseNewer'
+endif
+execute "nnoremap <buffer> <silent> <Plug>GtdBrowseNewer :call gtd#results#Browse(1)<CR>"
+let b:undo_ftplugin = ' | execute "nunmap <buffer> <Plug>GtdBrowseNewer"'
 
 if has('folding')
 

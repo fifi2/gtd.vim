@@ -175,6 +175,18 @@ Gtd.vim is able to fold your chapters on each title. See |gtd-syntax|. To
 activate this, you have to let this setting. >
 	let g:gtd#folding = 1
 <
+						*g:gtd#map_browse_older*
+						*g:gtd#map_browse_newer*
+You can browse the history of searches, from the |gtd-results| buffer with any
+key combinaison you might prefer. Default values are <C-Left> and <C-Right>. >
+	let g:gtd#map_browse_older = '<Left>'
+	let g:gtd#map_browse_newer = '<Right>'
+<
+						*g:gtd#map_edit*
+From the |gtd-results| buffer, you can edit one |gtd-note| file with <Enter>
+(default value). You can chance this map : >
+	let g:gtd#map_edit = 'o'
+<
 						*g:gtd#review*
 You might want to have a quick review on your most frequent Gtd search. To do
 so, you can populate the review list in your configuration. The review is done
@@ -210,6 +222,7 @@ and wait for the first empty line before leaving the search. >
 		    theirs tags or content. Results are loaded to the
 		    |gtd-results| buffer so you can navigate into it.
 
+						*gtd-formula*
 		    {formula} is a string you can consider as a mathematic
 		    expression.
 
@@ -399,16 +412,39 @@ and wait for the first empty line before leaving the search. >
 ==============================================================================
 4. Mappings					*gtd-mappings*
 
-You might want to have a map to access your attached files in a quicker way
-than executing |:GtdFiles|. To do so, simply associate the key combinaison of
-your choice to <Plug>GtdAttachedFiles. This map is only available when the
-current buffer has gtd filetype. >
-	nmap <Leader>tf <Plug>GtdAttachedFiles
+From the |gtd-results| buffer:
+
+	<Enter>	    Display the |gtd-note| file under the cursor.
+		    If the line under the cursor is the |gtd-formula|, it will
+		    refresh the search.
+		    Override this mapping with |g:gtd#map_edit|.
+
+	<C-Left>    Browse the history of recent searches.
+	<C-Right>   Override this mappings with |g:gtd#map_browse_older| and
+		    |g:gtd#map_browse_newer|.
+
+From the |gtd-note| buffer:
+
+	<Plug>GtdAttachedFiles
+
+		    You might want to have a map to access your attached files
+		    in a quicker way than executing |:GtdFiles|. To do so,
+		    simply associate the key combinaison of your choice to
+		    <Plug>GtdAttachedFiles. This map is only available when
+		    the current buffer has gtd filetype.
+>
+		    nmap <Leader>tf <Plug>GtdAttachedFiles
 <
-You can set a map to create a new Gtd file in a quicker way than using
-|:GtdNew|. Key combinaisons can be equal for normal and visual modes. >
-	nmap <Leader>tn <Plug>GtdNew
-	vmap <Leader>tn <Plug>GtdNew
+Anywhere:
+
+	<Plug>GtdNew
+
+		    You can set a map to create a new Gtd file in a quicker
+		    way than using |:GtdNew|. Key combinaisons can be equal
+		    for normal and visual modes.
+>
+		    nmap <Leader>tn <Plug>GtdNew
+		    vmap <Leader>tn <Plug>GtdNew
 <
 Other optional mapping have to be written manually in your vimrc file.
 Eg. To quickly search for pending tasks or scheduled today: >
@@ -462,6 +498,8 @@ You can check for updates or browse the plugin here:
 ==============================================================================
 8. Changelog					*gtd-changelog*
 
+	+ Mappings of |gtd-results| buffer can now be overrided with personnal
+	  combinaisons.
 	+ Results are now loaded into the new |gtd-results| buffer instead of
 	  the location list. This buffer is able to load the results of
 	  multiple searches (as |GtdReview| can produce).
