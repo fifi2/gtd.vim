@@ -144,9 +144,8 @@ function! gtd#results#Display(gtd_id)
 	try
 		let l:content = []
 		let l:gtd_id = s:GtdResultsHistoryId(a:gtd_id)
-		let l:gtd_data = get(s:results_history, l:gtd_id, [])
 
-		for l:gtd in l:gtd_data
+		for l:gtd in get(s:results_history, l:gtd_id, [])
 			let l:content += [ l:gtd['formula'] ]
 			if empty(l:gtd['results'])
 				let l:content += [ ' No result' ]

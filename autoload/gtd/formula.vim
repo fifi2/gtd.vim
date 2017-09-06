@@ -176,7 +176,7 @@ function! s:GtdFormulaEltSimplify(formula_list)
 endfunction
 
 function! s:GtdFormulaKeepBrackets(op_in, op_out)
-	" Brackets are usefull if there is at leat one operator inside them whose
+	" Brackets are usefull if there is at least one operator inside them whose
 	" precedence is weaker than those outside.
 	return !empty(a:op_in)
 		\ && index(a:op_out, ' ') >= 0
