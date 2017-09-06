@@ -438,7 +438,7 @@ From the |gtd-note| buffer:
 		    <Plug>GtdAttachedFiles. This map is only available when
 		    the current buffer has gtd filetype.
 >
-		    nmap <Leader>tf <Plug>GtdAttachedFiles
+		    nmap <Leader>gf <Plug>GtdAttachedFiles
 <
 	<Plug>GtdExplore
 
@@ -454,8 +454,8 @@ Anywhere:
 		    way than using |:GtdNew|. Key combinaisons can be equal
 		    for normal and visual modes.
 >
-		    nmap <Leader>tn <Plug>GtdNew
-		    vmap <Leader>tn <Plug>GtdNew
+		    nmap <Leader>gn <Plug>GtdNew
+		    vmap <Leader>gn <Plug>GtdNew
 <
 Other optional mapping have to be written manually in your vimrc file.
 Eg. To quickly search for pending tasks or scheduled today: >
