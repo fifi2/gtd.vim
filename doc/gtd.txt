@@ -224,6 +224,8 @@ and wait for the first empty line before leaving the search. >
 		    theirs tags or content. Results are loaded to the
 		    |gtd-results| buffer so you can navigate into it.
 
+		    Modifiers are allowed (see |<mods>|).
+
 						*gtd-formula*
 		    {formula} is a string you can consider as a mathematic
 		    expression.
@@ -372,6 +374,8 @@ and wait for the first empty line before leaving the search. >
 :GtdRefresh	    Refresh the current Gtd search, assuming you've done some
 		    changes in the tags of the previous results.
 
+		    Modifiers are allowed (see |<mods>|).
+
 						*:GtdReview*
 :GtdReview[!]	    If you are used to repeat a few |:Gtd| search, you might
 		    like to use this command to execute them all in one
@@ -379,6 +383,8 @@ and wait for the first empty line before leaving the search. >
 
 		    With [!] no default context will be added to any of your
 		    searches. See |g:gtd#default_context|.
+
+		    Modifiers are allowed (see |<mods>|).
 
 		    See |g:gtd#review|.
 
@@ -513,6 +519,7 @@ You can check for updates or browse the plugin here:
 ==============================================================================
 8. Changelog					*gtd-changelog*
 
+	+ Fix: <mods> are respected again for |:Gtd|.
 	+ Fix: <mods> are respected again for |:GtdNew|.
 	+ Fix: Use a correct regexp to search with the cache.
 	+ Delete a |gtd-note| also updates the results history.

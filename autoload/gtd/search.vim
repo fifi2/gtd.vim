@@ -1,5 +1,5 @@
 
-function! gtd#search#Start(bang, formula, type)
+function! gtd#search#Start(mods, bang, formula, type)
 
 	if g:gtd#debug
 		let l:start_time = reltime()
@@ -140,7 +140,7 @@ function! gtd#search#Start(bang, formula, type)
 			let @/ = '\('.join(uniq(sort(s:gtd_highlighted)), '\)\|\(').'\)'
 		endif
 
-		call gtd#results#Display(l:result_id)
+		call gtd#results#Display(a:mods, l:result_id)
 
 		if g:gtd#debug
 			echomsg "Gtd elapsed time:" reltimestr(reltime(l:start_time))

@@ -127,7 +127,7 @@ function! gtd#results#Browse(move)
 
 		" We do not autorize looping on the history
 		if l:idx >= 0 && l:idx-s:results_current == a:move
-			call gtd#results#Display(l:idx)
+			call gtd#results#Display('', l:idx)
 		endif
 	endif
 endfunction
@@ -139,7 +139,7 @@ function! s:GtdResultsHistoryId(gtd_id)
 	return (a:gtd_id+l:len)%l:len
 endfunction
 
-function! gtd#results#Display(gtd_id)
+function! gtd#results#Display(mods, gtd_id)
 	try
 		let l:content = []
 		let l:gtd_id = s:GtdResultsHistoryId(a:gtd_id)
@@ -159,7 +159,7 @@ function! gtd#results#Display(gtd_id)
 			let l:content += [ '' ]
 		endfor
 
-		let s:results_buffer = s:GtdResultsOpen()
+		let s:results_buffer = s:GtdResultsOpen(a:mods)
 		let s:results_current = l:gtd_id
 		call append(0, l:content)
 		call s:GtdResultsFreeze()
@@ -173,11 +173,11 @@ function! gtd#results#Edit(line)
 	if !empty(l:key)
 		execute "silent split" g:gtd#dir.l:key.'.gtd'
 	else
-		call gtd#search#Start('!', '', 'refresh')
+		call gtd#search#Start('', '!', '', 'refresh')
 	endif
 endfunction
 
-function! s:GtdResultsOpen()
+function! s:GtdResultsOpen(mods)
 	if s:results_buffer != 0 && bufloaded(s:results_buffer)
 		let l:w = bufwinnr(s:results_buffer)
 		if l:w != -1
@@ -188,7 +188,11 @@ function! s:GtdResultsOpen()
 			execute 'silent! bwipeout' s:results_buffer
 		endif
 	endif
-	execute 'keepalt botright 15new | set ft=gtd-results'
+	let l:mods = split(a:mods)
+	if index(l:mods, 'aboveleft') == -1
+		let l:mods += [ 'botright' ]
+	endif
+	execute 'keepalt' join(l:mods) 'new | set ft=gtd-results'
 	call s:GtdResultsFree()
 	return bufnr('%')
 endfunction
@@ -218,7 +222,7 @@ function! gtd#results#Remove(key)
 	let s:results_history = l:results_new
 
 	if s:results_buffer && s:results_current != -1
-		call gtd#results#Display(s:results_current)
+		call gtd#results#Display('', s:results_current)
 	endif
 endfunction
 
