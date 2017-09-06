@@ -440,6 +440,12 @@ From the |gtd-note| buffer:
 >
 		    nmap <Leader>tf <Plug>GtdAttachedFiles
 <
+	<Plug>GtdExplore
+
+		    This map allows you to use |:GtdExplore| faster.
+>
+		    nmap <Leader>ge <Plug>GtdExplore
+<
 Anywhere:
 
 	<Plug>GtdNew
