@@ -430,15 +430,15 @@ From the |gtd-results| buffer:
 
 From the |gtd-note| buffer:
 
-	<Plug>GtdAttachedFiles
+	<Plug>GtdFiles
 
 		    You might want to have a map to access your attached files
 		    in a quicker way than executing |:GtdFiles|. To do so,
 		    simply associate the key combinaison of your choice to
-		    <Plug>GtdAttachedFiles. This map is only available when
-		    the current buffer has gtd filetype.
+		    <Plug>GtdFiles. This map is only available when the
+		    current buffer has gtd filetype.
 >
-		    nmap <Leader>gf <Plug>GtdAttachedFiles
+		    nmap <Leader>gf <Plug>GtdFiles
 <
 	<Plug>GtdExplore
 
@@ -509,6 +509,7 @@ You can check for updates or browse the plugin here:
 ==============================================================================
 8. Changelog					*gtd-changelog*
 
+	+ <Plug>GtdAttachedFiles is now defined as <Plug>GtdFiles.
 	+ New |g:gtd#results_history| to define how many searches are saved
 	  into the history.
 	+ Mappings of |gtd-results| buffer can now be overrided with personnal

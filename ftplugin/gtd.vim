@@ -8,8 +8,8 @@ endif
 command! -buffer -nargs=0 GtdFiles call gtd#files#Open()
 let b:undo_ftplugin = 'execute "delcommand GtdFiles"'
 
-execute "nnoremap <buffer> <silent> <Plug>GtdAttachedFiles :GtdFiles<CR>"
-let b:undo_ftplugin .= ' | execute "nunmap <buffer> <Plug>GtdAttachedFiles"'
+execute "nnoremap <buffer> <silent> <Plug>GtdFiles :GtdFiles<CR>"
+let b:undo_ftplugin .= ' | execute "nunmap <buffer> <Plug>GtdFiles"'
 
 command! -buffer -nargs=0 GtdExplore call gtd#files#Explore()
 let b:undo_ftplugin .= ' | execute "delcommand GtdExplore"'
