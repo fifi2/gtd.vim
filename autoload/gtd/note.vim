@@ -29,7 +29,7 @@ function! gtd#note#Read(note, count)
 	endif
 endfunction
 
-function! gtd#note#Create(bang, mods, isrange) range
+function! gtd#note#Create(mods, bang, isrange) range
 
 	" a:isrange is deduced from <count>
 	" Ugly workaround :
@@ -38,12 +38,6 @@ function! gtd#note#Create(bang, mods, isrange) range
 	"   from selection.
 
 	try
-		if empty(a:mods)
-			let l:action = 'edit'.a:bang
-		else
-			let l:action = a:mods.' split'
-		endif
-
 		let l:content = copy(s:note_template)
 		if a:isrange != -1
 			if a:firstline == a:lastline
@@ -56,7 +50,12 @@ function! gtd#note#Create(bang, mods, isrange) range
 			endif
 		endif
 
-		execute l:action fnamemodify(
+		if empty(a:mods)
+			let l:action = 'edit'
+		else
+			let l:action = 'split'
+		endif
+		execute a:mods l:action a:bang fnamemodify(
 			\ g:gtd#dir.strftime("%Y%m%d_%H%M%S").'.gtd',
 			\ ':.'
 			\ )
