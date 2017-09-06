@@ -31,7 +31,7 @@ if exists('g:gtd#debug') && g:gtd#debug
 	command! -bang -nargs=1 -complete=customlist,gtd#search#CommandTagComplete GtdBench call gtd#debug#Bench(<q-bang>, <q-args>)
 endif
 
-nnoremap <silent> <Plug>Gtd :call gtd#results#Display(-1)<CR>
+nnoremap <silent> <Plug>GtdDisplay :call gtd#results#Display(-1)<CR>
 
 nnoremap <silent> <Plug>GtdNew :GtdNew<CR>
 vnoremap <silent> <Plug>GtdNew :GtdNew<CR>

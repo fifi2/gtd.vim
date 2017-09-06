@@ -457,6 +457,13 @@ Anywhere:
 		    nmap <Leader>gn <Plug>GtdNew
 		    vmap <Leader>gn <Plug>GtdNew
 <
+	<Plug>GtdDisplay
+
+		    This plugin is available to display, if available, the
+		    last search that you made.
+>
+		    nmap <Leader>gd <Plug>GtdDisplay
+<
 Other optional mapping have to be written manually in your vimrc file.
 Eg. To quickly search for pending tasks or scheduled today: >
 	nnoremap <Leader>tw :Gtd @work (!inbox + !scheduled-<C-R>=strftime("%Y%m%d")<CR>)<CR>
@@ -509,6 +516,7 @@ You can check for updates or browse the plugin here:
 ==============================================================================
 8. Changelog					*gtd-changelog*
 
+	+ Fix: <Plug>GtdDisplay is now faster to react.
 	+ Fix: |gtd-results| mappings were available in any buffer.
 	+ <Plug>GtdAttachedFiles is now defined as <Plug>GtdFiles.
 	+ New |g:gtd#results_history| to define how many searches are saved
