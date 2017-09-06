@@ -25,19 +25,19 @@ execute 'setlocal cursorline'
 execute 'silent! file! Gtd results'
 
 if !hasmapto('<Plug>GtdEdit')
-	execute 'nmap' g:gtd#map_edit '<Plug>GtdEdit'
+	execute 'nmap <buffer>' g:gtd#map_edit '<Plug>GtdEdit'
 endif
 execute "nnoremap <buffer> <silent> <Plug>GtdEdit :call gtd#results#Edit(line('.'))<CR>"
 let b:undo_ftplugin = 'execute "nunmap <buffer> <Plug>GtdEdit"'
 
 if !hasmapto('<Plug>GtdBrowseOlder')
-	execute 'nmap' g:gtd#map_browse_older '<Plug>GtdBrowseOlder'
+	execute 'nmap <buffer>' g:gtd#map_browse_older '<Plug>GtdBrowseOlder'
 endif
 execute "nnoremap <buffer> <silent> <Plug>GtdBrowseOlder :call gtd#results#Browse(-1)<CR>"
 let b:undo_ftplugin = ' | execute "nunmap <buffer> <Plug>GtdBrowseOlder"'
 
 if !hasmapto('<Plug>GtdBrowseNewer')
-	execute 'nmap' g:gtd#map_browse_newer '<Plug>GtdBrowseNewer'
+	execute 'nmap <buffer>' g:gtd#map_browse_newer '<Plug>GtdBrowseNewer'
 endif
 execute "nnoremap <buffer> <silent> <Plug>GtdBrowseNewer :call gtd#results#Browse(1)<CR>"
 let b:undo_ftplugin = ' | execute "nunmap <buffer> <Plug>GtdBrowseNewer"'

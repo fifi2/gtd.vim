@@ -509,6 +509,7 @@ You can check for updates or browse the plugin here:
 ==============================================================================
 8. Changelog					*gtd-changelog*
 
+	+ Fix: |gtd-results| mappings were available in any buffer.
 	+ <Plug>GtdAttachedFiles is now defined as <Plug>GtdFiles.
 	+ New |g:gtd#results_history| to define how many searches are saved
 	  into the history.
