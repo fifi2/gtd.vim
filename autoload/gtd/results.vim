@@ -189,10 +189,15 @@ function! s:GtdResultsOpen(mods)
 		endif
 	endif
 	let l:mods = split(a:mods)
-	if index(l:mods, 'aboveleft') == -1
-		let l:mods += [ 'botright' ]
+	if empty(a:mods) && &hidden
+		let l:action = 'enew'
+	else
+		if index(l:mods, 'aboveleft') == -1
+			let l:mods += [ 'botright' ]
+		endif
+		let l:action = 'new'
 	endif
-	execute 'keepalt' join(l:mods) 'new | set ft=gtd-results'
+	execute 'keepalt' join(l:mods) l:action ' | set ft=gtd-results'
 	call s:GtdResultsFree()
 	return bufnr('%')
 endfunction

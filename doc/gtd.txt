@@ -519,6 +519,7 @@ You can check for updates or browse the plugin here:
 ==============================================================================
 8. Changelog					*gtd-changelog*
 
+	+ Gtd searches are displayed in the current window if |hidden| is on.
 	+ Fix: <mods> are respected again for |:Gtd|.
 	+ Fix: <mods> are respected again for |:GtdNew|.
 	+ Fix: Use a correct regexp to search with the cache.
