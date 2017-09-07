@@ -157,18 +157,15 @@ insert it as well. This default context will also be added in all your Gtd
 searches as an "AND" argument. >
 	let g:gtd#default_context = 'work'
 <
-						*g:gtd#dir*
-Directory where to save notes or to do the search. Default is the current
-directory. If you want to save all your notes in the same directory (which is
-important to perform relevant search), you may decide to set this variable to
-a specific directory in your vimrc file. >
-	let g:gtd#dir = '~/notes'
-<
 						*g:gtd#default_action*
 When creating a new Gtd file, the plugin automatically try to insert basic Gtd
 tags in it. If you want, you can define your default action tag to let the
 plugin insert it as well. >
 	let g:gtd#default_action = 'inbox'
+<
+						*g:gtd#dir*
+Directory where to save notes or to do the searches. Default is '~/notes'. >
+	let g:gtd#dir = '~/notes'
 <
 						*g:gtd#folding*
 Gtd.vim is able to fold your chapters on each title. See |gtd-syntax|. To

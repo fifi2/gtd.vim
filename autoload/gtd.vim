@@ -4,7 +4,7 @@ function! gtd#Init()
 
 	try
 		if !exists('g:gtd#dir')
-			let g:gtd#dir = '.'
+			let g:gtd#dir = '~/notes'
 		else
 			let g:gtd#dir = expand(g:gtd#dir)
 			if !isdirectory(g:gtd#dir)
