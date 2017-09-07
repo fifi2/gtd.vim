@@ -513,6 +513,7 @@ You can check for updates or browse the plugin here:
 ==============================================================================
 8. Changelog					*gtd-changelog*
 
+	+ Delete a |gtd-note| also updates the results history.
 	+ Fix: <Plug>GtdDisplay is now faster to react.
 	+ Fix: |gtd-results| mappings were available in any buffer.
 	+ <Plug>GtdAttachedFiles is now defined as <Plug>GtdFiles.

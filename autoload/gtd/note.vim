@@ -100,11 +100,12 @@ function! gtd#note#Delete()
 				redraw | echomsg "GTD file couldn't be deleted"
 			endif
 
+			let l:key = gtd#note#Key('N/A', l:gtd_note_file)
 			if g:gtd#cache
-				call gtd#cache#Delete(
-					\ gtd#note#Key('N/A', l:gtd_note_file)
-					\ )
+				call gtd#cache#Delete(l:key)
 			endif
+
+			call gtd#results#Remove(l:key)
 		else
 			execute 'bwipeout!'
 		endif

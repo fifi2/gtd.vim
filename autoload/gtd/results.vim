@@ -94,12 +94,11 @@ function! gtd#results#Set(history_id, formula, results)
 			\ ]
 	endfor
 
-	let l:result_history = {
+	let s:results_history[a:history_id] += [ {
 		\ 'formula': a:formula,
 		\ 'results': l:results
-		\ }
+		\ } ]
 
-	let s:results_history[a:history_id] += [ l:result_history ]
 endfunction
 
 function! gtd#results#Get()
@@ -196,6 +195,31 @@ endfunction
 
 function! gtd#results#Close()
 	let s:results_buffer = 0
+endfunction
+
+function! gtd#results#Remove(key)
+	let l:results_new = []
+	for l:h in s:results_history
+		let l:history = []
+		for l:s in l:h
+			let l:results = []
+			for l:r in get(l:s, 'results', [])
+				if l:r['key'] != a:key
+					let l:results += [ l:r ]
+				endif
+			endfor
+			let l:history += [ {
+				\ 'formula': l:s['formula'],
+				\ 'results': l:results
+				\ } ]
+		endfor
+		let l:results_new += [ l:history ]
+	endfor
+	let s:results_history = l:results_new
+
+	if s:results_buffer && s:results_current != -1
+		call gtd#results#Display(s:results_current)
+	endif
 endfunction
 
 function! s:GtdResultsFree()
