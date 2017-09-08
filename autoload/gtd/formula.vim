@@ -8,6 +8,10 @@ function! gtd#formula#OperatorPrecedenceHelper(formula)
 endfunction
 
 function! gtd#formula#Parser(formula)
+	return s:GtdFormulaParser(s:GtdFormulaListConvert(a:formula))
+endfunction
+
+function! s:GtdFormulaParser(formula)
 
 	let [ l:c_idx, l:br_match, l:brackets ] = [ 0, 0, 0 ]
 	let l:formula_len = len(a:formula)
@@ -29,7 +33,7 @@ function! gtd#formula#Parser(formula)
 
 	if l:brackets == 1
 		if l:c_idx == l:formula_len-1
-			return gtd#formula#Parser(
+			return s:GtdFormulaParser(
 				\ a:formula[1:l:c_idx-1]
 				\ )
 		else
@@ -37,10 +41,10 @@ function! gtd#formula#Parser(formula)
 			if l:operator == '+' || l:operator == ' '
 				return [
 					\ l:operator,
-					\ gtd#formula#Parser(
+					\ s:GtdFormulaParser(
 						\ a:formula[0:l:c_idx]
 						\ ),
-					\ gtd#formula#Parser(
+					\ s:GtdFormulaParser(
 						\ a:formula[l:c_idx+2:]
 						\ )
 					\ ]
@@ -56,7 +60,7 @@ function! gtd#formula#Simplify(formula)
 	return join(
 			\ map(
 				\ s:GtdFormulaEltSimplify(
-					\ gtd#formula#ListConvert(a:formula)
+					\ s:GtdFormulaListConvert(a:formula)
 					\ ),
 				\ "v:val == '+' ? ' + ' : v:val"
 			\ ),
@@ -64,7 +68,7 @@ function! gtd#formula#Simplify(formula)
 		\ )
 endfunction
 
-function! gtd#formula#ListConvert(formula)
+function! s:GtdFormulaListConvert(formula)
 	let l:formula = substitute(a:formula, '\s*+\s*', '+', 'g')
 	let [ l:formula_list, l:c_idx, l:atom_pending ] = [ [], 0, '' ]
 

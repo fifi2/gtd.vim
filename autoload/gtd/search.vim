@@ -111,9 +111,7 @@ function! gtd#search#Start(mods, bang, formula, type)
 
 		for l:s in l:searches
 
-			let l:search_actions = gtd#formula#Parser(
-				\ gtd#formula#ListConvert(l:s['what'])
-				\ )
+			let l:search_actions = gtd#formula#Parser(l:s['what'])
 			call gtd#debug#Message(l:search_actions)
 
 			" No need to do each search if type is 'add' there will be no
