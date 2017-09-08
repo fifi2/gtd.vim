@@ -231,9 +231,15 @@ function! s:GtdSearchAtom(arg, where)
 		let l:gtd_file = g:gtd#dir.l:gtd_name.'.gtd'
 
 		if l:cache_decision
+			if index([ '@', '!', '#' ], l:arg_type) >= 0
+				let l:arg_reg = '^'.l:arg.'$'
+			elseif l:arg_type == '[*]'
+				let l:arg_reg = '^\[\*\]$'
+			endif
+
 			if gtd#cache#Query(
 				\ l:gtd_file,
-				\ l:gtd_name, l:arg,
+				\ l:gtd_name, l:arg_reg,
 				\ getftime(l:gtd_file)
 				\ )
 				let l:search_results += [ l:gtd_name ]

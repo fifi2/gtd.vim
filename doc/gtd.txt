@@ -513,6 +513,7 @@ You can check for updates or browse the plugin here:
 ==============================================================================
 8. Changelog					*gtd-changelog*
 
+	+ Fix: Use a correct regexp to search with the cache.
 	+ Delete a |gtd-note| also updates the results history.
 	+ Fix: <Plug>GtdDisplay is now faster to react.
 	+ Fix: |gtd-results| mappings were available in any buffer.
