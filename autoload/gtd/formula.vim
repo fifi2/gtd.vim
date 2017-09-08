@@ -54,9 +54,7 @@ endfunction
 
 function! gtd#formula#Simplify(formula)
 	let l:formula = s:GtdFormulaEltSimplify(
-		\ gtd#formula#ListConvert(
-			\ substitute(a:formula, '\s*+\s*', '+', 'g')
-			\ )
+		\ gtd#formula#ListConvert(a:formula)
 		\ )
 	let l:elt_idx = 0
 	while l:elt_idx < len(l:formula)
@@ -69,17 +67,18 @@ function! gtd#formula#Simplify(formula)
 endfunction
 
 function! gtd#formula#ListConvert(formula)
+	let l:formula = substitute(a:formula, '\s*+\s*', '+', 'g')
 	let [ l:formula_list, l:c_idx, l:atom_pending ] = [ [], 0, '' ]
 
-	while l:c_idx < strlen(a:formula)
-		if index([ '(', ')', '+', ' ' ], a:formula[l:c_idx]) >= 0
+	while l:c_idx < strlen(l:formula)
+		if index([ '(', ')', '+', ' ' ], l:formula[l:c_idx]) >= 0
 			if !empty(l:atom_pending)
 				let l:formula_list += [ l:atom_pending ]
 				let l:atom_pending = ''
 			endif
-			let l:formula_list += [ a:formula[l:c_idx] ]
+			let l:formula_list += [ l:formula[l:c_idx] ]
 		else
-			let l:atom_pending .= a:formula[l:c_idx]
+			let l:atom_pending .= l:formula[l:c_idx]
 		endif
 		let l:c_idx += 1
 	endwhile
