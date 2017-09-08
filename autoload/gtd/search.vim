@@ -14,12 +14,12 @@ function! gtd#search#Start(mods, bang, formula, type)
 		if a:type == 'new'
 			let l:what = s:GtdSearchContextAdd(
 				\ a:bang,
-				\ gtd#formula#OperatorPrecedenceHelper(a:formula)
+				\ gtd#formula#Parser(a:formula)
 				\ )
 			let l:searches += [ {
 				\ 'display': gtd#formula#Simplify(l:what),
 				\ 'keep': [],
-				\ 'what': gtd#formula#Parser(l:what),
+				\ 'what': l:what,
 				\ 'where': gtd#note#GetAll('short')
 				\ } ]
 		elseif a:type == 'review'
@@ -29,12 +29,12 @@ function! gtd#search#Start(mods, bang, formula, type)
 				for l:r in g:gtd#review
 					let l:what = s:GtdSearchContextAdd(
 						\ a:bang,
-						\ gtd#formula#OperatorPrecedenceHelper(l:r)
+						\ gtd#formula#Parser(l:r)
 						\ )
 					let l:searches += [ {
 						\ 'display': gtd#formula#Simplify(l:what),
 						\ 'keep': [],
-						\ 'what': gtd#formula#Parser(l:what),
+						\ 'what': l:what,
 						\ 'where': gtd#note#GetAll('short')
 						\ } ]
 				endfor
@@ -47,12 +47,12 @@ function! gtd#search#Start(mods, bang, formula, type)
 				for l:p in l:previous['gtd']
 					let l:what = s:GtdSearchContextAdd(
 						\ a:bang,
-						\ gtd#formula#OperatorPrecedenceHelper(l:p['formula'])
+						\ gtd#formula#Parser(l:p['formula'])
 						\ )
 					let l:searches += [ {
 						\ 'display': gtd#formula#Simplify(l:what),
 						\ 'keep': [],
-						\ 'what': gtd#formula#Parser(l:what),
+						\ 'what': l:what,
 						\ 'where': gtd#note#GetAll('short')
 						\ } ]
 				endfor
@@ -64,15 +64,15 @@ function! gtd#search#Start(mods, bang, formula, type)
 			else
 				let l:what = s:GtdSearchContextAdd(
 					\ a:bang,
-					\ gtd#formula#OperatorPrecedenceHelper(a:formula)
+					\ gtd#formula#Parser(a:formula)
 					\ )
 				for l:p in l:previous['gtd']
 					let l:searches += [ {
 						\ 'display': gtd#formula#Simplify(
-							\ l:p['formula'].' + '.l:what
+							\ [ '+', gtd#formula#Parser(l:p['formula']), l:what ]
 							\ ),
 						\ 'keep': l:p['results'],
-						\ 'what': gtd#formula#Parser(l:what),
+						\ 'what': l:what,
 						\ 'where': gtd#note#GetAll('short')
 						\ } ]
 				endfor
@@ -84,15 +84,15 @@ function! gtd#search#Start(mods, bang, formula, type)
 			else
 				let l:what = s:GtdSearchContextAdd(
 					\ a:bang,
-					\ gtd#formula#OperatorPrecedenceHelper(a:formula)
+					\ gtd#formula#Parser(a:formula)
 					\ )
 				for l:p in l:previous['gtd']
 					let l:searches += [ {
 						\ 'display': gtd#formula#Simplify(
-							\ '('.l:p['formula'].') ('.l:what.')'
+							\ [ ' ', gtd#formula#Parser(l:p['formula']), l:what ]
 							\ ),
 						\ 'keep': [],
-						\ 'what': gtd#formula#Parser(l:what),
+						\ 'what': l:what,
 						\ 'where': l:p['results']
 						\ } ]
 				endfor
@@ -121,8 +121,7 @@ function! gtd#search#Start(mods, bang, formula, type)
 					\ l:s['where']
 					\ )
 			endif
-			let l:gtd_results += l:s['keep']
-			let l:gtd_results = uniq(sort(l:gtd_results))
+			let l:gtd_results = uniq(sort(l:gtd_results + l:s['keep']))
 
 			if l:highlight == 0 && !empty(l:gtd_results)
 				let l:highlight = 1
@@ -160,7 +159,7 @@ endfunction
 
 function! s:GtdSearchContextAdd(bang, formula)
 	if a:bang != '!' && !empty(g:gtd#default_context)
-		return '('.a:formula.') @'.g:gtd#default_context
+		return [ ' ', a:formula, '@'.g:gtd#default_context ]
 	else
 		return a:formula
 	endif

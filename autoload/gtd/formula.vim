@@ -1,5 +1,5 @@
 
-function! gtd#formula#OperatorPrecedenceHelper(formula)
+function! s:GtdFormulaOperatorPrecedenceHelper(formula)
 	let l:formula = substitute(a:formula, '^\s*\(.\{-}\)\s*$', '\1', '')
 	let l:formula = substitute(l:formula, '\([()]\)', '\1\1\1', 'g')
 	let l:formula = substitute(l:formula, '\s*+\s*', '))+((', 'g')
@@ -8,7 +8,11 @@ function! gtd#formula#OperatorPrecedenceHelper(formula)
 endfunction
 
 function! gtd#formula#Parser(formula)
-	return s:GtdFormulaParser(s:GtdFormulaListConvert(a:formula))
+	return s:GtdFormulaParser(
+		\ s:GtdFormulaListConvert(
+			\ s:GtdFormulaOperatorPrecedenceHelper(a:formula)
+			\ )
+		\ )
 endfunction
 
 function! s:GtdFormulaParser(formula)
@@ -57,15 +61,37 @@ function! s:GtdFormulaParser(formula)
 endfunction
 
 function! gtd#formula#Simplify(formula)
-	return join(
-			\ map(
-				\ s:GtdFormulaEltSimplify(
-					\ s:GtdFormulaListConvert(a:formula)
-					\ ),
-				\ "v:val == '+' ? ' + ' : v:val"
-			\ ),
-			\ ''
-		\ )
+	if type(a:formula) == v:t_string
+		return a:formula
+	else
+		if a:formula[0] == '+'
+			return gtd#formula#Simplify(a:formula[1])
+				\ .' + '
+				\ .gtd#formula#Simplify(a:formula[2])
+		elseif a:formula[0] == ' '
+			let [ l:brackets_left, l:brackets_right ] = [ 0, 0 ]
+
+			if type(a:formula[1]) != v:t_string && a:formula[1][0] == '+'
+				let l:brackets_left = 1
+			endif
+
+			if type(a:formula[2]) != v:t_string && a:formula[2][0] == '+'
+				let l:brackets_right = 1
+			endif
+
+			let l:left = gtd#formula#Simplify(a:formula[1])
+			if l:brackets_left == 1
+				let l:left = '('.l:left.')'
+			endif
+
+			let l:right = gtd#formula#Simplify(a:formula[2])
+			if l:brackets_right == 1
+				let l:right = '('.l:right.')'
+			endif
+
+			return l:left.' '.l:right
+		endif
+	endif
 endfunction
 
 function! s:GtdFormulaListConvert(formula)
@@ -90,97 +116,5 @@ function! s:GtdFormulaListConvert(formula)
 	endif
 
 	return l:formula_list
-endfunction
-
-function! s:GtdFormulaEltSimplify(formula_list)
-
-	let l:formula_clean = []	" Result
-	let l:c_idx = 0				" Current index in the list
-	let l:op_last = 'N'			" Last seen operator before opening bracket
-	let l:br_start = -1			" Opening bracket position
-	let l:br_end = -1			" Closing bracket position
-	let l:br_match = 0			" Marker to know if we have a bracket match
-	let l:op_out = []			" Operators immediately outside the brackets
-	let l:op_in = []			" Operators inside the current brackets
-	let l:wait_for_eob = 0		" Wait for end of current bracket block
-
-	while l:c_idx < len(a:formula_list)
-
-		let l:c_elt = a:formula_list[l:c_idx]
-
-		if l:c_elt == '('
-			if l:br_start == -1
-				let l:br_start = l:c_idx
-				let l:op_in = []
-			else
-				let l:wait_for_eob = 1
-			endif
-			let l:br_match += 1
-			if empty(l:op_out)
-				let l:op_out += [ l:op_last ]
-			endif
-		elseif l:c_elt == ')'
-			let l:br_match -= 1
-			if l:br_start != -1 && l:br_match == 0
-				let l:br_end = l:c_idx
-				if l:c_idx < len(a:formula_list)-1
-					let l:c_idx += 1
-					continue
-				endif
-			elseif l:br_match == 1
-				let l:wait_for_eob = 0
-			endif
-		elseif l:wait_for_eob == 0 && (l:c_elt == '+' || l:c_elt == ' ')
-			if l:br_start != -1 && l:br_end == -1
-				" Inside some brackets
-				let l:op_in += [ l:c_elt ]
-			else
-				" Outside of any brackets
-				if l:br_start == -1
-					" Before opening bracket
-					let l:op_last = l:c_elt
-				else
-					" After closing bracket
-					let l:op_out += [ l:c_elt ]
-				endif
-			endif
-		endif
-
-		if l:br_match == 0 && l:br_start != -1 && l:br_end != -1
-			if s:GtdFormulaKeepBrackets(l:op_in, l:op_out)
-				return l:formula_clean
-					\ + [ '(' ]
-					\ + s:GtdFormulaEltSimplify(
-						\ a:formula_list[l:br_start+1:l:br_end-1]
-						\ )
-					\ + [ ')' ]
-					\ + s:GtdFormulaEltSimplify(
-						\ a:formula_list[l:br_end+1:]
-						\ )
-			else
-				return l:formula_clean
-					\ + s:GtdFormulaEltSimplify(
-						\ a:formula_list[l:br_start+1:l:br_end-1]
-							\ + a:formula_list[l:br_end+1:]
-						\ )
-			endif
-		else
-			if l:br_match == 0 && l:br_start == -1
-				let l:formula_clean += [ l:c_elt ]
-			endif
-			let l:c_idx += 1
-		endif
-
-	endwhile
-
-	return l:formula_clean
-endfunction
-
-function! s:GtdFormulaKeepBrackets(op_in, op_out)
-	" Brackets are usefull if there is at least one operator inside them whose
-	" precedence is weaker than those outside.
-	return !empty(a:op_in)
-		\ && index(a:op_out, ' ') >= 0
-		\ && index(a:op_in, '+') >= 0
 endfunction
 
