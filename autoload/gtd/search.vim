@@ -19,7 +19,7 @@ function! gtd#search#Start(mods, bang, formula, type)
 			let l:searches += [ {
 				\ 'display': gtd#formula#Simplify(l:what),
 				\ 'keep': [],
-				\ 'what': l:what,
+				\ 'what': gtd#formula#Parser(l:what),
 				\ 'where': gtd#note#GetAll('short')
 				\ } ]
 		elseif a:type == 'review'
@@ -34,7 +34,7 @@ function! gtd#search#Start(mods, bang, formula, type)
 					let l:searches += [ {
 						\ 'display': gtd#formula#Simplify(l:what),
 						\ 'keep': [],
-						\ 'what': l:what,
+						\ 'what': gtd#formula#Parser(l:what),
 						\ 'where': gtd#note#GetAll('short')
 						\ } ]
 				endfor
@@ -52,7 +52,7 @@ function! gtd#search#Start(mods, bang, formula, type)
 					let l:searches += [ {
 						\ 'display': gtd#formula#Simplify(l:what),
 						\ 'keep': [],
-						\ 'what': l:what,
+						\ 'what': gtd#formula#Parser(l:what),
 						\ 'where': gtd#note#GetAll('short')
 						\ } ]
 				endfor
@@ -72,7 +72,7 @@ function! gtd#search#Start(mods, bang, formula, type)
 							\ l:p['formula'].' + '.l:what
 							\ ),
 						\ 'keep': l:p['results'],
-						\ 'what': l:what,
+						\ 'what': gtd#formula#Parser(l:what),
 						\ 'where': gtd#note#GetAll('short')
 						\ } ]
 				endfor
@@ -92,7 +92,7 @@ function! gtd#search#Start(mods, bang, formula, type)
 							\ '('.l:p['formula'].') ('.l:what.')'
 							\ ),
 						\ 'keep': [],
-						\ 'what': l:what,
+						\ 'what': gtd#formula#Parser(l:what),
 						\ 'where': l:p['results']
 						\ } ]
 				endfor
@@ -111,14 +111,13 @@ function! gtd#search#Start(mods, bang, formula, type)
 
 		for l:s in l:searches
 
-			let l:search_actions = gtd#formula#Parser(l:s['what'])
-			call gtd#debug#Message(l:search_actions)
+			call gtd#debug#Message(l:s['what'])
 
 			" No need to do each search if type is 'add' there will be no
 			" change...
 			if a:type != 'add' || !exists('l:gtd_results')
 				let l:gtd_results = s:GtdSearchHandler(
-					\ l:search_actions,
+					\ l:s['what'],
 					\ l:s['where']
 					\ )
 			endif
