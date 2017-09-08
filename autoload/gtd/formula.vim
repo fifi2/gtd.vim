@@ -53,17 +53,15 @@ function! gtd#formula#Parser(formula)
 endfunction
 
 function! gtd#formula#Simplify(formula)
-	let l:formula = s:GtdFormulaEltSimplify(
-		\ gtd#formula#ListConvert(a:formula)
+	return join(
+			\ map(
+				\ s:GtdFormulaEltSimplify(
+					\ gtd#formula#ListConvert(a:formula)
+					\ ),
+				\ "v:val == '+' ? ' + ' : v:val"
+			\ ),
+			\ ''
 		\ )
-	let l:elt_idx = 0
-	while l:elt_idx < len(l:formula)
-		if l:formula[l:elt_idx] == '+'
-			let l:formula[l:elt_idx] = ' + '
-		endif
-		let l:elt_idx += 1
-	endwhile
-	return join(l:formula, '')
 endfunction
 
 function! gtd#formula#ListConvert(formula)
