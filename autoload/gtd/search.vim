@@ -159,6 +159,7 @@ endfunction
 
 function! s:GtdSearchContextAdd(bang, formula)
 	if a:bang != '!' && !empty(g:gtd#default_context)
+		\ && gtd#formula#AtomUseful(a:formula, ' ', '@'.g:gtd#default_context)
 		return [ ' ', a:formula, '@'.g:gtd#default_context ]
 	else
 		return a:formula

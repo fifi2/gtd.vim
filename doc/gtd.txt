@@ -520,6 +520,7 @@ You can check for updates or browse the plugin here:
 ==============================================================================
 8. Changelog					*gtd-changelog*
 
+	+ Context is now added to the searches only if it is useful.
 	+ Gtd searches are displayed in the current window if |hidden| is on.
 	+ Fix: <mods> are respected again for |:Gtd|.
 	+ Fix: <mods> are respected again for |:GtdNew|.

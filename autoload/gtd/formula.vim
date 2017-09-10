@@ -118,3 +118,17 @@ function! s:GtdFormulaListConvert(formula)
 	return l:formula_list
 endfunction
 
+function! gtd#formula#AtomUseful(formula, operator, atom)
+	if type(a:formula) == v:t_string
+		return a:formula != a:atom
+	endif
+
+	if a:operator == a:formula[0]
+		return gtd#formula#AtomUseful(a:formula[1], a:operator, a:atom)
+			\ && gtd#formula#AtomUseful(a:formula[2], a:operator, a:atom)
+	else
+		return gtd#formula#AtomUseful(a:formula[1], a:operator, a:atom)
+			\ || gtd#formula#AtomUseful(a:formula[2], a:operator, a:atom)
+	endif
+endfunction
+
