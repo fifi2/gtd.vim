@@ -60,14 +60,14 @@ function! s:GtdFormulaParser(formula)
 
 endfunction
 
-function! gtd#formula#Simplify(formula)
+function! gtd#formula#ToString(formula)
 	if type(a:formula) == v:t_string
 		return a:formula
 	else
 		if a:formula[0] == '+'
-			return gtd#formula#Simplify(a:formula[1])
+			return gtd#formula#ToString(a:formula[1])
 				\ .' + '
-				\ .gtd#formula#Simplify(a:formula[2])
+				\ .gtd#formula#ToString(a:formula[2])
 		elseif a:formula[0] == ' '
 			let [ l:brackets_left, l:brackets_right ] = [ 0, 0 ]
 
@@ -79,12 +79,12 @@ function! gtd#formula#Simplify(formula)
 				let l:brackets_right = 1
 			endif
 
-			let l:left = gtd#formula#Simplify(a:formula[1])
+			let l:left = gtd#formula#ToString(a:formula[1])
 			if l:brackets_left == 1
 				let l:left = '('.l:left.')'
 			endif
 
-			let l:right = gtd#formula#Simplify(a:formula[2])
+			let l:right = gtd#formula#ToString(a:formula[2])
 			if l:brackets_right == 1
 				let l:right = '('.l:right.')'
 			endif

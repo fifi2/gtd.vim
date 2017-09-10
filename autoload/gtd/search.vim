@@ -17,7 +17,7 @@ function! gtd#search#Start(mods, bang, formula, type)
 				\ gtd#formula#Parser(a:formula)
 				\ )
 			let l:searches += [ {
-				\ 'display': gtd#formula#Simplify(l:what),
+				\ 'display': gtd#formula#ToString(l:what),
 				\ 'keep': [],
 				\ 'what': l:what,
 				\ 'where': gtd#note#GetAll('short')
@@ -32,7 +32,7 @@ function! gtd#search#Start(mods, bang, formula, type)
 						\ gtd#formula#Parser(l:r)
 						\ )
 					let l:searches += [ {
-						\ 'display': gtd#formula#Simplify(l:what),
+						\ 'display': gtd#formula#ToString(l:what),
 						\ 'keep': [],
 						\ 'what': l:what,
 						\ 'where': gtd#note#GetAll('short')
@@ -50,7 +50,7 @@ function! gtd#search#Start(mods, bang, formula, type)
 						\ gtd#formula#Parser(l:p['formula'])
 						\ )
 					let l:searches += [ {
-						\ 'display': gtd#formula#Simplify(l:what),
+						\ 'display': gtd#formula#ToString(l:what),
 						\ 'keep': [],
 						\ 'what': l:what,
 						\ 'where': gtd#note#GetAll('short')
@@ -68,7 +68,7 @@ function! gtd#search#Start(mods, bang, formula, type)
 					\ )
 				for l:p in l:previous['gtd']
 					let l:searches += [ {
-						\ 'display': gtd#formula#Simplify(
+						\ 'display': gtd#formula#ToString(
 							\ [ '+', gtd#formula#Parser(l:p['formula']), l:what ]
 							\ ),
 						\ 'keep': l:p['results'],
@@ -88,7 +88,7 @@ function! gtd#search#Start(mods, bang, formula, type)
 					\ )
 				for l:p in l:previous['gtd']
 					let l:searches += [ {
-						\ 'display': gtd#formula#Simplify(
+						\ 'display': gtd#formula#ToString(
 							\ [ ' ', gtd#formula#Parser(l:p['formula']), l:what ]
 							\ ),
 						\ 'keep': [],
