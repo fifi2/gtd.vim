@@ -35,8 +35,8 @@ is obviously needed at a time, you will get your notes right there, just
 beyond the tags which allowed you to display the file.
 
 Gtd.vim has been thought to let you decide what GTD workflow you prefer. I
-give here examples of what you can do, not what you should. The objetive is to
-present what this plugin can do.
+give here examples of what you can do, not what you should. The objective is
+to present what this plugin can do.
 
 Right after you set the directory in which to save the Gtd files (see
 |g:gtd#dir|), you will create new notes in it with |:GtdNew| command, named
@@ -70,7 +70,7 @@ particular context.
 	    @work
 
 						*gtd-action*
-Gtd actions are some usefull tags to mark files in a distinctive state. It can
+Gtd actions are some useful tags to mark files in a distinctive state. It can
 be used to create logical baskets for your tasks. Use what you prefer.
 	Eg. !inbox
 	    !todo
@@ -106,8 +106,9 @@ operate search in the Gtd file content.
 						*gtd-philosophy*
 As I said, there are different ways to use GTD. The good one is what you
 decide to do. Gtd.vim is designed to let you use any kind of action tags,
-hashtags or contexts. It will just help you to search notes with the tags you
-choosed. Here is just an example of what you can do with this plugin.
+hashtags or contexts. It will just help you to find your notes according to
+the tags you are interested in. Here is just an example of what you can do
+with this plugin.
 
 	1. New notes are tagged !inbox. It may be the main action tag. At this
 	   point, you need a title, a context, an action tag !inbox and the
@@ -216,7 +217,7 @@ and wait for the first empty line before leaving the search. >
 		    with the [!] any changes in the current buffer are
 		    abandoned.
 
-		    With a [range] (optional), seletected text is inserted in
+		    With a [range] (optional), selected text is inserted in
 		    the new |gtd-note|.
 
 						*:Gtd*
@@ -227,7 +228,7 @@ and wait for the first empty line before leaving the search. >
 		    Modifiers are allowed (see |<mods>|).
 
 						*gtd-formula*
-		    {formula} is a string you can consider as a mathematic
+		    {formula} is a string you can consider as a mathematical
 		    expression.
 
 		    - {formula} is either a |gtd-atom|
@@ -437,7 +438,7 @@ From the |gtd-note| buffer:
 
 		    You might want to have a map to access your attached files
 		    in a quicker way than executing |:GtdFiles|. To do so,
-		    simply associate the key combinaison of your choice to
+		    simply associate the key mapping of your choice to
 		    <Plug>GtdFiles. This map is only available when the
 		    current buffer has gtd filetype.
 >
@@ -454,8 +455,8 @@ Anywhere:
 	<Plug>GtdNew
 
 		    You can set a map to create a new Gtd file in a quicker
-		    way than using |:GtdNew|. Key combinaisons can be equal
-		    for normal and visual modes.
+		    way than using |:GtdNew|. Key mappings can be equal for
+		    normal and visual modes.
 >
 		    nmap <Leader>gn <Plug>GtdNew
 		    vmap <Leader>gn <Plug>GtdNew
@@ -529,8 +530,8 @@ You can check for updates or browse the plugin here:
 	+ <Plug>GtdAttachedFiles is now defined as <Plug>GtdFiles.
 	+ New |g:gtd#results_history| to define how many searches are saved
 	  into the history.
-	+ Mappings of |gtd-results| buffer can now be overrided with personnal
-	  combinaisons.
+	+ Mappings of |gtd-results| buffer can now be overrided with personal
+	  mappings.
 	+ Results are now loaded into the new |gtd-results| buffer instead of
 	  the location list. This buffer is able to load the results of
 	  multiple searches (as |GtdReview| can produce).
