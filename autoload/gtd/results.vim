@@ -132,19 +132,15 @@ function! gtd#results#Browse(move)
 	endif
 endfunction
 
-function! s:GtdResultsHistoryId(gtd_id)
-	" a:gtd_id may be -1 to deal with last display but I'd prefer to save the
-	" real key.
-	let l:len = len(s:results_history)
-	return (a:gtd_id+l:len)%l:len
+function! gtd#results#CurrentId()
+	return s:results_current
 endfunction
 
 function! gtd#results#Display(mods, gtd_id)
 	try
 		let l:content = []
-		let l:gtd_id = s:GtdResultsHistoryId(a:gtd_id)
 
-		for l:gtd in get(s:results_history, l:gtd_id, [])
+		for l:gtd in get(s:results_history, a:gtd_id, [])
 			let l:content += [ l:gtd['formula'] ]
 			if empty(l:gtd['results'])
 				let l:content += [ ' No result' ]
@@ -160,7 +156,7 @@ function! gtd#results#Display(mods, gtd_id)
 		endfor
 
 		let s:results_buffer = s:GtdResultsOpen(a:mods)
-		let s:results_current = l:gtd_id
+		let s:results_current = a:gtd_id
 		call append(0, l:content)
 		call s:GtdResultsFreeze()
 	catch /.*/

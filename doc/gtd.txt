@@ -463,8 +463,8 @@ Anywhere:
 <
 	<Plug>GtdDisplay
 
-		    This plugin is available to display, if available, the
-		    last search that you made.
+		    This mapping is available to recall, if available, the
+		    last search that you have displayed.
 >
 		    nmap <Leader>gd <Plug>GtdDisplay
 <
@@ -520,6 +520,8 @@ You can check for updates or browse the plugin here:
 ==============================================================================
 8. Changelog					*gtd-changelog*
 
+	+ <Plug>GtdDisplay now leads to the display of the last displayed
+	  search, instead of the last one done.
 	+ Context is now added to the searches only if it is useful.
 	+ Gtd searches are displayed in the current window if |hidden| is on.
 	+ Fix: <mods> are respected again for |:Gtd|.
