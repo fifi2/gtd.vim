@@ -193,7 +193,7 @@ function! s:GtdResultsOpen(mods)
 		endif
 		let l:action = 'new'
 	endif
-	execute 'keepalt' join(l:mods) l:action ' | set ft=gtd-results'
+	execute join(l:mods) l:action ' | set ft=gtd-results'
 	call s:GtdResultsFree()
 	return bufnr('%')
 endfunction
