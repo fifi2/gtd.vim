@@ -482,6 +482,10 @@ Highlighting of the tags
 
 Markdown inspiration (titles for now, more to come)
 
+						*gtd-completion*
+A completion based on used tags is available in |gtd-note| buffers when you
+are in insert mode on the tag lines. See |compl-function| and |i_CTRL-X_CTRL-U|.
+
 
 ==============================================================================
 6. License					*gtd-license*
