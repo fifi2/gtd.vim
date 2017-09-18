@@ -7,7 +7,7 @@ endif
 
 execute 'setlocal nomodifiable'
 execute 'setlocal buftype=nofile'
-execute 'setlocal bufhidden=unload'
+execute 'setlocal bufhidden=wipe'
 execute 'setlocal nobuflisted'
 execute 'setlocal noswapfile'
 execute 'setlocal nowrap'
