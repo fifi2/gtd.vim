@@ -524,6 +524,8 @@ You can check for updates or browse the plugin here:
 ==============================================================================
 8. Changelog					*gtd-changelog*
 
+	+ Reverse the results order to display the latest notes in the
+	  beginning.
 	+ <Plug>GtdDisplay now leads to the display of the last displayed
 	  search, instead of the last one done.
 	+ Context is now added to the searches only if it is useful.

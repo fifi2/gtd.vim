@@ -121,7 +121,11 @@ function! gtd#search#Start(mods, bang, formula, type)
 					\ l:s['where']
 					\ )
 			endif
-			let l:gtd_results = uniq(sort(l:gtd_results + l:s['keep']))
+			let l:gtd_results = reverse(
+				\ uniq(
+					\ sort(l:gtd_results + l:s['keep'])
+					\ )
+				\ )
 
 			if l:highlight == 0 && !empty(l:gtd_results)
 				let l:highlight = 1
