@@ -58,6 +58,10 @@ function! gtd#Init()
 			let g:gtd#map_edit = '<Enter>'
 		endif
 
+		if !exists('g:gtd#map_refresh') || empty(g:gtd#map_refresh)
+			let g:gtd#map_refresh = '<F5>'
+		endif
+
 		if !exists('g:gtd#map_browse_older') || empty(g:gtd#map_browse_older)
 			let g:gtd#map_browse_older = '<C-Left>'
 		endif

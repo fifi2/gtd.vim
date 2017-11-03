@@ -185,6 +185,11 @@ From the |gtd-results| buffer, you can edit one |gtd-note| file with <Enter>
 (default value). You can chance this map : >
 	let g:gtd#map_edit = 'o'
 <
+						*g:gtd#map_refresh*
+From the |gtd-results| buffer, you can refresh the results with <F5> (default
+value). See |:GtdRefresh|. You can chance this map : >
+	let g:gtd#map_refresh = 'r'
+<
 						*g:gtd#results_history*
 Define how many searches are saved into the history. You can disable this
 limitation by setting this parameter to 0. Default: 10. >
@@ -428,6 +433,9 @@ From the |gtd-results| buffer:
 		    refresh the search.
 		    Override this mapping with |g:gtd#map_edit|.
 
+	<F5>	    Refresh the results.
+		    Override this mapping with |g:gtd#map_refresh|.
+
 	<C-Left>    Browse the history of recent searches.
 	<C-Right>   Override this mappings with |g:gtd#map_browse_older| and
 		    |g:gtd#map_browse_newer|.
@@ -524,6 +532,7 @@ You can check for updates or browse the plugin here:
 ==============================================================================
 8. Changelog					*gtd-changelog*
 
+	+ Add a map <Plug>GtdRefresh to quickly refresh the results.
 	+ Reverse the results order to display the latest notes in the
 	  beginning.
 	+ <Plug>GtdDisplay now leads to the display of the last displayed

@@ -30,6 +30,12 @@ endif
 execute "nnoremap <buffer> <silent> <Plug>GtdEdit :call gtd#results#Edit(line('.'))<CR>"
 let b:undo_ftplugin = 'execute "nunmap <buffer> <Plug>GtdEdit"'
 
+if !hasmapto('<Plug>GtdRefresh')
+	execute 'nmap <buffer>' g:gtd#map_refresh '<Plug>GtdRefresh'
+endif
+execute "nnoremap <buffer> <silent> <Plug>GtdRefresh :GtdRefresh<CR>"
+let b:undo_ftplugin = 'execute "nunmap <buffer> <Plug>GtdRefresh"'
+
 if !hasmapto('<Plug>GtdBrowseOlder')
 	execute 'nmap <buffer>' g:gtd#map_browse_older '<Plug>GtdBrowseOlder'
 endif
