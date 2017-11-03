@@ -1,9 +1,11 @@
 
-let s:note_template = [
-	\ '=',
-	\ '@'.g:gtd#default_context,
-	\ '!'.g:gtd#default_action
-	\ ]
+function! s:GtdNoteTemplate()
+	return [
+		\ '=',
+		\ '@'.g:gtd#default_context,
+		\ '!'.g:gtd#default_action
+		\ ]
+endfunction
 
 function! gtd#note#Key(key, value)
 	return fnamemodify(a:value, ':t:r')
@@ -38,7 +40,7 @@ function! gtd#note#Create(mods, bang, isrange) range
 	"   from selection.
 
 	try
-		let l:content = copy(s:note_template)
+		let l:content = s:GtdNoteTemplate()
 		if a:isrange != -1
 			if a:firstline == a:lastline
 				let l:line = getline(a:firstline)
