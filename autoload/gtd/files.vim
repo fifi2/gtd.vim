@@ -11,11 +11,7 @@ function! gtd#files#Open()
 		endif
 
 		" Browsing directory
-		if has('win32')
-			execute 'silent !explorer.exe' l:gtd_note_dir
-		else
-			execute 'silent !xdg-open' l:gtd_note_dir
-		endif
+		execute 'silent !'.g:gtd#folder_command.' '.l:gtd_note_dir
 
 		" We wait the user to continue...
 		call input("Hit enter to continue")
