@@ -168,6 +168,11 @@ plugin insert it as well. >
 Directory where to save notes or to do the searches. Default is '~/notes'. >
 	let g:gtd#dir = '~/notes'
 <
+						*g:gtd#folder_command*
+Command to run to open the folder for :GtdFiles. Default is 'explorer.exe'.
+for Windows and 'xdg-open' for other. >
+	let g:gtd#folder_command = 'ranger'
+<
 						*g:gtd#folding*
 Gtd.vim is able to fold your chapters on each title. See |gtd-syntax|. To
 activate this, you have to let this setting. >
