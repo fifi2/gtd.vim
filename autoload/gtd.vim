@@ -14,6 +14,14 @@ function! gtd#Init()
 		endif
 		let g:gtd#dir = fnamemodify(g:gtd#dir, ':p')
 
+		if !exists('g:gtd#folder_command')
+			if has('win32')
+				let g:gtd#folder_command = 'explorer.exe'
+			else
+				let g:gtd#folder_command = 'xdg-open'
+			endif
+		endif
+
 		if !exists('g:gtd#debug') || g:gtd#debug != 1
 			let g:gtd#debug = 0
 		endif
