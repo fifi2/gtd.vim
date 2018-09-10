@@ -73,7 +73,7 @@ function! gtd#cache#IsPossible(atom_type)
 endfunction
 
 function! gtd#cache#Delete(key)
-	if exists('s:cache')
+	if exists('s:cache') && exists('s:cache[a:key]')
 		unlet! s:cache[a:key]
 	endif
 endfunction
