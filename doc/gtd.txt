@@ -81,6 +81,9 @@ be used to create logical baskets for your tasks. Use what you prefer.
 						*gtd-hashtag*
 You can add a bunch of hashtags to your Gtd files to mark they are related to
 some peculiar concepts or people.
+
+Sub-hashtags can be created using colons, i.e #company-name:project-name, and
+searches will match #company-name and #company-name:project-name.
 	Eg.	#john-doe
 		#project-name
 		#company-name
@@ -273,7 +276,9 @@ and wait for the first empty line before leaving the search. >
 		      year, month and day.
 		    - |gtd-content| to look for a |pattern| into your notes.
 		      Eg: /bar
-		    - |gtd-hashtag|. Eg. #meeting or #jean-marc
+		    - |gtd-hashtag|. Eg. #meeting or #jean-marc. Sub-hashtags
+                      can be matched using #school:math or #school:history
+                      which can be searched using the atom #school.
 
 		    After the first character which is a leader allowing to
 		    know what kind of atom you're looking for, atom can

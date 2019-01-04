@@ -248,8 +248,10 @@ function! s:GtdSearchAtom(arg, where)
 		else
 
 			" Preparing search...
-			if index([ '@', '!', '#' ], l:arg_type) >= 0
+			if index([ '@', '!' ], l:arg_type) >= 0
 				let l:arg_reg = '^'.l:arg.'$'
+			elseif index([ '#' ], l:arg_type) >= 0
+				let l:arg_reg = '^'.l:arg.'\(:\|$\)'
 			elseif l:arg_type == '='
 				let l:arg_reg = '^=.*'.strpart(l:arg, 1)
 			elseif l:arg_type == '/'
