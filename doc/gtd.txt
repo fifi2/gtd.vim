@@ -541,6 +541,7 @@ You can check for updates or browse the plugin here:
 8. Changelog					*gtd-changelog*
 
 	+ Feat: sub-hastags are handled.
+	+ Fix: Force redraw after |:GtdFiles|.
 	+ Fix: Deletion of a |gtd-note| could lead to try the deletion of a
 	  non existing cache.
 	+ Allow users to set the command to open |:GtdFiles| with

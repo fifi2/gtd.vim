@@ -29,7 +29,9 @@ function! gtd#files#Open()
 		else
 			throw "Gtd note directory couldn't be found"
 		endif
+		execute "redraw!"
 	catch /.*/
+		execute "redraw!"
 		echomsg v:exception
 	endtry
 
