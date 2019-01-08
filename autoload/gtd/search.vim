@@ -232,8 +232,10 @@ function! s:GtdSearchAtom(arg, where)
 		let l:gtd_file = g:gtd#dir.l:gtd_name.'.gtd'
 
 		if l:cache_decision
-			if index([ '@', '!', '#' ], l:arg_type) >= 0
+			if index([ '@', '!' ], l:arg_type) >= 0
 				let l:arg_reg = '^'.l:arg.'$'
+			elseif l:arg_type == '#'
+				let l:arg_reg = '^'.l:arg.'\(:.\+\)\=$'
 			elseif l:arg_type == '[*]'
 				let l:arg_reg = '^\[\*\]$'
 			endif
@@ -250,8 +252,8 @@ function! s:GtdSearchAtom(arg, where)
 			" Preparing search...
 			if index([ '@', '!' ], l:arg_type) >= 0
 				let l:arg_reg = '^'.l:arg.'$'
-			elseif index([ '#' ], l:arg_type) >= 0
-				let l:arg_reg = '^'.l:arg.'\(:\|$\)'
+			elseif l:arg_type == '#'
+				let l:arg_reg = '^'.l:arg.'\(:.\+\)\=$'
 			elseif l:arg_type == '='
 				let l:arg_reg = '^=.*'.strpart(l:arg, 1)
 			elseif l:arg_type == '/'
