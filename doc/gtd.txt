@@ -293,7 +293,7 @@ and wait for the first empty line before leaving the search. >
 			    Y2017	    -M06
 			    [*]		    -[*]
 
-						*gtd-completion*
+						*gtd-formula-completion*
 		    Pressing <Tab> while you're editing your formula will
 		    search for similar atoms in your existing notes and give
 		    you back proposals. Title, content or date atoms are not
