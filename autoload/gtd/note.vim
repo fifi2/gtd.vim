@@ -31,7 +31,7 @@ function! gtd#note#Read(note, count)
 	endif
 endfunction
 
-function! gtd#note#Create(mods, bang, isrange) range
+function! gtd#note#Create(mods, command, bang, isrange) range
 
 	" a:isrange is deduced from <count>
 	" Ugly workaround :
@@ -52,12 +52,7 @@ function! gtd#note#Create(mods, bang, isrange) range
 			endif
 		endif
 
-		if empty(a:mods)
-			let l:action = 'edit'
-		else
-			let l:action = 'split'
-		endif
-		execute a:mods l:action a:bang fnamemodify(
+		execute a:mods a:command.a:bang fnamemodify(
 			\ g:gtd#dir.strftime("%Y%m%d_%H%M%S").'.gtd',
 			\ ':.'
 			\ )

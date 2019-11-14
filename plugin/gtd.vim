@@ -12,7 +12,8 @@ endif
 
 " Define Gtd.vim commands
 
-command! -bang -range -nargs=0 GtdNew <line1>,<line2>call gtd#note#Create(<q-mods>, <q-bang>, <count>)
+command! -bang -range -nargs=0 GtdNew <line1>,<line2>call gtd#note#Create(<q-mods>, 'split', <q-bang>, <count>)
+command! -bang -range -nargs=0 GtdEnew <line1>,<line2>call gtd#note#Create(<q-mods>, 'edit', <q-bang>, <count>)
 command! -bang -nargs=1 -complete=customlist,gtd#search#CommandTagComplete Gtd call gtd#search#Start(<q-mods>, <q-bang>, <q-args>, 'new')
 command! -bang -nargs=1 -complete=customlist,gtd#search#CommandTagComplete GtdAdd call gtd#search#Start(<q-mods>, <q-bang>, <q-args>, 'add')
 command! -bang -nargs=1 -complete=customlist,gtd#search#CommandTagComplete GtdFilter call gtd#search#Start(<q-mods>, <q-bang>, <q-args>, 'filter')
@@ -36,6 +37,8 @@ nnoremap <silent> <Plug>GtdDisplay
 
 nnoremap <silent> <Plug>GtdNew :GtdNew<CR>
 vnoremap <silent> <Plug>GtdNew :GtdNew<CR>
+nnoremap <silent> <Plug>GtdEnew :GtdEnew<CR>
+vnoremap <silent> <Plug>GtdEnew :GtdEnew<CR>
 
 let g:loaded_gtd = 1
 

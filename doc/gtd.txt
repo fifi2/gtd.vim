@@ -223,14 +223,21 @@ and wait for the first empty line before leaving the search. >
 3. Usage					*gtd-usage*
 
 						*:GtdNew*
-:[range]GtdNew[!]   Create a new task file.
+:[range]GtdNew      Create a new task file.
 
-		    Modifiers are allowed (see |<mods>|). Without modifier and
-		    with the [!] any changes in the current buffer are
-		    abandoned.
+		    Modifiers are allowed (see |<mods>|).
 
 		    With a [range] (optional), selected text is inserted in
 		    the new |gtd-note|.
+
+						*:GtdEnew*
+:[range]GtdEnew[!]   Create a new task file.
+
+		    Same as |:GtdNew|, except it opens the note using |:edit|
+		    instead of |:split|.
+
+		    Without modifier and with the [!] any changes in the
+		    current buffer are abandoned (see |'hidden'|).
 
 						*:Gtd*
 :Gtd[!] {formula}   This command allows you to search for some notes regarding
@@ -468,10 +475,11 @@ From the |gtd-note| buffer:
 Anywhere:
 
 	<Plug>GtdNew
+	<Plug>GtdEnew
 
 		    You can set a map to create a new Gtd file in a quicker
-		    way than using |:GtdNew|. Key mappings can be equal for
-		    normal and visual modes.
+		    way than using |:GtdNew| or |:GtdEnew|. Key mappings can
+		    be equal for normal and visual modes.
 >
 		    nmap <Leader>gn <Plug>GtdNew
 		    vmap <Leader>gn <Plug>GtdNew
