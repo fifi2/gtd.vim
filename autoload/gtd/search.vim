@@ -1,7 +1,7 @@
 
 function! gtd#search#Start(mods, bang, formula, type)
 
-	if g:gtd#debug
+	if &verbose > 0
 		let l:start_time = reltime()
 	endif
 
@@ -142,7 +142,7 @@ function! gtd#search#Start(mods, bang, formula, type)
 
 		call gtd#results#Display(a:mods, l:result_id)
 
-		if g:gtd#debug
+		if &verbose >= 1
 			echomsg "Gtd elapsed time:" reltimestr(reltime(l:start_time))
 		endif
 

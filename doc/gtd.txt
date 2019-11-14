@@ -520,6 +520,9 @@ You can read it here: http://www.gnu.org/licenses/gpl-3.0.en.html
 ==============================================================================
 7. Contributing					*gtd-contributing*
 
+						*gtd-verbose*
+Some commands, such as |:Gtd|, allow |:verbose| modifier.
+
 						*g:gtd#debug*
 If you want, you can get the debug messages of the plugin by setting the
 g:gtd#debug variable. Default is 0. >
