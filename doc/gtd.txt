@@ -17,8 +17,7 @@ Summary:
 5. Syntax					|gtd-syntax|
 6. License					|gtd-license|
 7. Contributing					|gtd-contributing|
-8. Changelog					|gtd-changelog|
-9. Credits					|gtd-credits|
+8. Credits					|gtd-credits|
 
 
 ==============================================================================
@@ -538,70 +537,7 @@ You can check for updates or browse the plugin here:
 
 
 ==============================================================================
-8. Changelog					*gtd-changelog*
-
-	+ Feat: sub-hastags are handled.
-	+ Fix: Force redraw after |:GtdFiles|.
-	+ Fix: Deletion of a |gtd-note| could lead to try the deletion of a
-	  non existing cache.
-	+ Allow users to set the command to open |:GtdFiles| with
-	  |g:gtd#folder_command|.
-	+ Fix: The template for a new |gtd-note| is no longer static if the
-	  active context is changed.
-	+ Add a map <Plug>GtdRefresh to quickly refresh the results.
-	+ Reverse the results order to display the latest notes in the
-	  beginning.
-	+ <Plug>GtdDisplay now leads to the display of the last displayed
-	  search, instead of the last one done.
-	+ Context is now added to the searches only if it is useful.
-	+ Gtd searches are displayed in the current window if |hidden| is on.
-	+ Fix: <mods> are respected again for |:Gtd|.
-	+ Fix: <mods> are respected again for |:GtdNew|.
-	+ Fix: Use a correct regexp to search with the cache.
-	+ Delete a |gtd-note| also updates the results history.
-	+ Fix: <Plug>GtdDisplay is now faster to react.
-	+ Fix: |gtd-results| mappings were available in any buffer.
-	+ <Plug>GtdAttachedFiles is now defined as <Plug>GtdFiles.
-	+ New |g:gtd#results_history| to define how many searches are saved
-	  into the history.
-	+ Mappings of |gtd-results| buffer can now be overrided with personal
-	  mappings.
-	+ Results are now loaded into the new |gtd-results| buffer instead of
-	  the location list. This buffer is able to load the results of
-	  multiple searches (as |GtdReview| can produce).
-	+ Fix: trailing spaces in the Gtd request weren't removed as expected
-	  due to the adding of default context.
-	+ |:GtdNew| is now capable to use a range as initial content of the
-	  notes. Removal of the dedicated command.
-	+ Fix: it is now possible to look for tags in the cache using regular
-	  expressions.
-	+ Cache system.
-	+ Fix bug with internal parenthesized blocks during formula
-	  simplification.
-	+ Fix bug with the highlighting of results, for atom |gtd-content|.
-	+ Optimization of results collection (assignation seems slightly
-	  faster than the add() function).
-	+ Fix issue with |:GtdAdd| and |:GtdFilter| which didn't use short
-	  names of the former results.
-	+ New command |:GtdDelete| to delete the GTD file and its attached
-	  files.
-	+ |:GtdExplore| is possible if the directory really exists.
-	+ GtdMarkdowFold() is now only defined if needed.
-	+ Only complete |:GtdContext| with relevant context tags.
-	+ Manage vim markers as a folding method (in addition to the Markdown
-	  titles).
-	+ New command |:GtdContext|.
-	  Gtd.vim now automatically filters searches according to the current
-	  context.
-	+ Accept 0 for |g:gtd#tag_lines_count| and use in the gtd syntax.
-
-0.0.1~
-
-	+ Initial version of the plugin. Enjoy!
-
-
-==============================================================================
-9. Credits					*gtd-credits*
+8. Credits					*gtd-credits*
 
 	Vim		Thank you Bram Moolenaar!
 	Vimscript help	Thank you to the community #vim on freenode.net
