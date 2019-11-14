@@ -190,12 +190,12 @@ key combinaison you might prefer. Default values are <C-Left> and <C-Right>. >
 <
 						*g:gtd#map_edit*
 From the |gtd-results| buffer, you can edit one |gtd-note| file with <Enter>
-(default value). You can chance this map : >
+(default value). You can change this map : >
 	let g:gtd#map_edit = 'o'
 <
 						*g:gtd#map_refresh*
 From the |gtd-results| buffer, you can refresh the results with <F5> (default
-value). See |:GtdRefresh|. You can chance this map : >
+value). See |:GtdRefresh|. You can change this map : >
 	let g:gtd#map_refresh = 'r'
 <
 						*g:gtd#results_history*
