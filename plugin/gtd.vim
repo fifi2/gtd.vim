@@ -19,6 +19,7 @@ command! -bang -nargs=1 -complete=customlist,gtd#search#CommandTagComplete GtdAd
 command! -bang -nargs=1 -complete=customlist,gtd#search#CommandTagComplete GtdFilter call gtd#search#Start(<q-mods>, <q-bang>, <q-args>, 'filter')
 command! -nargs=0 GtdRefresh call gtd#search#Start(<q-mods>, '!', '', 'refresh')
 command! -nargs=1 -complete=customlist,gtd#search#CommandTagComplete GtdContext call gtd#search#Context(<f-args>)
+command! -nargs=+ -complete=customlist,gtd#search#CommandTagComplete GtdMove call gtd#search#AtomMove(<f-args>)
 
 if !empty('g:gtd#review')
 	command! -bang -nargs=0 GtdReview call gtd#search#Start(<q-mods>, <q-bang>, '', 'review')

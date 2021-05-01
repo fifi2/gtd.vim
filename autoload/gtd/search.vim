@@ -155,9 +155,9 @@ endfunction
 function! gtd#search#Context(context)
 	if a:context =~ '@\S\+'
 		let g:gtd#default_context = a:context[1:]
-		echo "Gtd context is now:" a:context
+		echomsg "Gtd context is now:" a:context
 	else
-		echo "Gtd context doesn't seem legit"
+		echoerr "Gtd context doesn't seem legit"
 	endif
 endfunction
 
@@ -407,5 +407,43 @@ function! s:GtdSearchTag(pattern, prefix)
 		endfor
 	endif
 	return uniq(sort(l:matches))
+endfunction
+
+function! gtd#search#AtomMove(source, destination)
+	try
+		if a:source =~ '[@!#]\S\+' && a:destination =~ '[@!#]\S\+'
+			if g:gtd#cache
+				call gtd#cache#Load(1)
+			endif
+
+			let l:count = 0
+
+			for l:m in s:GtdSearchAtom(a:source, gtd#note#GetAll('short'))
+				let l:gtd_file = g:gtd#dir.l:m.'.gtd'
+				let l:new_note = []
+				for l:l in gtd#note#Read(l:gtd_file, g:gtd#tag_lines_count)
+					if l:l =~ '^'.a:source
+						let l:new_note += [
+							\ substitute(l:l, '^'.a:source, a:destination, '')
+							\ ]
+						let l:count += 1
+					else
+						let l:new_note += [ l:l ]
+					endif
+				endfor
+				call writefile(l:new_note, l:gtd_file, 's')
+				if g:gtd#cache
+					call gtd#cache#One(l:gtd_file)
+				endif
+			endfor
+
+			echomsg "Moved" a:source "to" a:destination
+				\ "(".l:count "substitutions)"
+		else
+			echoerr "Invalid arguments to :GtdMove"
+		endif
+	catch /.*/
+		echoerr v:exception
+	endtry
 endfunction
 

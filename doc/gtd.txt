@@ -436,6 +436,14 @@ and wait for the first empty line before leaving the search. >
 :GtdCache	    Create or refresh a cache file to speed up your searches.
 		    Only available when |g:gtd#cache| has been set.
 
+						*:GtdMove*
+:GtdMove {source} {destination}
+		    Replace {source} atom by {destination}, in all notes.
+		    Only possible with @context, !action or #tag.
+
+>
+		    :GtdMove #foo #bar
+<
 
 ==============================================================================
 4. Mappings					*gtd-mappings*
