@@ -14,7 +14,6 @@ function! gtd#cache#Load(silent)
 				\ )
 		else
 			let [ s:cache, l:curr, l:ratio ] = [ {}, 1, 0.0 ]
-			let l:time = localtime()
 			let l:all_files = gtd#note#GetAll('full')
 			let l:nb_files = len(l:all_files)
 			for l:f in l:all_files
@@ -28,11 +27,7 @@ function! gtd#cache#Load(silent)
 					endif
 					let l:curr += 1
 				endif
-				let l:l_tags = s:GtdCacheFileCreate(l:f)
-				let s:cache[gtd#note#Key('N/A', l:f)] = {
-					\ 'time': l:time,
-					\ 'tags': l:l_tags
-					\ }
+				call gtd#cache#One(l:f)
 			endfor
 			if !empty(s:cache)
 				call writefile(
@@ -60,12 +55,21 @@ function! gtd#cache#Query(file, key, tag, time)
 		\ ) >= 0
 endfunction
 
-function! gtd#cache#Refresh()
+function! gtd#cache#All()
 	unlet! s:cache
 	if !empty(glob(g:gtd#cache_file))
 		call delete(g:gtd#cache_file)
 	endif
 	call gtd#cache#Load(0)
+endfunction
+
+function! gtd#cache#One(file)
+	if g:gtd#cache && exists('s:cache')
+		let s:cache[gtd#note#Key('N/A', a:file)] = {
+			\ 'time': localtime(),
+			\ 'tags': s:GtdCacheFileCreate(a:file)
+			\ }
+	endif
 endfunction
 
 function! gtd#cache#IsPossible(atom_type)

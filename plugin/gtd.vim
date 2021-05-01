@@ -25,7 +25,7 @@ if !empty('g:gtd#review')
 endif
 
 if g:gtd#cache == 1
-	command! -nargs=0 GtdCache call gtd#cache#Refresh()
+	command! -nargs=0 GtdCache call gtd#cache#All()
 endif
 
 if exists('g:gtd#debug') && g:gtd#debug
