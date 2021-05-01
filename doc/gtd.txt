@@ -445,6 +445,15 @@ and wait for the first empty line before leaving the search. >
 		    :GtdMove #foo #bar
 <
 
+						*:GtdDo*
+:GtdDo {cmd}
+		    Execute {cmd} on each |gtd-note| in the current results
+		    using the Vim |argument-list|.
+
+>
+		    :GtdDo GtdDelete
+<
+
 ==============================================================================
 4. Mappings					*gtd-mappings*
 

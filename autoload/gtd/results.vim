@@ -236,3 +236,15 @@ function! s:GtdResultsFreeze()
 	execute "setlocal nomodifiable"
 endfunction
 
+function! gtd#results#Do(cmd)
+	let l:targets = []
+	for l:search in get(gtd#results#Get(), 'gtd')
+		let l:targets += get(l:search, 'results')
+	endfor
+	execute '%argdelete'
+	for l:target in uniq(sort(l:targets))
+		execute 'argadd '.g:gtd#dir.l:target.'.gtd'
+	endfor
+	execute 'argdo '.a:cmd
+endfunction
+
