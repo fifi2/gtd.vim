@@ -9,14 +9,15 @@ endif
 
 syntax match gtdResultsFormula /^[^ ].*$/
 syntax match gtdResultsResult /^ .*$/ contains=gtdResultsResultKey,gtdResultsResultTitle,gtdResultsResultAttached
-syntax match gtdResultsResultKey /^ \zs\d\{8}_\d\{6}/ contained
-syntax match gtdResultsResultTitle / \[[\* ]\] \zs.*/ contained
-syntax match gtdResultsResultAttached / \[\zs\*\ze\] / contained
+syntax match gtdResultsResultKey /^ \zs\d\{8}_\d\{6}/ contained conceal cchar=-
+syntax match gtdResultsResultTitle / \d\{8}_\d\{6} \zs.* \[[\* ]\]/ contained
+syntax match gtdResultsResultAttached / \[\zs\*\ze\]/ contained
 
 highlight def link gtdResultsFormula Title
 highlight def link gtdResultsResultKey Keyword
 highlight def link gtdResultsResultTitle Normal
 highlight def link gtdResultsResultAttached Underlined
+highlight Conceal ctermbg=NONE ctermfg=NONE guibg=NONE guifg=NONE
 
 let b:current_syntax = "gtd-results"
 

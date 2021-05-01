@@ -21,6 +21,8 @@ execute 'setlocal textwidth=0'
 execute 'setlocal noundofile'
 execute 'setlocal colorcolumn=0'
 execute 'setlocal cursorline'
+execute 'setlocal conceallevel=2'
+execute 'setlocal concealcursor=nvic'
 
 execute 'silent! file! Gtd results'
 

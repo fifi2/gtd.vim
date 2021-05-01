@@ -146,9 +146,9 @@ function! gtd#results#Display(mods, gtd_id)
 				let l:content += [ ' No result' ]
 			else
 				for l:r in l:gtd['results']
-					let l:attached = l:r['attached'] ? '[*]' : '[ ]'
+					let l:attached = l:r['attached'] ? ' [*]' : ''
 					let l:content += [
-						\ ' '.l:r['key'].' '.l:attached.' '.l:r['title']
+						\ ' '.l:r['key'].' '.l:r['title'].l:attached
 						\ ]
 				endfor
 			endif
