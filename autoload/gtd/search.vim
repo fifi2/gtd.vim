@@ -152,10 +152,16 @@ function! gtd#search#Start(mods, bang, formula, type)
 
 endfunction
 
-function! gtd#search#Context(context)
-	if a:context =~ '@\S\+'
-		let g:gtd#default_context = a:context[1:]
-		echomsg "Gtd context is now:" a:context
+function! gtd#search#Context(...)
+	if a:0 == 0
+		if g:gtd#default_context == ''
+			echomsg "There is no default context"
+		else
+			echomsg "Gtd context is" '@'.g:gtd#default_context
+		endif
+	elseif a:1 =~ '@\S\+'
+		let g:gtd#default_context = a:1[1:]
+		echomsg "Gtd context is now:" a:1
 	else
 		echoerr "Gtd context doesn't seem legit"
 	endif
