@@ -573,11 +573,11 @@ g:gtd#debug variable. Default is 0. >
 
 						*gtd-bugs*
 Thank you to track any issue you may encounter here:
-	https://github.com/phb1/gtd.vim/issues
+	https://github.com/fifi2/gtd.vim/issues
 
 						*gtd-repository*
 You can check for updates or browse the plugin here:
-	https://github.com/phb1/gtd.vim
+	https://github.com/fifi2/gtd.vim
 
 
 ==============================================================================

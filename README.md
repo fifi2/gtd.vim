@@ -25,7 +25,7 @@ archive from Github and extract it to your personal Vim directory.
 
 	$ mkdir -p ~/.vim/pack/plugins/start
 	$ cd ~/.vim/pack/plugins/start/
-	$ git clone https://github.com/phb1/gtd.vim
+	$ git clone https://github.com/fifi2/gtd.vim
 
 Notes:
 - Replace the subdirectory "plugins" with whatever you like.
@@ -35,12 +35,12 @@ Notes:
 
 ### Vundle
 
-	Plugin 'phb1/gtd.vim'
+	Plugin 'fifi2/gtd.vim'
 
 ### Pathogen
 
 	$ cd ~/.vim/bundle
-	$ git clone https://github.com/phb1/gtd.vim
+	$ git clone https://github.com/fifi2/gtd.vim
 
 ## Basic configuration
 
