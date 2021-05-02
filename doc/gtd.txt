@@ -374,12 +374,15 @@ and wait for the first empty line before leaving the search. >
 		    :Gtd !archive (#john-doe + /john\sdoe) @work -/foo
 <
 						*:GtdContext*
-:GtdContext [{arg}]   Change (or set) the current value of
+:GtdContext [{arg}] Change (or set) the current value of
 		    |g:gtd#default_context|.
 
 		    Display the current context when {arg} is omitted.
 
 		    {arg} must be a valid context (Eg. @work).
+
+:GtdContext!	    Unset the current default context (as set by
+		    |g:gtd#default_context|).
 
 						*:GtdAdd*
 :GtdAdd[!] {formula}
