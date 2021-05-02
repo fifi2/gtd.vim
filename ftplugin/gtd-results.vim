@@ -71,7 +71,7 @@ endif
 
 augroup gtd-results
 	autocmd!
-	execute 'command! -buffer -nargs=1 GtdDo call gtd#results#Do(<q-args>)'
+	execute 'command! -buffer -nargs=1 -complete=command GtdDo call gtd#results#Do(<q-args>)'
 	execute 'autocmd BufUnload <buffer> call gtd#results#Close()'
 augroup END
 
