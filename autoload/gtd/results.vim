@@ -141,10 +141,15 @@ function! gtd#results#Display(mods, gtd_id)
 		let l:content = []
 
 		for l:gtd in get(s:results_history, a:gtd_id, [])
-			let l:content += [ l:gtd['formula'] ]
-			if empty(l:gtd['results'])
-				let l:content += [ ' No result' ]
+			let l:title = l:gtd['formula']
+			let l:nb_tasks = len(l:gtd['results'])
+			if l:nb_tasks <= 1
+				let l:title .= ' ['.l:nb_tasks.' task]'
 			else
+				let l:title .= ' ['.l:nb_tasks.' tasks]'
+			endif
+			let l:content += [ l:title ]
+			if !empty(l:gtd['results'])
 				for l:r in l:gtd['results']
 					let l:attached = l:r['attached'] ? ' [*]' : ''
 					let l:content += [
