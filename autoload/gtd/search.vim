@@ -106,7 +106,7 @@ function! gtd#search#Start(mods, bang, formula, type)
 		endif
 
 		if g:gtd#cache
-			call gtd#cache#Load(1)
+			call gtd#cache#Load()
 		endif
 
 		for l:s in l:searches
@@ -234,7 +234,7 @@ function! s:GtdSearchAtom(arg, where)
 		let l:arg_type = strpart(l:arg, 0, 1)
 	endif
 
-	" Can we use cache file?
+	" Can we use cache?
 	let l:cache_decision = g:gtd#cache && gtd#cache#IsPossible(l:arg_type)
 
 	" Search
@@ -398,7 +398,7 @@ endfunction
 function! s:GtdSearchTag(pattern, prefix)
 	let l:matches = []
 	if g:gtd#cache
-		call gtd#cache#Load(1)
+		call gtd#cache#Load()
 		for l:f in gtd#note#GetAll('short')
 			for l:t in gtd#cache#TagsGet(l:f)
 				if l:t =~ a:pattern
@@ -424,7 +424,7 @@ function! gtd#search#AtomMove(source, destination)
 	try
 		if a:source =~ '[@!#]\S\+' && a:destination =~ '[@!#]\S\+'
 			if g:gtd#cache
-				call gtd#cache#Load(1)
+				call gtd#cache#Load()
 			endif
 
 			let l:count = 0

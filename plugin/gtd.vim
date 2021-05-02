@@ -25,10 +25,6 @@ if !empty('g:gtd#review')
 	command! -bang -nargs=0 GtdReview call gtd#search#Start(<q-mods>, <q-bang>, '', 'review')
 endif
 
-if g:gtd#cache == 1
-	command! -nargs=0 GtdCache call gtd#cache#All()
-endif
-
 if exists('g:gtd#debug') && g:gtd#debug
 	command! -bang -nargs=1 -complete=customlist,gtd#search#CommandTagComplete GtdBench call gtd#debug#Bench(<q-bang>, <q-args>)
 endif

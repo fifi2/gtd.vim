@@ -148,11 +148,6 @@ If you've got lots and lots of notes, you might want to use this option to
 activate the cache system and speed up your searches. >
 	let g:gtd#cache = 1
 <
-						*g:gtd#cache_file*
-File in which cache will be saved and read. Only used when |g:gtd#cache| is
-on. Default value: |g:gtd#dir|/cache. >
-	let g:gtd#cache_file = '~/gtd_cache'
-<
 						*g:gtd#default_context*
 When creating a new Gtd file, the plugin automatically try to insert basic Gtd
 tags in it. If you want, you can define your default context to let the plugin
@@ -447,10 +442,6 @@ and wait for the first empty line before leaving the search. >
 		    and finally delete the directory and its content, then the
 		    GTD file. Operations are abandoned as soon as an error
 		    occurs.
-
-						*:GtdCache*
-:GtdCache	    Create or refresh a cache file to speed up your searches.
-		    Only available when |g:gtd#cache| has been set.
 
 						*:GtdMove*
 :GtdMove {source} {destination}
