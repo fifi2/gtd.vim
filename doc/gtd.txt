@@ -144,9 +144,9 @@ To enable loading the Gtd.vim plugin, you will have to activate plugin files
 with `:filetype plugin on` in your Vimrc file. See |:filetype-plugin-on|
 
 						*g:gtd#cache*
-If you've got lots and lots of notes, you might want to use this option to
-activate the cache system and speed up your searches. >
-	let g:gtd#cache = 1
+To speed up searches, a memory cache is enabled by default. If you need, for
+some reasons, to disable it, you can set this to 0. >
+	let g:gtd#cache = 0
 <
 						*g:gtd#default_context*
 When creating a new Gtd file, the plugin automatically try to insert basic Gtd

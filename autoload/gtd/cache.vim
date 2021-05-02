@@ -66,7 +66,7 @@ function! gtd#cache#One(file)
 endfunction
 
 function! gtd#cache#IsPossible(atom_type)
-	return index(keys(s:cache_atoms), a:atom_type) >= 0
+	return g:gtd#cache && index(keys(s:cache_atoms), a:atom_type) >= 0
 endfunction
 
 function! gtd#cache#Delete(key)

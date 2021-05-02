@@ -235,7 +235,7 @@ function! s:GtdSearchAtom(arg, where)
 	endif
 
 	" Can we use cache?
-	let l:cache_decision = g:gtd#cache && gtd#cache#IsPossible(l:arg_type)
+	let l:cache_decision = gtd#cache#IsPossible(l:arg_type)
 
 	" Search
 	let l:search_results = []
@@ -443,9 +443,7 @@ function! gtd#search#AtomMove(source, destination)
 					endif
 				endfor
 				call writefile(l:new_note, l:gtd_file, 's')
-				if g:gtd#cache
-					call gtd#cache#One(l:gtd_file)
-				endif
+				call gtd#cache#One(l:gtd_file)
 			endfor
 
 			echomsg "Moved" a:source "to" a:destination

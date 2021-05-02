@@ -26,8 +26,8 @@ function! gtd#Init()
 			let g:gtd#debug = 0
 		endif
 
-		if !exists('g:gtd#cache') || g:gtd#cache != 1
-			let g:gtd#cache = 0
+		if !exists('g:gtd#cache') || g:gtd#cache != 0
+			let g:gtd#cache = 1
 		endif
 
 		if !exists('g:gtd#default_action') || empty(g:gtd#default_action)

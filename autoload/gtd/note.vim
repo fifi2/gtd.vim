@@ -96,10 +96,7 @@ function! gtd#note#Delete()
 			endif
 
 			let l:key = gtd#note#Key('N/A', l:gtd_note_file)
-			if g:gtd#cache
-				call gtd#cache#Delete(l:key)
-			endif
-
+			call gtd#cache#Delete(l:key)
 			call gtd#results#Remove(l:key)
 		else
 			execute 'bwipeout!'
