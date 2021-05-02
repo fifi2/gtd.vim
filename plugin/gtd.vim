@@ -12,8 +12,8 @@ endif
 
 " Define Gtd.vim commands
 
-command! -bang -range -nargs=0 GtdNew <line1>,<line2>call gtd#note#Create(<q-mods>, 'split', <q-bang>, <count>)
-command! -bang -range -nargs=0 GtdEnew <line1>,<line2>call gtd#note#Create(<q-mods>, 'edit', <q-bang>, <count>)
+command! -bang -range -nargs=? GtdNew <line1>,<line2>call gtd#note#Create(<q-mods>, 'split', <q-bang>, <count>, <q-args>)
+command! -bang -range -nargs=? GtdEnew <line1>,<line2>call gtd#note#Create(<q-mods>, 'edit', <q-bang>, <count>, <q-args>)
 command! -bang -nargs=1 -complete=customlist,gtd#search#CommandTagComplete Gtd call gtd#search#Start(<q-mods>, <q-bang>, <q-args>, 'new')
 command! -bang -nargs=1 -complete=customlist,gtd#search#CommandTagComplete GtdAdd call gtd#search#Start(<q-mods>, <q-bang>, <q-args>, 'add')
 command! -bang -nargs=1 -complete=customlist,gtd#search#CommandTagComplete GtdFilter call gtd#search#Start(<q-mods>, <q-bang>, <q-args>, 'filter')

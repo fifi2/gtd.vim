@@ -1,7 +1,7 @@
 
-function! s:GtdNoteTemplate()
+function! s:GtdNoteTemplate(title)
 	return [
-		\ '=',
+		\ '='.a:title,
 		\ '@'.g:gtd#default_context,
 		\ '!'.g:gtd#default_action
 		\ ]
@@ -31,7 +31,7 @@ function! gtd#note#Read(note, count)
 	endif
 endfunction
 
-function! gtd#note#Create(mods, command, bang, isrange) range
+function! gtd#note#Create(mods, command, bang, isrange, note) range
 
 	" a:isrange is deduced from <count>
 	" Ugly workaround :
@@ -40,16 +40,9 @@ function! gtd#note#Create(mods, command, bang, isrange) range
 	"   from selection.
 
 	try
-		let l:content = s:GtdNoteTemplate()
+		let l:content = s:GtdNoteTemplate(a:note)
 		if a:isrange != -1
-			if a:firstline == a:lastline
-				let l:line = getline(a:firstline)
-				if !empty(l:line)
-					let l:content += [ '', l:line ]
-				endif
-			else
-				let l:content += [ '' ] + getline(a:firstline, a:lastline)
-			endif
+			let l:content += [ '' ] + getline(a:firstline, a:lastline)
 		endif
 
 		execute a:mods a:command.a:bang fnamemodify(
@@ -60,8 +53,14 @@ function! gtd#note#Create(mods, command, bang, isrange) range
 		if append(0, l:content)
 			throw "Gtd default content couldn't be inserted"
 		else
-			execute 'normal! gg'
-			execute 'startinsert!'
+			if empty(a:note)
+				\ || empty(g:gtd#default_context)
+				\ || empty(g:gtd#default_action)
+				execute 'normal! gg'
+				execute 'startinsert!'
+			else
+				execute 'write | bwipeout'
+			endif
 		endif
 	catch /.*/
 		echomsg v:exception

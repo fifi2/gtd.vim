@@ -223,21 +223,32 @@ and wait for the first empty line before leaving the search. >
 3. Usage					*gtd-usage*
 
 						*:GtdNew*
-:[range]GtdNew      Create a new task file.
+:[range]GtdNew [{title})
+		    Create a new task file.
 
 		    Modifiers are allowed (see |<mods>|).
 
 		    With a [range] (optional), selected text is inserted in
 		    the new |gtd-note|.
 
+		    If {title} is provided, the title will be set
+		    automatically. If |g:gtd#default_context| and
+		    |g:gtd#default_action| are set, the buffer will be saved
+		    and wiped out.
+
 						*:GtdEnew*
-:[range]GtdEnew[!]   Create a new task file.
+:[range]GtdEnew[!]  Create a new task file.
 
 		    Same as |:GtdNew|, except it opens the note using |:edit|
 		    instead of |:split|.
 
 		    Without modifier and with the [!] any changes in the
 		    current buffer are abandoned (see |'hidden'|).
+
+		    If {title} is provided, the title will be set
+		    automatically. If |g:gtd#default_context| and
+		    |g:gtd#default_action| are set, the buffer will be saved
+		    and wiped out.
 
 						*:Gtd*
 :Gtd[!] {formula}   This command allows you to search for some notes regarding
