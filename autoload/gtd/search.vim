@@ -19,6 +19,7 @@ function! gtd#search#Start(mods, bang, formula, type)
 			let l:searches += [ {
 				\ 'display': gtd#formula#ToString(l:what),
 				\ 'keep': [],
+				\ 'formula': l:what,
 				\ 'what': l:what,
 				\ 'where': gtd#note#GetAll('short')
 				\ } ]
@@ -27,13 +28,22 @@ function! gtd#search#Start(mods, bang, formula, type)
 				throw "Gtd review has not been set (g:gtd#review)"
 			else
 				for l:r in g:gtd#review
+					if type(l:r) == v:t_string
+						" Deal with former review format
+						let l:r = { 'title': l:r, 'formula': l:r }
+					endif
 					let l:what = s:GtdSearchContextAdd(
 						\ a:bang,
-						\ gtd#formula#Parser(l:r)
+						\ gtd#formula#Parser(get(l:r, 'formula', ''))
 						\ )
+					let l:display = get(l:r, 'title', gtd#formula#ToString(l:what))
+					if empty(trim(l:display))
+						let l:display = get(l:r, 'formula', '')
+					endif
 					let l:searches += [ {
-						\ 'display': gtd#formula#ToString(l:what),
+						\ 'display': l:display,
 						\ 'keep': [],
+						\ 'formula': l:what,
 						\ 'what': l:what,
 						\ 'where': gtd#note#GetAll('short')
 						\ } ]
@@ -45,13 +55,11 @@ function! gtd#search#Start(mods, bang, formula, type)
 				throw 'No previous result'
 			else
 				for l:p in l:previous['gtd']
-					let l:what = s:GtdSearchContextAdd(
-						\ a:bang,
-						\ gtd#formula#Parser(l:p['formula'])
-						\ )
+					let l:what = get(l:p, 'formula', '')
 					let l:searches += [ {
-						\ 'display': gtd#formula#ToString(l:what),
+						\ 'display': get(l:p, 'title', gtd#formula#ToString(l:what)),
 						\ 'keep': [],
+						\ 'formula': l:what,
 						\ 'what': l:what,
 						\ 'where': gtd#note#GetAll('short')
 						\ } ]
@@ -69,9 +77,12 @@ function! gtd#search#Start(mods, bang, formula, type)
 				for l:p in l:previous['gtd']
 					let l:searches += [ {
 						\ 'display': gtd#formula#ToString(
-							\ [ '+', gtd#formula#Parser(l:p['formula']), l:what ]
+							\ [ '+', l:p['formula'], l:what ]
 							\ ),
 						\ 'keep': l:p['results'],
+						\ 'formula': gtd#formula#ToString(
+							\ [ '+', l:p['formula'], l:what ]
+							\ ),
 						\ 'what': l:what,
 						\ 'where': gtd#note#GetAll('short')
 						\ } ]
@@ -89,9 +100,10 @@ function! gtd#search#Start(mods, bang, formula, type)
 				for l:p in l:previous['gtd']
 					let l:searches += [ {
 						\ 'display': gtd#formula#ToString(
-							\ [ ' ', gtd#formula#Parser(l:p['formula']), l:what ]
+							\ [ ' ', l:p['formula'], l:what ]
 							\ ),
 						\ 'keep': [],
+						\ 'formula': l:what,
 						\ 'what': l:what,
 						\ 'where': l:p['results']
 						\ } ]
@@ -132,7 +144,12 @@ function! gtd#search#Start(mods, bang, formula, type)
 			endif
 
 			" Results loading
-			call gtd#results#Set(l:result_id, l:s['display'], l:gtd_results)
+			call gtd#results#Set(
+				\ l:result_id,
+				\ l:s['display'],
+				\ l:s['formula'],
+				\ l:gtd_results
+				\ )
 		endfor
 
 		" Highlighting

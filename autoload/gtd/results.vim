@@ -7,6 +7,7 @@ let s:results_current = -1
 " [
 " 	[
 " 		{
+" 			'title': '#hashtag',
 " 			'formula': '#hastag',
 " 			'results': [
 " 				{
@@ -24,6 +25,7 @@ let s:results_current = -1
 " 	],
 " 	[
 " 		{
+" 			'title': 'INBOX',
 " 			'formula': '!inbox @work',
 " 			'results': [
 " 				{
@@ -34,6 +36,7 @@ let s:results_current = -1
 " 			]
 " 		},
 " 		{
+" 			'title': 'WAITING',
 " 			'formula': '!waiting @work',
 " 			'results': [
 " 				{
@@ -44,6 +47,7 @@ let s:results_current = -1
 " 			]
 " 		},
 " 		{
+" 			'title': 'SOMEDAY',
 " 			'formula': '!someday @work',
 " 			'results': [
 " 				{
@@ -76,7 +80,7 @@ function! gtd#results#Create(recycling)
 	endif
 endfunction
 
-function! gtd#results#Set(history_id, formula, results)
+function! gtd#results#Set(history_id, title, formula, results)
 	let l:results = []
 	for l:r in a:results
 		let l:r_data = gtd#note#Read(g:gtd#dir.l:r.'.gtd', 1)[0]
@@ -95,6 +99,7 @@ function! gtd#results#Set(history_id, formula, results)
 	endfor
 
 	let s:results_history[a:history_id] += [ {
+		\ 'title': a:title,
 		\ 'formula': a:formula,
 		\ 'results': l:results
 		\ } ]
@@ -110,7 +115,11 @@ function! gtd#results#Get()
 				let l:results += [ l:r['key'] ]
 			endfor
 			let l:requests += [
-				\ { 'formula': l:q['formula'], 'results': l:results }
+					\ {
+						\ 'title': l:q['title'],
+						\ 'formula': l:q['formula'],
+						\ 'results': l:results
+					\ }
 				\ ]
 		endfor
 	endif
@@ -141,7 +150,7 @@ function! gtd#results#Display(mods, gtd_id)
 		let l:content = []
 
 		for l:gtd in get(s:results_history, a:gtd_id, [])
-			let l:title = l:gtd['formula']
+			let l:title = l:gtd['title']
 			let l:nb_tasks = len(l:gtd['results'])
 			if l:nb_tasks <= 1
 				let l:title .= ' ['.l:nb_tasks.' task]'
@@ -219,6 +228,7 @@ function! gtd#results#Remove(key)
 				endif
 			endfor
 			let l:history += [ {
+				\ 'title': l:s['title'],
 				\ 'formula': l:s['formula'],
 				\ 'results': l:results
 				\ } ]

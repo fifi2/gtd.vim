@@ -202,9 +202,18 @@ You might want to have a quick review on your most frequent Gtd search. To do
 so, you can populate the review list in your configuration. The review is done
 when you execute |:GtdReview| command. >
 	let g:gtd#review = [
-		\ '(!inbox + !scheduled-'.strftime("%Y%m%d").') @work',
-		\ '!todo @work',
-		\ '!waiting @work',
+		\ { 'formula': '!inbox', 'title': 'INBOX' },
+		\ { 'formula': '!todo #calendar:mon', 'title': 'MONDAY' },
+		\ { 'formula': '!todo #calendar:tue', 'title': 'TUESDAY' },
+		\ { 'formula': '!todo #calendar:wed', 'title': 'WEDNESDAY' },
+		\ { 'formula': '!todo #calendar:thu', 'title': 'THURSDAY' },
+		\ { 'formula': '!todo #calendar:fri', 'title': 'FRIDAY' },
+		\ { 'formula': '!todo #calendar:sat', 'title': 'SATURDAY' },
+		\ { 'formula': '!todo #calendar:sun', 'title': 'SUNDAY' },
+		\ { 'formula': '!todo -#calendar', 'title': 'TODO' },
+		\ { 'formula': '!project', 'title': 'PROJECTS' },
+		\ { 'formula': '!waiting', 'title': 'WAITING' },
+		\ { 'formula': '!someday', 'title': 'SOMEDAY' }
 		\ ]
 <
 						*g:gtd#tag_lines_count*
