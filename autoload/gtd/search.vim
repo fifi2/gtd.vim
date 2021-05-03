@@ -126,17 +126,15 @@ function! gtd#search#Start(mods, bang, formula, type)
 			call gtd#debug#Message(l:s['what'])
 
 			" No need to do each search if type is 'add' there will be no
-			" change...
-			if a:type != 'add' || !exists('l:gtd_results')
-				let l:gtd_results = s:GtdSearchHandler(
+			" change in results...
+			if a:type != 'add' || !exists('l:search_results')
+				let l:search_results = s:GtdSearchHandler(
 					\ l:s['what'],
 					\ l:s['where']
 					\ )
 			endif
 			let l:gtd_results = reverse(
-				\ uniq(
-					\ sort(l:gtd_results + l:s['keep'])
-					\ )
+				\ uniq(sort(l:search_results + l:s['keep']))
 				\ )
 
 			if l:highlight == 0 && !empty(l:gtd_results)
