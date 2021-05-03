@@ -67,10 +67,9 @@ let s:results_current = -1
 
 function! gtd#results#Create(recycling)
 	if a:recycling < 0
-		if g:gtd#results_history != 0
-			while len(s:results_history) >= g:gtd#results_history
-				call remove(s:results_history, 0)
-			endwhile
+		let l:idx_end_delete = len(s:results_history) - g:gtd#results_history
+		if g:gtd#results_history != 0 && l:idx_end_delete >= 0
+			call remove(s:results_history, 0, l:idx_end_delete)
 		endif
 		call add(s:results_history, [])
 		return len(s:results_history)-1
