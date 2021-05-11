@@ -236,9 +236,8 @@ and wait for the first empty line before leaving the search. >
 		    the new |gtd-note|.
 
 		    If {title} is provided, the title will be set
-		    automatically. If |g:gtd#default_context| and
-		    |g:gtd#default_action| are set, the buffer will be saved
-		    and wiped out.
+		    automatically. If |g:gtd#default_action| is set, the
+		    buffer will be saved and wiped out.
 
 						*:GtdEnew*
 :[range]GtdEnew[!]  Create a new task file.
@@ -250,9 +249,8 @@ and wait for the first empty line before leaving the search. >
 		    current buffer are abandoned (see |'hidden'|).
 
 		    If {title} is provided, the title will be set
-		    automatically. If |g:gtd#default_context| and
-		    |g:gtd#default_action| are set, the buffer will be saved
-		    and wiped out.
+		    automatically. If |g:gtd#default_action| is set, the
+		    buffer will be saved and wiped out.
 
 						*:Gtd*
 :Gtd[!] {formula}   This command allows you to search for some notes regarding

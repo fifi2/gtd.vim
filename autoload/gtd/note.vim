@@ -1,10 +1,13 @@
 
 function! s:GtdNoteTemplate(title)
-	return [
+	let l:template = [
 		\ '='.a:title,
-		\ '@'.g:gtd#default_context,
 		\ '!'.g:gtd#default_action
 		\ ]
+	if !empty(g:gtd#default_context)
+		let l:template += [ '@'.g:gtd#default_context ]
+	endif
+	return l:template
 endfunction
 
 function! gtd#note#Key(key, value)
@@ -54,7 +57,6 @@ function! gtd#note#Create(mods, command, bang, isrange, note) range
 			throw "Gtd default content couldn't be inserted"
 		else
 			if empty(a:note)
-				\ || empty(g:gtd#default_context)
 				\ || empty(g:gtd#default_action)
 				execute 'normal! gg'
 				execute 'startinsert!'
