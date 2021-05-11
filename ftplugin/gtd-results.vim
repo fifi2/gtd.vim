@@ -55,7 +55,7 @@ if has('folding')
 	" Folding function
 	function! GtdResultsFold()
 		let l:line = getline(v:lnum)
-		if match(l:line, '^[^ ].\+$') != -1
+		if match(l:line, '^.*\[\d\+ notes\?\]$') != -1
 			return '>1'
 		elseif match(l:line, '^$') != -1
 			return 0

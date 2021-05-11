@@ -150,18 +150,18 @@ function! gtd#results#Display(mods, gtd_id)
 
 		for l:gtd in get(s:results_history, a:gtd_id, [])
 			let l:title = l:gtd['title']
-			let l:nb_tasks = len(l:gtd['results'])
-			if l:nb_tasks <= 1
-				let l:title .= ' ['.l:nb_tasks.' task]'
+			let l:nb_notes = len(l:gtd['results'])
+			if l:nb_notes <= 1
+				let l:title .= ' ['.l:nb_notes.' note]'
 			else
-				let l:title .= ' ['.l:nb_tasks.' tasks]'
+				let l:title .= ' ['.l:nb_notes.' notes]'
 			endif
 			let l:content += [ l:title ]
 			if !empty(l:gtd['results'])
 				for l:r in l:gtd['results']
 					let l:attached = l:r['attached'] ? ' [*]' : ''
 					let l:content += [
-						\ ' '.l:r['key'].' '.l:r['title'].l:attached
+						\ l:r['key'].' '.l:r['title'].l:attached
 						\ ]
 				endfor
 			endif
@@ -178,7 +178,7 @@ function! gtd#results#Display(mods, gtd_id)
 endfunction
 
 function! gtd#results#Edit(line)
-	let l:key = matchstr(getline(a:line), '^ \zs\d\{8}_\d\{6}')
+	let l:key = matchstr(getline(a:line), '^\zs\d\{8}_\d\{6}')
 	if !empty(l:key)
 		execute "silent split" g:gtd#dir.l:key.'.gtd'
 	else

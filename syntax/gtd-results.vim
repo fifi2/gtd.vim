@@ -7,11 +7,11 @@ elseif exists("b:current_syntax")
 	finish
 endif
 
-syntax match gtdResultsFormula /^[^ ].*$/ contains=gtdResultsCount
-syntax match gtdResultsCount / \zs\[\d\+ tasks\?\]$/
-syntax match gtdResultsResult /^ .*$/ contains=gtdResultsResultKey,gtdResultsResultTitle,gtdResultsResultAttached
-syntax match gtdResultsResultKey /^ \zs\d\{8}_\d\{6}/ contained conceal cchar=-
-syntax match gtdResultsResultTitle / \d\{8}_\d\{6} \zs.* \[[\* ]\]/ contained
+syntax match gtdResultsFormula /^.*\[\d\+ notes\?\]$/ contains=gtdResultsCount
+syntax match gtdResultsCount / \zs\[\d\+ notes\?\]$/
+syntax match gtdResultsResult /^\zs\d\{8}_\d\{6} .*$/ contains=gtdResultsResultKey,gtdResultsResultTitle,gtdResultsResultAttached
+syntax match gtdResultsResultKey /^\zs\d\{8}_\d\{6}/ contained conceal cchar=-
+syntax match gtdResultsResultTitle /\d\{8}_\d\{6} \zs.* \[[\* ]\]/ contained
 syntax match gtdResultsResultAttached / \[\zs\*\ze\]/ contained
 
 highlight def link gtdResultsFormula Title
