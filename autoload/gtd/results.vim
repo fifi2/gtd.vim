@@ -9,15 +9,18 @@ let s:results_current = -1
 " 		{
 " 			'title': '#hashtag',
 " 			'formula': '#hastag',
+" 			'display_list': 1,
 " 			'results': [
 " 				{
 "					'key': '20170414_104443',
+"					'list': '!inbox',
 "					'attached': 0,
 "					'title': 'Example 1'
 "				},
 " 				{
-"					'attached': 1,
 "					'key': '20170818_100024',
+"					'list': '!next',
+"					'attached': 1,
 "					'title': 'Example 2'
 "				},
 " 			]
@@ -27,9 +30,11 @@ let s:results_current = -1
 " 		{
 " 			'title': 'INBOX',
 " 			'formula': '!inbox @work',
+" 			'display_list': 0,
 " 			'results': [
 " 				{
 "					'key': '20161205_153911',
+"					'list': '!inbox',
 "					'attached': 0,
 "					'title': 'Example 3'
 "				},
@@ -38,9 +43,11 @@ let s:results_current = -1
 " 		{
 " 			'title': 'WAITING',
 " 			'formula': '!waiting @work',
+" 			'display_list': 0,
 " 			'results': [
 " 				{
 "					'key': '20161115_150000',
+"					'list': '!waiting',
 "					'attached': 0,
 "					'title': 'Example 4'
 "				},
@@ -49,14 +56,17 @@ let s:results_current = -1
 " 		{
 " 			'title': 'SOMEDAY',
 " 			'formula': '!someday @work',
+" 			'display_list': 0,
 " 			'results': [
 " 				{
 "					'key': '20161207_112100',
+"					'list': '!someday',
 "					'attached': 0,
 "					'title': 'Example 5'
 "				},
 " 				{
 "					'key': '20161216_162500',
+"					'list': '!someday',
 "					'attached': 0,
 "					'title': 'Example 6'
 "				},
@@ -82,13 +92,24 @@ endfunction
 function! gtd#results#Set(history_id, title, formula, results)
 	let l:results = []
 	for l:r in a:results
-		let l:r_data = gtd#note#Read(g:gtd#dir.l:r.'.gtd', 1)[0]
+		let l:list = ''
+		let l:r_data = gtd#note#Read(g:gtd#dir.l:r.'.gtd', g:gtd#tag_lines_count)
+		for l:l in l:r_data
+			if match(l:l, '^!\S\+') != -1
+				let l:list = l:l
+				break
+			endif
+			if match(l:l, '^\s*$') != -1
+				break
+			endif
+		endfor
 		let l:results += [
 				\ {
 				\ 'key': l:r,
-				\ 'attached': match(l:r_data, ' \[\*\]$') == -1 ? 0 : 1,
+				\ 'list': l:list,
+				\ 'attached': match(l:r_data[0], ' \[\*\]$') == -1 ? 0 : 1,
 				\ 'title': substitute(
-					\ l:r_data,
+					\ l:r_data[0],
 					\ '^=\(.\{-}\)\( \[\*\]\)\?$',
 					\ '\1',
 					\ ''
@@ -100,6 +121,7 @@ function! gtd#results#Set(history_id, title, formula, results)
 	let s:results_history[a:history_id] += [ {
 		\ 'title': a:title,
 		\ 'formula': a:formula,
+		\ 'display_list': s:GtdResultsDisplayList(a:formula),
 		\ 'results': l:results
 		\ } ]
 
@@ -160,9 +182,15 @@ function! gtd#results#Display(mods, gtd_id)
 			if !empty(l:gtd['results'])
 				for l:r in l:gtd['results']
 					let l:attached = l:r['attached'] ? ' [*]' : ''
-					let l:content += [
-						\ l:r['key'].' '.l:r['title'].l:attached
-						\ ]
+					if l:gtd['display_list']
+						let l:content += [
+							\ l:r['key'].' '.l:r['list'].' '.l:r['title'].l:attached
+							\ ]
+					else
+						let l:content += [
+							\ l:r['key'].' '.l:r['title'].l:attached
+							\ ]
+					endif
 				endfor
 			endif
 			let l:content += [ '' ]
@@ -260,5 +288,17 @@ function! gtd#results#Do(cmd)
 		execute 'argadd '.g:gtd#dir.l:target.'.gtd'
 	endfor
 	execute 'argdo '.a:cmd
+endfunction
+
+function! s:GtdResultsDisplayList(formula)
+	if type(a:formula) == v:t_string
+		return match(a:formula, '^!\S\+') != -1
+			\ ? 0 : 1
+	else
+		return get(a:formula, 0) == ' '
+			\ && (match(get(a:formula, 1, ''), '^!\S\+') != -1
+				\ || match(get(a:formula, 2, ''), '^!\S\+') != -1)
+			\ ? 0 : 1
+	endif
 endfunction
 
