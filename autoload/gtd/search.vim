@@ -1,5 +1,5 @@
 
-function! gtd#search#Start(mods, bang, formula, type)
+function! gtd#search#Start(mods, formula, type)
 
 	if &verbose > 0
 		let l:start_time = reltime()
@@ -12,10 +12,7 @@ function! gtd#search#Start(mods, bang, formula, type)
 		let l:highlight = 0
 
 		if a:type == 'new'
-			let l:what = s:GtdSearchContextAdd(
-				\ a:bang,
-				\ gtd#formula#Parser(a:formula)
-				\ )
+			let l:what = gtd#formula#Parser(a:formula)
 			let l:searches += [ {
 				\ 'display': gtd#formula#ToString(l:what),
 				\ 'keep': [],
@@ -32,10 +29,7 @@ function! gtd#search#Start(mods, bang, formula, type)
 						" Deal with former review format
 						let l:r = { 'title': l:r, 'formula': l:r }
 					endif
-					let l:what = s:GtdSearchContextAdd(
-						\ a:bang,
-						\ gtd#formula#Parser(get(l:r, 'formula', ''))
-						\ )
+					let l:what = gtd#formula#Parser(get(l:r, 'formula', ''))
 					let l:display = get(l:r, 'title', gtd#formula#ToString(l:what))
 					if empty(trim(l:display))
 						let l:display = get(l:r, 'formula', '')
@@ -70,10 +64,7 @@ function! gtd#search#Start(mods, bang, formula, type)
 			if l:previous['id'] == -1
 				throw 'No previous result'
 			else
-				let l:what = s:GtdSearchContextAdd(
-					\ a:bang,
-					\ gtd#formula#Parser(a:formula)
-					\ )
+				let l:what = gtd#formula#Parser(a:formula)
 				for l:p in l:previous['gtd']
 					let l:formula = [ '+', l:p['formula'], l:what ]
 					let l:searches += [ {
@@ -90,10 +81,7 @@ function! gtd#search#Start(mods, bang, formula, type)
 			if l:previous['id'] == -1
 				throw 'No previous result'
 			else
-				let l:what = s:GtdSearchContextAdd(
-					\ a:bang,
-					\ gtd#formula#Parser(a:formula)
-					\ )
+				let l:what = gtd#formula#Parser(a:formula)
 				for l:p in l:previous['gtd']
 					let l:formula = [ ' ', l:p['formula'], l:what ]
 					let l:searches += [ {
@@ -161,35 +149,6 @@ function! gtd#search#Start(mods, bang, formula, type)
 		echomsg v:exception
 	endtry
 
-endfunction
-
-function! gtd#search#Context(bang, ...)
-	if a:bang == '!' && len(a:000) == 0
-		let g:gtd#default_context = ''
-		echomsg "No Gtd context"
-	else
-		if a:0 == 0
-			if g:gtd#default_context == ''
-				echomsg "There is no default context"
-			else
-				echomsg "Gtd context is" '@'.g:gtd#default_context
-			endif
-		elseif a:1 =~ '@\S\+'
-			let g:gtd#default_context = a:1[1:]
-			echomsg "Gtd context is now:" a:1
-		else
-			echoerr "Gtd context doesn't seem legit"
-		endif
-	endif
-endfunction
-
-function! s:GtdSearchContextAdd(bang, formula)
-	if a:bang != '!' && !empty(g:gtd#default_context)
-		\ && gtd#formula#AtomUseful(a:formula, ' ', '@'.g:gtd#default_context)
-		return [ ' ', a:formula, '@'.g:gtd#default_context ]
-	else
-		return a:formula
-	endif
 endfunction
 
 function! s:GtdSearchHandler(actions, where)
@@ -366,12 +325,7 @@ endfunction
 function! gtd#search#CommandTagComplete(arg_lead, cmd_line, cursor_pos)
 
 	let l:arg_lead = a:arg_lead
-
-	if a:cmd_line =~ '^GtdContext'
-		let l:prefix_types_to_complete = [ '@' ]
-	else
-		let l:prefix_types_to_complete = [ '@', '!', '#' ]
-	endif
+	let l:prefix_types_to_complete = [ '@', '!', '#' ]
 
 	" Is there some parenthesis in front of arg_lead?
 	let l:parenthesis = 0

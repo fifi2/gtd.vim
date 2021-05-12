@@ -14,19 +14,18 @@ endif
 
 command! -bang -range -nargs=? GtdNew <line1>,<line2>call gtd#note#Create(<q-mods>, 'split', <q-bang>, <count>, <q-args>)
 command! -bang -range -nargs=? GtdEnew <line1>,<line2>call gtd#note#Create(<q-mods>, 'edit', <q-bang>, <count>, <q-args>)
-command! -bang -nargs=1 -complete=customlist,gtd#search#CommandTagComplete Gtd call gtd#search#Start(<q-mods>, <q-bang>, <q-args>, 'new')
-command! -bang -nargs=1 -complete=customlist,gtd#search#CommandTagComplete GtdAdd call gtd#search#Start(<q-mods>, <q-bang>, <q-args>, 'add')
-command! -bang -nargs=1 -complete=customlist,gtd#search#CommandTagComplete GtdFilter call gtd#search#Start(<q-mods>, <q-bang>, <q-args>, 'filter')
-command! -nargs=0 GtdRefresh call gtd#search#Start(<q-mods>, '!', '', 'refresh')
-command! -bang -nargs=? -complete=customlist,gtd#search#CommandTagComplete GtdContext call gtd#search#Context(<q-bang>, <f-args>)
+command! -nargs=1 -complete=customlist,gtd#search#CommandTagComplete Gtd call gtd#search#Start(<q-mods>, <q-args>, 'new')
+command! -nargs=1 -complete=customlist,gtd#search#CommandTagComplete GtdAdd call gtd#search#Start(<q-mods>, <q-args>, 'add')
+command! -nargs=1 -complete=customlist,gtd#search#CommandTagComplete GtdFilter call gtd#search#Start(<q-mods>, <q-args>, 'filter')
+command! -nargs=0 GtdRefresh call gtd#search#Start(<q-mods>, '', 'refresh')
 command! -nargs=+ -complete=customlist,gtd#search#CommandTagComplete GtdMove call gtd#search#AtomMove(<f-args>)
 
 if !empty('g:gtd#review')
-	command! -bang -nargs=0 GtdReview call gtd#search#Start(<q-mods>, <q-bang>, '', 'review')
+	command! -nargs=0 GtdReview call gtd#search#Start(<q-mods>, '', 'review')
 endif
 
 if exists('g:gtd#debug') && g:gtd#debug
-	command! -bang -nargs=1 -complete=customlist,gtd#search#CommandTagComplete GtdBench call gtd#debug#Bench(<q-bang>, <q-args>)
+	command! -nargs=1 -complete=customlist,gtd#search#CommandTagComplete GtdBench call gtd#debug#Bench(<q-args>)
 endif
 
 nnoremap <silent> <Plug>GtdDisplay

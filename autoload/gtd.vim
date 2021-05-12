@@ -34,10 +34,6 @@ function! gtd#Init()
 			let g:gtd#default_action = ''
 		endif
 
-		if !exists('g:gtd#default_context') || empty(g:gtd#default_context)
-			let g:gtd#default_context = ''
-		endif
-
 		if !exists('g:gtd#review') || type(g:gtd#review) != v:t_list
 			let g:gtd#review = []
 		endif

@@ -4,9 +4,6 @@ function! s:GtdNoteTemplate(title)
 		\ '='.a:title,
 		\ '!'.g:gtd#default_action
 		\ ]
-	if !empty(g:gtd#default_context)
-		let l:template += [ '@'.g:gtd#default_context ]
-	endif
 	return l:template
 endfunction
 

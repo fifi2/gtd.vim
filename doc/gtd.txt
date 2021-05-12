@@ -148,13 +148,6 @@ To speed up searches, a memory cache is enabled by default. If you need, for
 some reasons, to disable it, you can set this to 0. >
 	let g:gtd#cache = 0
 <
-						*g:gtd#default_context*
-When creating a new Gtd file, the plugin automatically try to insert basic Gtd
-tags in it. If you want, you can define your default context to let the plugin
-insert it as well. This default context will also be added in all your Gtd
-searches as an "AND" argument. >
-	let g:gtd#default_context = 'work'
-<
 						*g:gtd#default_action*
 When creating a new Gtd file, the plugin automatically try to insert basic Gtd
 tags in it. If you want, you can define your default action tag to let the
@@ -253,7 +246,7 @@ and wait for the first empty line before leaving the search. >
 		    buffer will be saved and wiped out.
 
 						*:Gtd*
-:Gtd[!] {formula}   This command allows you to search for some notes regarding
+:Gtd {formula}	    This command allows you to search for some notes regarding
 		    theirs tags or content. Results are loaded to the
 		    |gtd-results| buffer so you can navigate into it.
 
@@ -277,9 +270,6 @@ and wait for the first empty line before leaving the search. >
 		    but previous results (for AND operations) define where to
 		    continue searching next operands.
 		    OR operations allow you to concatenate results.
-
-		    With [!] no default context will be added to the
-		    {formula}. See |g:gtd#default_context|.
 
 						*gtd-atom*
 		    An atom is a part of your formula which can't be reduced.
@@ -386,24 +376,12 @@ and wait for the first empty line before leaving the search. >
 		    You will use: >
 		    :Gtd !archive (#john-doe + /john\sdoe) @work -/foo
 <
-						*:GtdContext*
-:GtdContext [{arg}] Change (or set) the current value of
-		    |g:gtd#default_context|.
-
-		    Display the current context when {arg} is omitted.
-
-		    {arg} must be a valid context (Eg. @work).
-
-:GtdContext!	    Unset the current default context (as set by
-		    |g:gtd#default_context|).
-
 						*:GtdAdd*
-:GtdAdd[!] {formula}
-		    Same as |:Gtd| except previous results are kept if a
+:GtdAdd {formula}   Same as |:Gtd| except previous results are kept if a
 		    search has already been performed.
 
 						*:GtdFilter*
-:GtdFilter[!] {formula}
+:GtdFilter {formula}
 		    Same as |:Gtd| except default working files are deduced
 		    from the current list of results if a former search has
 		    been performed.
@@ -415,12 +393,9 @@ and wait for the first empty line before leaving the search. >
 		    Modifiers are allowed (see |<mods>|).
 
 						*:GtdReview*
-:GtdReview[!]	    If you are used to repeat a few |:Gtd| search, you might
+:GtdReview	    If you are used to repeat a few |:Gtd| search, you might
 		    like to use this command to execute them all in one
 		    action.
-
-		    With [!] no default context will be added to any of your
-		    searches. See |g:gtd#default_context|.
 
 		    Modifiers are allowed (see |<mods>|).
 
@@ -560,7 +535,7 @@ g:gtd#debug variable. Default is 0. >
 	let g:gtd#debug = 1
 <
 						*:GtdBench*
-:GtdBench[!] {formula}	Same as |:Gtd| except that the search is performed
+:GtdBench {formula}	Same as |:Gtd| except that the search is performed
 			multiple times and average execution time is printed
 			at the end.
 

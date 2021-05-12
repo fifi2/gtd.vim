@@ -182,7 +182,7 @@ function! gtd#results#Edit(line)
 	if !empty(l:key)
 		execute "silent split" g:gtd#dir.l:key.'.gtd'
 	else
-		call gtd#search#Start('', '!', '', 'refresh')
+		call gtd#search#Start('', '', 'refresh')
 	endif
 endfunction
 
