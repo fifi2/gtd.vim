@@ -9,7 +9,6 @@ let s:results_current = -1
 " 		{
 " 			'title': '#hashtag',
 " 			'formula': '#hastag',
-" 			'display_list': 1,
 " 			'results': [
 " 				{
 "					'key': '20170414_104443',
@@ -30,7 +29,6 @@ let s:results_current = -1
 " 		{
 " 			'title': 'INBOX',
 " 			'formula': '!inbox @work',
-" 			'display_list': 0,
 " 			'results': [
 " 				{
 "					'key': '20161205_153911',
@@ -43,7 +41,6 @@ let s:results_current = -1
 " 		{
 " 			'title': 'WAITING',
 " 			'formula': '!waiting @work',
-" 			'display_list': 0,
 " 			'results': [
 " 				{
 "					'key': '20161115_150000',
@@ -56,7 +53,6 @@ let s:results_current = -1
 " 		{
 " 			'title': 'SOMEDAY',
 " 			'formula': '!someday @work',
-" 			'display_list': 0,
 " 			'results': [
 " 				{
 "					'key': '20161207_112100',
@@ -125,7 +121,6 @@ function! gtd#results#Set(history_id, title, formula, results)
 	let s:results_history[a:history_id] += [ {
 		\ 'title': a:title,
 		\ 'formula': a:formula,
-		\ 'display_list': s:GtdResultsDisplayList(a:formula),
 		\ 'results': l:results
 		\ } ]
 
@@ -183,10 +178,11 @@ function! gtd#results#Display(mods, gtd_id)
 				let l:title .= ' ['.l:nb_notes.' notes]'
 			endif
 			let l:content += [ l:title ]
+			let l:display_list = s:GtdResultsDisplayList(l:gtd['formula'])
 			if !empty(l:gtd['results'])
 				for l:r in l:gtd['results']
 					let l:content_line_arr = [ l:r['key'] ]
-					if l:gtd['display_list'] && !empty(l:r['list'])
+					if l:display_list && !empty(l:r['list'])
 						let l:content_line_arr += [ l:r['list'] ]
 					endif
 					let l:context_to_display = []
