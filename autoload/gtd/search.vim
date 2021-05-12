@@ -75,14 +75,11 @@ function! gtd#search#Start(mods, bang, formula, type)
 					\ gtd#formula#Parser(a:formula)
 					\ )
 				for l:p in l:previous['gtd']
+					let l:formula = [ '+', l:p['formula'], l:what ]
 					let l:searches += [ {
-						\ 'display': gtd#formula#ToString(
-							\ [ '+', l:p['formula'], l:what ]
-							\ ),
+						\ 'display': gtd#formula#ToString(l:formula),
 						\ 'keep': l:p['results'],
-						\ 'formula': gtd#formula#ToString(
-							\ [ '+', l:p['formula'], l:what ]
-							\ ),
+						\ 'formula': l:formula,
 						\ 'what': l:what,
 						\ 'where': gtd#note#GetAll('short')
 						\ } ]
@@ -98,12 +95,11 @@ function! gtd#search#Start(mods, bang, formula, type)
 					\ gtd#formula#Parser(a:formula)
 					\ )
 				for l:p in l:previous['gtd']
+					let l:formula = [ ' ', l:p['formula'], l:what ]
 					let l:searches += [ {
-						\ 'display': gtd#formula#ToString(
-							\ [ ' ', l:p['formula'], l:what ]
-							\ ),
+						\ 'display': gtd#formula#ToString(l:formula),
 						\ 'keep': [],
-						\ 'formula': l:what,
+						\ 'formula': l:formula,
 						\ 'what': l:what,
 						\ 'where': l:p['results']
 						\ } ]
