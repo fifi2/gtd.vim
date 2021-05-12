@@ -93,11 +93,14 @@ function! gtd#results#Set(history_id, title, formula, results)
 	let l:results = []
 	for l:r in a:results
 		let l:list = ''
+		let l:contexts = []
 		let l:r_data = gtd#note#Read(g:gtd#dir.l:r.'.gtd', g:gtd#tag_lines_count)
 		for l:l in l:r_data
 			if match(l:l, '^!\S\+') != -1
 				let l:list = l:l
-				break
+			endif
+			if match(l:l, '^@\S\+') != -1
+				let l:contexts += [ l:l ]
 			endif
 			if match(l:l, '^\s*$') != -1
 				break
@@ -107,6 +110,7 @@ function! gtd#results#Set(history_id, title, formula, results)
 				\ {
 				\ 'key': l:r,
 				\ 'list': l:list,
+				\ 'contexts': l:contexts,
 				\ 'attached': match(l:r_data[0], ' \[\*\]$') == -1 ? 0 : 1,
 				\ 'title': substitute(
 					\ l:r_data[0],
@@ -181,16 +185,28 @@ function! gtd#results#Display(mods, gtd_id)
 			let l:content += [ l:title ]
 			if !empty(l:gtd['results'])
 				for l:r in l:gtd['results']
-					let l:attached = l:r['attached'] ? ' [*]' : ''
-					if l:gtd['display_list']
-						let l:content += [
-							\ l:r['key'].' '.l:r['list'].' '.l:r['title'].l:attached
-							\ ]
-					else
-						let l:content += [
-							\ l:r['key'].' '.l:r['title'].l:attached
+					let l:content_line_arr = [ l:r['key'] ]
+					if l:gtd['display_list'] && !empty(l:r['list'])
+						let l:content_line_arr += [ l:r['list'] ]
+					endif
+					let l:context_to_display = []
+					for l:c in l:r['contexts']
+						if s:GtdResultsContextToDisplay(l:gtd['formula'], l:c)
+							let l:context_to_display += [
+								\ substitute(l:c, '^@', '', '')
+								\ ]
+						endif
+					endfor
+					if len(l:context_to_display) > 0
+						let l:content_line_arr += [
+							\ '@'.join(l:context_to_display, ',')
 							\ ]
 					endif
+					let l:content_line_arr += [ l:r['title'] ]
+					if l:r['attached']
+						let l:content_line_arr += [ '[*]' ]
+					endif
+					let l:content += [ join(l:content_line_arr, ' ') ]
 				endfor
 			endif
 			let l:content += [ '' ]
@@ -299,6 +315,18 @@ function! s:GtdResultsDisplayList(formula)
 			\ && (match(get(a:formula, 1, ''), '^!\S\+') != -1
 				\ || match(get(a:formula, 2, ''), '^!\S\+') != -1)
 			\ ? 0 : 1
+	endif
+endfunction
+
+function! s:GtdResultsContextToDisplay(formula, context)
+	if type(a:formula) == v:t_string
+		return a:formula != a:context
+	else
+		let l:left = get(a:formula, 1)
+		let l:right = get(a:formula, 2)
+		return get(a:formula, 0) == ' '
+			\ && (type(l:left) != v:t_string || l:left != a:context)
+			\ && (type(l:right) != v:t_string || l:right != a:context)
 	endif
 endfunction
 
